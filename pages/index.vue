@@ -1,6 +1,6 @@
 <template>
   <main>
-    <search-input/>
+    <search-input />
 
     <div class="grid">
       <div v-for="group in groupCategories"
@@ -40,6 +40,7 @@
 import axios from 'axios'
 import searchInput from '~/components/searchInput.vue'
 import modal from '~/components/modal.vue'
+
 
 export default {
   components: {
