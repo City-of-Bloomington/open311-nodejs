@@ -1,0 +1,67 @@
+.form-group {
+  position: relative;
+  margin: 0 0 20px 0;
+
+  .singlevaluelist {
+    div {
+      display: inline-block;
+      margin: 0 20px 0 0;
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+  }
+
+  legend {
+    border-bottom: 1px solid rgba(225,225,225,0.2);
+    padding: 0 0 10px 0;
+    margin: 0 0 10px 0;
+  }
+
+  label {
+    display: block;
+    color: white;
+    margin: 0 0 5px 0;
+  }
+
+  input:not([type=radio]):not([type=checkbox]),
+  textarea {
+    border: none;
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    background-clip: padding-box;
+    border-radius: 4px;
+  }
+
+  textarea {
+    min-height: 50px;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  input {
+    &[type=checkbox] {
+      cursor: pointer;
+      margin: 0;
+    }
+
+    &[type=file] {
+      padding: 0 !important;
+    }
+
+    &[type=radio] {
+      margin: 0 0 5px 0;
+
+      ~ label {
+        display: inline-block;
+        margin: 0 0 0 10px;
+      }
+    }
+
+    &:focus {
+      outline: 3px solid rgba(77, 144, 254, 0.6);
+    }
+  }
+}

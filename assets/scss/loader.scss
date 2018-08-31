@@ -1,0 +1,25 @@
+.loader-wrapper {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  .bar {
+    animation: loader 2s cubic-bezier(.17,.37,.43,.67) infinite;
+    float: left;
+    width: 15px;
+    height: 6px;
+    border-radius: 2px;
+    background-color: $silver-chalice;
+  }
+}
+
+@keyframes loader {
+  0% , 100% { transform: translate(0,0); }
+
+  50% {
+    transform: translate(200px,0);
+    background-color: $fern;
+    width: 25px;
+  }
+}
