@@ -196,3 +196,32 @@ button {
     font-size: 20px;
   }
 }
+
+
+// Smartphones
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  main {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+  }
+
+  nav {
+    h1 {
+      font-size: 22px;
+    }
+  }
+
+  .grid {
+    grid-grap: 5px;
+
+    .item {
+      .icon {
+        width: 125px;
+        height: 125px;
+      }
+    }
+  }
+}
