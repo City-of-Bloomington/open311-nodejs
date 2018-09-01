@@ -238,6 +238,7 @@ export default {
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
     submitPost() {
+
       this.$store.commit('storeFormInfo', this.defaultFields);
 
       var testing = `api_key=${process.env.open311Key}`
@@ -253,26 +254,26 @@ export default {
                   // + `&media_url=${this.postMedia}`
                   + `&${this.attrKeyValPairs}`;
 
-      var formData = new FormData();
-      formData.append("api_key", process.env.open311Key)
-      formData.append("service_code", this.postServiceCode)
-      formData.append("lat", this.postLat)
-      formData.append("long", this.postLong)
-      formData.append("address_string", this.postAddressString)
-      // formData.append("account_id",)
-      formData.append("email", this.postEmail)
-      formData.append("first_name", this.postFirstName)
-      formData.append("last_name", this.postLastName)
-      formData.append("phone", this.postPhone)
-      // formData.append("description", )
-      // formData.append("media_url", )
-      formData.append("attribute", this.attrKeyValPairs)
+      // var formData = new FormData();
+      // formData.append("api_key", process.env.open311Key)
+      // formData.append("service_code", this.postServiceCode)
+      // formData.append("lat", this.postLat)
+      // formData.append("long", this.postLong)
+      // formData.append("address_string", this.postAddressString)
+      // // formData.append("account_id",)
+      // formData.append("email", this.postEmail)
+      // formData.append("first_name", this.postFirstName)
+      // formData.append("last_name", this.postLastName)
+      // formData.append("phone", this.postPhone)
+      // // formData.append("description", )
+      // // formData.append("media_url", )
+      // formData.append("attribute", this.attrKeyValPairs)
 
-      var formObject = {};
-      formData.forEach(function(value, key){
-        formObject[key] = value;
-      });
-      var formJson = JSON.stringify(formObject);
+      // var formObject = {};
+      // formData.forEach(function(value, key){
+      //   formObject[key] = value;
+      // });
+      // var formJson = JSON.stringify(formObject);
 
       // console.log(formData);
 
@@ -288,13 +289,13 @@ export default {
       )
       .then(response => {
         console.log(testing);
-        console.log('cool!!');
-        console.log(response.data[0]);
+        // alert(testing);
+        // alert(JSON.stringify(response.data[0]));
         this.$store.commit('storeResponseInfo', response.data[0]);
       })
       .catch(error => {
         // console.log(testing);
-        console.log('dang!!');
+        // alert('dang!!');
         console.log(error);
       });
     }
