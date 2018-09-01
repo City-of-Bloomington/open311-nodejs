@@ -20,7 +20,7 @@
 
     <footer>
       <nuxt-link
-        v-if="!loading"
+        v-if="true"
         to="/fields"
         class="button next-button"
         @click.native="storeCommitLocationInfo">Next</nuxt-link>

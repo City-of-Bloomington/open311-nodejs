@@ -17,7 +17,8 @@
         <video
           ref="video"
           id="video"
-          autoplay>
+          autoplay
+          playsinline>
         </video>
 
         <button
@@ -163,6 +164,13 @@ import headerNav from '~/components/nav.vue'
 import modal from '~/components/modal.vue'
 
 export default {
+  head () {
+    return {
+      script: [
+        { src: './webrtc-adapter/adapter.js' }
+      ]
+    }
+  },
   props: ['item'],
   components: {
     headerNav,
@@ -197,12 +205,13 @@ export default {
       this.showVideoElm = true;
       this.video = this.$refs.video;
       if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
+          // NOTE: WKWebview has not yet implemented getUserMedia -_-,,,
           this.video.srcObject = stream;
           this.video.play();
         })
-        .catch(error => { console.log('error', error); });
+        .catch(error => { alert(error); });
       }
     },
     closeCamera() {
@@ -224,12 +233,10 @@ export default {
       this.showBiggerImage = true;
       this.modalImage = c;
     },
-
     storeCommitFormInfo() {
       console.log(this.defaultFields);
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
-
     submitPost() {
       this.$store.commit('storeFormInfo', this.defaultFields);
 

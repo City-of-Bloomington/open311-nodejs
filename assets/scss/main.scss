@@ -215,13 +215,24 @@ and (max-device-width : 480px) {
   }
 
   .grid {
-    grid-grap: 5px;
+    grid-gap: 10px;
+    grid-row-gap: 40px;
 
     .item {
+      h3 {
+        font-size: 18px;
+        width: 75%;
+        margin: 0 auto;
+      }
+
       .icon {
         width: 125px;
         height: 125px;
       }
     }
+  }
+
+  footer {
+    display: inline-block;
   }
 }
