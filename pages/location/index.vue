@@ -2,7 +2,7 @@
   <main>
     <headerNav />
 
-    <div class="form-group">
+    <div class="form-group" v-if="!geoError">
       <div v-if="loading" class="loader-wrapper">
         <div class="bar"></div>
       </div>
@@ -16,11 +16,16 @@
 
     <h3 v-if="loading">Detecting your location.</h3>
 
-    <div id="map-element"></div>
+    <div v-if="geoError">
+      <h3>It's helpful to report the issue location.</h3><br>
+      <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
+    </div>
+
+    <div id="map-element" v-if="!geoError"></div>
 
     <footer>
       <nuxt-link
-        v-if="true"
+        v-if="!loading"
         to="/fields"
         class="button next-button"
         @click.native="storeCommitLocationInfo">Next</nuxt-link>
@@ -56,6 +61,7 @@ export default {
   },
   data() {
     return {
+      geoError:         false,
       loading:          false,
       location: {
         lat:            null,
@@ -68,10 +74,25 @@ export default {
   mounted() {
     var self = this;
     self.loading = true;
+    self.geoError = false;
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(displayLocationInfo);
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(displayLocationInfo, geolocation_error, geolocation_options);
+      console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white`);
+    } else {
+      console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white`);
     }
+
+    function geolocation_error() {
+      self.loading = false;
+      self.geoError = true;
+      console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white`);
+    }
+
+    var geolocation_options = {
+      enableHighAccuracy: true,
+      timeout           : 27000
+    };
 
     function displayLocationInfo(position) {
       self.location.lat = position.coords.latitude;
