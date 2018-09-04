@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="form-group search">
+  <div class="search">
+    <div class="form-group">
       <label>Search</label>
       <input type="text" placeholder="Search"/>
 

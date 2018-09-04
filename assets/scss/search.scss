@@ -1,11 +1,16 @@
 .search {
-  // background: red;
-  margin: 0 0 40px 0;
+  // z-index: 1;
   position: relative;
+  // width: inherit;
+  margin: 0 auto;
+  // background: pink;
+  max-width: 520px;
 
-  // note:
-  // inputs can't render pseudos,
-  // so use here, on .search
+  .form-group {
+    position: relative;
+    margin: 0;
+  }
+
   &:after {
     position: absolute;
     content: '';
@@ -25,7 +30,7 @@
     border: none;
     background: rgba(225,225,225,0.2);
     color: white;
-    margin: 0 0 5px 0;
+    margin: 0;
 
     &::placeholder {
       color: white;

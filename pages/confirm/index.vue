@@ -2,8 +2,8 @@
   <main>
     <headerNav></headerNav>
 
-    <p v-html="thankYou"></p>
-    <p v-html="requestID"></p>
+    <h2 v-html="thankYou"></h2><br>
+    <h3 v-html="requestID"></h3>
 
     <!--     {{responseData}} -->
 
