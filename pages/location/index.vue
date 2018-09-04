@@ -16,7 +16,7 @@
 
     <h3 v-if="loading">Detecting your location.</h3>
 
-    <div id="mapid"></div>
+    <div id="map-element"></div>
 
     <footer>
       <nuxt-link
@@ -32,12 +32,6 @@
   .loader-wrapper {
     position: absolute;
     top: 42px;
-  }
-
-  #mapid {
-    width: 100%;
-    height: 500px;
-    margin: 0 0 20px 0;
   }
 </style>
 
@@ -112,7 +106,7 @@ export default {
     },
     initMap() {
       var self  = this;
-      var mymap = L.map('mapid').setView([self.location.lat,self.location.long], 20);
+      var mymap = L.map('map-element').setView([self.location.lat,self.location.long], 20);
 
       var crosshairIcon = L.icon({
         iconUrl:      '/crosshair.png',

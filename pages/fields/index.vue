@@ -205,7 +205,7 @@ export default {
       this.showVideoElm = true;
       this.video = this.$refs.video;
       if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment"}})
         .then(stream => {
           // NOTE: WKWebview has not yet implemented getUserMedia -_-,,,
           this.video.srcObject = stream;

@@ -197,6 +197,12 @@ button {
   }
 }
 
+#map-element {
+  width: 100%;
+  height: 500px;
+  margin: 0 0 20px 0;
+}
+
 
 // Smartphones
 @media only screen
@@ -226,10 +232,14 @@ and (max-device-width : 480px) {
       }
 
       .icon {
-        width: 125px;
-        height: 125px;
+        width: 100px;
+        height: 100px;
       }
     }
+  }
+
+  #map-element {
+    height: 275px;
   }
 
   footer {
