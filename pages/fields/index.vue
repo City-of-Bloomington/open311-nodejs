@@ -1,149 +1,153 @@
 <template>
-  <main>
-    <headerNav></headerNav>
-
-    <h2>General information fields.</h2>
-    <div class="form-group camera-wrapper">
-      <label>Include Media</label>
-
-      <input
-        type="file"
-        accept="image/jpeg, image/jpg, image/png"
-        @change="uploadImage"
-        ref="fileInput"
-        multiple>
-
-      <div class="video-wrapper" v-show="showVideoElm">
-        <video
-          ref="video"
-          id="video"
-          autoplay
-          playsinline>
-        </video>
-
-        <button
-          v-on:click="capture()"
-          class="button take"
-          alt="Take photo"
-          title="Take photo"
-          >
-          <span>Take Photo</span>
-        </button>
-
-        <button
-          v-on:click="closeCamera()"
-          class="button close"
-          alt="Close camera"
-          title="Close camera">Close Camera</button>
-      </div>
-
-      <canvas ref="canvas" id="canvas" width="640" height="480" v-show="false"></canvas>
-      <ul v-if="captures.length">
-        <li v-for="c in captures" :key="c">
-          <img :src="c" @click="biggerImage(c)" />
-          <button type="button" class="button" @click="removeImage(c)">remove</button>
-        </li>
-      </ul>
-
-      <button @click="$refs.fileInput.click()">Upload File</button>
-
-      <button
-        v-on:click="openCamera()"
-        class="button open"
-        alt="Open camera"
-        title="Open camera">Open Camera</button>
+  <div>
+    <div class="top">
+      <headerNav />
     </div>
 
-    <div class="form-group">
-      <label for="default-description">Tell us a little about this issue</label>
-      <textarea
-        v-model="defaultFields.description"
-        id="default-description"
-        name="default-description"
-        wrap="hard">
-      </textarea>
-    </div>
+    <main>
+      <h2>General information fields.</h2>
+      <div class="form-group camera-wrapper">
+        <label>Include Media</label>
 
-    <h2>{{ showSubGroupName }} specific information fields.</h2>
-    <div class="form-group" v-for="item in formFields" :key="item.code">
-      <div v-if="item.datatype === 'string'">
-        <label :for="item.key">{{ item.description }}</label>
         <input
-          v-model="defaultFields[item.code]"
-          type="text"
-          :id="item.name"
-          :name="item.name" />
+          type="file"
+          accept="image/jpeg, image/jpg, image/png"
+          @change="uploadImage"
+          ref="fileInput"
+          multiple>
+
+        <div class="video-wrapper" v-show="showVideoElm">
+          <video
+            ref="video"
+            id="video"
+            autoplay
+            playsinline>
+          </video>
+
+          <button
+            v-on:click="capture()"
+            class="button take"
+            alt="Take photo"
+            title="Take photo"
+            >
+            <span>Take Photo</span>
+          </button>
+
+          <button
+            v-on:click="closeCamera()"
+            class="button close"
+            alt="Close camera"
+            title="Close camera">Close Camera</button>
+        </div>
+
+        <canvas ref="canvas" id="canvas" width="640" height="480" v-show="false"></canvas>
+        <ul v-if="captures.length">
+          <li v-for="c in captures" :key="c">
+            <img :src="c" @click="biggerImage(c)" />
+            <button type="button" class="button" @click="removeImage(c)">remove</button>
+          </li>
+        </ul>
+
+        <button @click="$refs.fileInput.click()">Upload File</button>
+
+        <button
+          v-on:click="openCamera()"
+          class="button open"
+          alt="Open camera"
+          title="Open camera">Open Camera</button>
       </div>
 
-      <div v-else-if="item.datatype === 'number'">
-        <label :for="item.key">{{ item.description }}</label>
-        <input
-          type="number"
-          v-model="defaultFields[item.code]"
-          :id="item.name"
-          :name="item.name" />
-      </div>
-
-      <div v-else-if="item.datatype === 'datetime'">
-        <label :for="item.key">{{ item.description }}</label>
-        <input
-          type="datetime-local"
-          v-model="defaultFields[item.code]"
-          :id="item.name"
-          :name="item.name" />
-      </div>
-
-      <div v-else-if="item.datatype === 'text'">
-        <label :for="item.description">{{ item.description }}</label>
+      <div class="form-group">
+        <label for="default-description">Tell us a little about this issue</label>
         <textarea
-          v-model="defaultFields[item.code]"
-          :id="item.name"
-          :name="item.name"
-          wrap="hard"></textarea>
+          v-model="defaultFields.description"
+          id="default-description"
+          name="default-description"
+          wrap="hard">
+        </textarea>
       </div>
 
-      <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-        <legend>{{ item.description }}</legend>
-        <div v-for="value in item.values" :key="value.code" :item="item">
+      <h2>{{ showSubGroupName }} specific information fields.</h2>
+      <div class="form-group" v-for="item in formFields" :key="item.code">
+        <div v-if="item.datatype === 'string'">
+          <label :for="item.key">{{ item.description }}</label>
           <input
-            type="radio"
             v-model="defaultFields[item.code]"
-            :id="item.code"
-            :value="value.key"
-            :name="item.code" />
-          <label :for="value.key">{{ value.name }}</label>
+            type="text"
+            :id="item.name"
+            :name="item.name" />
+        </div>
+
+        <div v-else-if="item.datatype === 'number'">
+          <label :for="item.key">{{ item.description }}</label>
+          <input
+            type="number"
+            v-model="defaultFields[item.code]"
+            :id="item.name"
+            :name="item.name" />
+        </div>
+
+        <div v-else-if="item.datatype === 'datetime'">
+          <label :for="item.key">{{ item.description }}</label>
+          <input
+            type="datetime-local"
+            v-model="defaultFields[item.code]"
+            :id="item.name"
+            :name="item.name" />
+        </div>
+
+        <div v-else-if="item.datatype === 'text'">
+          <label :for="item.description">{{ item.description }}</label>
+          <textarea
+            v-model="defaultFields[item.code]"
+            :id="item.name"
+            :name="item.name"
+            wrap="hard"></textarea>
+        </div>
+
+        <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
+          <legend>{{ item.description }}</legend>
+          <div v-for="value in item.values" :key="value.code" :item="item">
+            <input
+              type="radio"
+              v-model="defaultFields[item.code]"
+              :id="item.code"
+              :value="value.key"
+              :name="item.code" />
+            <label :for="value.key">{{ value.name }}</label>
+          </div>
+        </div>
+
+        <div v-else-if="item.datatype === 'multivaluelist'">
+          <label :for="item.description">{{ item.description }}</label>
+          <select :id="item.key" v-model="defaultFields[item.code]">
+            <option
+              v-for="item in item.values"
+              :value="item.key"
+              :key="item.name">{{ item.name }}
+          </option>
+          </select>
         </div>
       </div>
 
-      <div v-else-if="item.datatype === 'multivaluelist'">
-        <label :for="item.description">{{ item.description }}</label>
-        <select :id="item.key" v-model="defaultFields[item.code]">
-          <option
-            v-for="item in item.values"
-            :value="item.key"
-            :key="item.name">{{ item.name }}
-        </option>
-        </select>
-      </div>
-    </div>
+      {{attrKeyValPairs}}
 
-    {{attrKeyValPairs}}
+      <footer>
+        <nuxt-link
+          to="/confirm"
+          class="button next-button"
+          @click.native="submitPost()">Next</nuxt-link>
 
-    <footer>
-      <nuxt-link
-        to="/confirm"
-        class="button next-button"
-        @click.native="submitPost()">Next</nuxt-link>
+        <!-- <button class="button next-button" @click="storeCommitFormInfo()">Store</button> -->
+        <!-- <button class="button next-button" @click="submitPost()">Submit</button> -->
+      </footer>
 
-      <!-- <button class="button next-button" @click="storeCommitFormInfo()">Store</button> -->
-      <!-- <button class="button next-button" @click="submitPost()">Submit</button> -->
-    </footer>
-
-    <modal v-if="showBiggerImage">
-      <img slot="body" :src="modalImage" />
-      <button slot="footer" @click="showBiggerImage = false">close</button>
-    </modal>
-  </main>
+      <modal v-if="showBiggerImage">
+        <img slot="body" :src="modalImage" />
+        <button slot="footer" @click="showBiggerImage = false">close</button>
+      </modal>
+    </main>
+  </div>
 </template>
 
 <style lang="scss">

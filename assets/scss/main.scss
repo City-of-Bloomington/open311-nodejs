@@ -58,14 +58,15 @@ html {
 main {
   // background: red;
   position: relative;
-  top: 73px;
+  top: 193px;
   width: 520px;
   margin: 0 auto;
 }
 
 .top {
   z-index: 1000;
-  background: #183365;
+  // background: #183365;
+  background: red;
   position: fixed;
   padding: 20px 0;
   max-width: 100%;
@@ -231,6 +232,10 @@ and (max-device-width : 480px) {
     padding: 20px;
   }
 
+  .top {
+    width: calc(100% - 40px);
+  }
+
   nav {
     h1 {
       font-size: 22px;
@@ -238,7 +243,7 @@ and (max-device-width : 480px) {
   }
 
   .search {
-    width: calc(100% - 40px);
+    // width: calc(100% - 40px);
   }
 
   .grid {

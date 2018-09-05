@@ -1,36 +1,40 @@
 <template>
-  <main>
-    <headerNav />
+  <div>
+    <div class="top">
+      <headerNav />
+    </div>
 
-    <div class="form-group" v-if="!geoError">
-      <div v-if="loading" class="loader-wrapper">
-        <div class="bar"></div>
+    <main>
+      <div class="form-group" v-if="!geoError">
+        <div v-if="loading" class="loader-wrapper">
+          <div class="bar"></div>
+        </div>
+
+        <label for="location">Location:</label>
+        <input v-model="location.address_string"
+               type="text"
+               id="location"
+               disabled="disabled">
       </div>
 
-      <label for="location">Location:</label>
-      <input v-model="location.address_string"
-             type="text"
-             id="location"
-             disabled="disabled">
-    </div>
+      <h3 v-if="loading">Detecting your location.</h3>
 
-    <h3 v-if="loading">Detecting your location.</h3>
+      <div v-if="geoError">
+        <h3>It's helpful to report the issue location.</h3><br>
+        <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
+      </div>
 
-    <div v-if="geoError">
-      <h3>It's helpful to report the issue location.</h3><br>
-      <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
-    </div>
+      <div id="map-element" v-if="!geoError"></div>
 
-    <div id="map-element" v-if="!geoError"></div>
-
-    <footer>
-      <nuxt-link
-        v-if="!loading"
-        to="/fields"
-        class="button next-button"
-        @click.native="storeCommitLocationInfo">Next</nuxt-link>
-    </footer>
-  </main>
+      <footer>
+        <nuxt-link
+          v-if="!loading"
+          to="/fields"
+          class="button next-button"
+          @click.native="storeCommitLocationInfo">Next</nuxt-link>
+      </footer>
+    </main>
+  </div>
 </template>
 
 <style type="text/css">

@@ -1,25 +1,29 @@
 <template>
-  <main>
-    <headerNav />
+  <div>
+    <div class="top">
+      <headerNav />
+    </div>
 
-    <ul class="subcategories">
-      <li v-for="subCat in subGroupList"
-        :key="subCat.service_name"
-        @click="subGroupName(subCat)">
-        <nuxt-link to="/info">{{ subCat.service_name }}</nuxt-link>
-      </li>
-    </ul>
+    <main>
+      <ul class="subcategories">
+        <li v-for="subCat in subGroupList"
+          :key="subCat.service_name"
+          @click="subGroupName(subCat)">
+          <nuxt-link to="/info">{{ subCat.service_name }}</nuxt-link>
+        </li>
+      </ul>
 
-    <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
-    <modal v-if="showModal">
-      <h3 slot="header">uReport: Can't Find It</h3>
-      <p slot="body">Can't find what you are looking for?</p>
+      <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
+      <modal v-if="showModal">
+        <h3 slot="header">uReport: Can't Find It</h3>
+        <p slot="body">Can't find what you are looking for?</p>
 
-      <p slot="body">You may send an e-mail directly to <strong>info@bloomington.in.gov</strong>, or call the City at <strong>812.349.3400</strong>.</p>
+        <p slot="body">You may send an e-mail directly to <strong>info@bloomington.in.gov</strong>, or call the City at <strong>812.349.3400</strong>.</p>
 
-      <button slot="footer" @click="showModal = false">OK</button>
-    </modal>
-  </main>
+        <button slot="footer" @click="showModal = false">OK</button>
+      </modal>
+    </main>
+  </div>
 </template>
 
 <script>

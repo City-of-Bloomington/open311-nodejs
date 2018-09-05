@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <search-input />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"
@@ -53,16 +53,22 @@ export default {
   },
   data() {
     return {
+      top: '',
       showModal: false,
       groups: []
     }
   },
   mounted() {
+    this.topHeight();
+
     axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
     .then(res => { this.groups = res.data })
     .catch(err => { console.log(err); });
   },
   methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
+    },
     groupsAsCss(group) {
       return group
       .replace(/\s+/g, '-')
@@ -75,6 +81,7 @@ export default {
     }
   },
   computed: {
+
     groupCategories() {
       return [...new Set(this.groups.map(g => g.group))]
     }

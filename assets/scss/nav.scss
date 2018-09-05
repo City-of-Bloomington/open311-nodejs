@@ -1,7 +1,8 @@
 nav {
   display: flex;
   flex-flow: wrap;
-  margin: 0 0 20px 0;
+  margin: 0 auto;
+  max-width: 520px;
 
   h1 {
     display: inline-block;
