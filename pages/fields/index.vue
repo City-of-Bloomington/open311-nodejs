@@ -9,6 +9,13 @@
       <div class="form-group camera-wrapper">
         <label>Include Media</label>
 
+        <!-- <input
+          type="file"
+          accept="image/jpeg, image/jpg, image/png"
+          @change="uploadImage"
+          ref="fileInput"
+          multiple> -->
+
         <input
           type="file"
           accept="image/jpeg, image/jpg, image/png"
@@ -130,8 +137,6 @@
         </div>
       </div>
 
-      {{attrKeyValPairs}}
-
       <footer>
         <nuxt-link
           to="/confirm"
@@ -190,7 +195,12 @@ export default {
       video:            {},
       canvas:           {},
       captures:         [],
-      response:         {}
+      response:         {},
+      cloudinary: {
+        uploadPreset: 'mot4xuaa',
+        apiKey: '555991339559458',
+        cloudName: 'butcherad'
+     },
     }
   },
   mounted() {
@@ -199,6 +209,25 @@ export default {
     .catch(err => { console.log(`Fields page error: ${err}`); });
   },
   methods: {
+    dataURItoBlob(dataURI) {
+      // convert base64/URLEncoded data component to raw binary data held in a string
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+          byteString = atob(dataURI.split(',')[1]);
+      else
+          byteString = unescape(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([ia], {type:mimeString});
+    },
     capture() {
       this.canvas = this.$refs.canvas;
       var context = this.canvas.getContext("2d")
@@ -225,13 +254,29 @@ export default {
     removeImage(c){
       this.captures.splice(this.captures.indexOf(c), 1);
     },
-    uploadImage(e){
+    uploadImage(e, file){
       const image = e.target.files[0];
       const reader = new FileReader();
+      const formData = new FormData();
+
       reader.readAsDataURL(image);
       reader.onload = e => {
         this.captures.push(e.target.result);
       };
+
+      // alert(`this far??`);
+      // formData.append('file', e.target.files[0]);
+      // formData.append('upload_preset', this.cloudinary.uploadPreset);
+
+      // axios.post(`https://api.cloudinary.com/v1_1/${this.cloudinary.cloudName}/upload/`,formData)
+      // .then(res => {
+      //   alert(`image uploaded??`);
+      //   console.log(res.data.secure_url);
+      //   this.captures.unshift({
+      //     url: res.data.secure_url
+      //   })
+      // })
+      // .catch(error => { alert(`cloudinary error :: ${error}`)});
     },
     biggerImage(c) {
       this.showBiggerImage = true;
@@ -242,64 +287,36 @@ export default {
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
     submitPost() {
-
       this.$store.commit('storeFormInfo', this.defaultFields);
 
-      var testing = `api_key=${process.env.open311Key}`
-                  + `&service_code=${this.postServiceCode}`
-                  + `&lat=${this.postLat}`
-                  + `&long=${this.postLong}`
-                  + `&address_string=${this.postAddressString}`
-                  + `&email=${this.postEmail}`
-                  + `&first_name=${this.postFirstName}`
-                  + `&last_name=${this.postLastName}`
-                  + `&phone=${this.postPhone}`
-                  + `&description=${this.postDefaultDescription}`
-                  // + `&media_url=${this.postMedia}`
-                  + `&${this.attrKeyValPairs}`;
+      var formData     = new FormData();
+      var dataURL = this.postMedia;
+      var blob = this.dataURItoBlob(dataURL);
+      var requestAttrs = this.defaultFields;
 
-      // var formData = new FormData();
-      // formData.append("api_key", process.env.open311Key)
-      // formData.append("service_code", this.postServiceCode)
-      // formData.append("lat", this.postLat)
-      // formData.append("long", this.postLong)
-      // formData.append("address_string", this.postAddressString)
-      // // formData.append("account_id",)
-      // formData.append("email", this.postEmail)
-      // formData.append("first_name", this.postFirstName)
-      // formData.append("last_name", this.postLastName)
-      // formData.append("phone", this.postPhone)
-      // // formData.append("description", )
-      // // formData.append("media_url", )
-      // formData.append("attribute", this.attrKeyValPairs)
+      formData.append("api_key", process.env.open311Key)
+      formData.append("service_code", this.postServiceCode)
+      formData.append("lat", this.postLat)
+      formData.append("long", this.postLong)
+      formData.append("address_string", this.postAddressString)
+      formData.append("email", this.postEmail)
+      formData.append("first_name", this.postFirstName)
+      formData.append("last_name", this.postLastName)
+      formData.append("phone", this.postPhone)
+      formData.append("description", this.postDefaultDescription)
+      formData.append("media", blob)
 
-      // var formObject = {};
-      // formData.forEach(function(value, key){
-      //   formObject[key] = value;
-      // });
-      // var formJson = JSON.stringify(formObject);
-
-      // console.log(formData);
+      Object.keys(requestAttrs).map(function(key) {
+        return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
+      }).join('&');
 
       axios.post(`${process.env.apiUrl}${process.env.postApi}`,
-      // axios.post(`/`,
-        // formData,
-        testing,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
+        formData
       )
       .then(response => {
-        console.log(testing);
-        // alert(testing);
-        // alert(JSON.stringify(response.data[0]));
         this.$store.commit('storeResponseInfo', response.data[0]);
       })
       .catch(error => {
-        // console.log(testing);
-        // alert('dang!!');
         console.log(error);
       });
     }
@@ -336,10 +353,10 @@ export default {
       return this.$store.state.serviceInfos.personal_info.phone
     },
     postMedia() {
-      return this.captures
+      return this.captures[0]
     },
     postDefaultDescription() {
-      return this.$store.state.serviceInfos.service_fields.description
+      return this.defaultFields.description
     },
     postServiceCode() {
       var sc = parseInt(this.$store.state.serviceInfos.service_group.service_code, 10)
@@ -347,15 +364,6 @@ export default {
     },
     formFields() {
       return this.formElements.attributes
-    },
-    attrKeyValPairs() {
-      var requestAttrs = this.$store.state.serviceInfos.service_fields;
-
-      var requestAttrsStr = Object.keys(requestAttrs).map(function(key) {
-        return `attribute[${key}]=${requestAttrs[key]}`;
-      }).join('&');
-
-      return requestAttrsStr;
     }
   }
 }
