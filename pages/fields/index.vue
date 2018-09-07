@@ -195,12 +195,7 @@ export default {
       video:            {},
       canvas:           {},
       captures:         [],
-      response:         {},
-      cloudinary: {
-        uploadPreset: 'mot4xuaa',
-        apiKey: '555991339559458',
-        cloudName: 'butcherad'
-     },
+      response:         {}
     }
   },
   mounted() {
@@ -213,9 +208,9 @@ export default {
       // convert base64/URLEncoded data component to raw binary data held in a string
       var byteString;
       if (dataURI.split(',')[0].indexOf('base64') >= 0)
-          byteString = atob(dataURI.split(',')[1]);
+        byteString = atob(dataURI.split(',')[1]);
       else
-          byteString = unescape(dataURI.split(',')[1]);
+        byteString = unescape(dataURI.split(',')[1]);
 
       // separate out the mime component
       var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -223,7 +218,7 @@ export default {
       // write the bytes of the string to a typed array
       var ia = new Uint8Array(byteString.length);
       for (var i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
+        ia[i] = byteString.charCodeAt(i);
       }
 
       return new Blob([ia], {type:mimeString});
@@ -257,26 +252,10 @@ export default {
     uploadImage(e, file){
       const image = e.target.files[0];
       const reader = new FileReader();
-      const formData = new FormData();
-
       reader.readAsDataURL(image);
       reader.onload = e => {
         this.captures.push(e.target.result);
       };
-
-      // alert(`this far??`);
-      // formData.append('file', e.target.files[0]);
-      // formData.append('upload_preset', this.cloudinary.uploadPreset);
-
-      // axios.post(`https://api.cloudinary.com/v1_1/${this.cloudinary.cloudName}/upload/`,formData)
-      // .then(res => {
-      //   alert(`image uploaded??`);
-      //   console.log(res.data.secure_url);
-      //   this.captures.unshift({
-      //     url: res.data.secure_url
-      //   })
-      // })
-      // .catch(error => { alert(`cloudinary error :: ${error}`)});
     },
     biggerImage(c) {
       this.showBiggerImage = true;
