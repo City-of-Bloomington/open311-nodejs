@@ -56,9 +56,9 @@ html {
 // }
 
 main {
-  // background: red;
+  background: red;
   position: relative;
-  top: 193px;
+  // top: 193px;
   width: 520px;
   margin: 0 auto;
 }
@@ -227,9 +227,9 @@ button {
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
   main {
-    width: 100%;
-    margin: 0;
-    padding: 20px;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    padding: 20px 0;
   }
 
   .top {
@@ -247,13 +247,11 @@ and (max-device-width : 480px) {
   }
 
   .grid {
-    grid-gap: 10px;
     grid-row-gap: 40px;
 
     .item {
       h3 {
         font-size: 18px;
-        width: 75%;
         margin: 0 auto;
       }
 

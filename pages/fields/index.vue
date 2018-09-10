@@ -179,6 +179,7 @@ export default {
       ]
     }
   },
+  middleware: 'redirect-home',
   props: ['item'],
   components: {
     headerNav,

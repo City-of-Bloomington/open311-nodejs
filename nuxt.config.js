@@ -23,7 +23,8 @@ module.exports = {
   loading: { color: '#FFFFFF' },
   css: [
     '@/assets/vendor/normalize/normalize.css',
-    '@/assets/scss/main.scss'
+    '@/assets/scss/main.scss',
+    '~/plugins/leaflet/leaflet.css'
   ],
   modules: [
     '@nuxtjs/axios',
@@ -45,6 +46,9 @@ module.exports = {
     mapBoxUrl:   process.env.MAPBOX_URL || 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
     mapBoxKey:   process.env.MAPBOX_KEY
   },
+  plugins: [
+    { src: '~/plugins/leaflet/leaflet.js', ssr: false}
+  ],
   build: {
     vendors: ['babel-polyfill'],
 

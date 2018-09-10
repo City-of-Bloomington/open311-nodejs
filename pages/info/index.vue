@@ -52,6 +52,7 @@
 import headerNav from '~/components/nav.vue'
 
 export default {
+  middleware: 'redirect-home',
   components: {
     headerNav
   },

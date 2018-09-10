@@ -47,11 +47,12 @@ const Store = () => {
     },
     actions: {},
     getters: {
-      group:     state => state.serviceInfos.service_group.group,
-      subGroup:  state => state.serviceInfos.service_group.service_name,
-      response:  state => state.serviceInfos.service_response,
-      firstName: state => state.serviceInfos.personal_info.first_name,
-      requestID: state => state.serviceInfos.service_response.service_request_id
+      group:          state => state.serviceInfos.service_group.group,
+      subGroup:       state => state.serviceInfos.service_group.service_name,
+      subGroupCode:   state => state.serviceInfos.service_group.service_code,
+      response:       state => state.serviceInfos.service_response,
+      firstName:      state => state.serviceInfos.personal_info.first_name,
+      requestID:      state => state.serviceInfos.service_response.service_request_id
     }
   })
 }

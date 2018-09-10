@@ -57,10 +57,6 @@
     margin: 0 0 20px 0;
   }
 
-  /*.search {
-    margin: 0 0 20px 0;
-  }*/
-
   .loader-wrapper {
     position: absolute;
     top: 42px;
@@ -68,21 +64,16 @@
 </style>
 
 <script>
-import L from 'leaflet';
 import axios from 'axios'
 import headerNav from '~/components/nav.vue'
 
+let leaflet;
+if (process.browser) {
+  leaflet = require('leaflet')
+}
+
 export default {
-  head () {
-    return {
-      script: [
-        { src: './leaflet/leaflet.js' }
-      ],
-      link: [
-        { rel: 'stylesheet', href: './leaflet/leaflet.css' }
-      ]
-    }
-  },
+  middleware: 'redirect-home',
   components: {
     headerNav
   },
@@ -165,6 +156,7 @@ export default {
     },
     initMap(lat,long) {
       var self = this;
+
       var mymap = L.map('map-element');
       mymap.setView([self.lat,self.long], 20);
 

@@ -59,7 +59,6 @@ export default {
   },
   mounted() {
     this.topHeight();
-
     axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
     .then(res => { this.groups = res.data })
     .catch(err => { console.log(err); });
