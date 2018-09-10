@@ -130,9 +130,9 @@ export default {
     locationUpdate: function() {
       this.updateAddressString(this.location.lat,this.location.long);
     },
-    mapsCords: function() {
-      this.initMap(this.location.lat,this.location.long);
-    }
+    // mapsCords: function() {
+    //   this.initMap(this.location.lat,this.location.long);
+    // }
   },
   methods: {
     topHeight() {
@@ -143,6 +143,8 @@ export default {
       .then(response => {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;
+        this.location.lat = response.data.location.x;
+        this.location.long = response.data.location.y;
         console.log(`UAS :: `,response.data);
       })
       .catch(error => {
@@ -158,7 +160,7 @@ export default {
       var self = this;
 
       var mymap = L.map('map-element');
-      mymap.setView([self.lat,self.long], 20);
+      mymap.setView([self.location.lat,self.location.long], 20);
 
       var crosshairIcon = L.icon({
         iconUrl:      '/crosshair.png',
@@ -208,17 +210,18 @@ export default {
     },
     searchAddressString() {
       var self = this;
-      alert(`clicked search ... this take A WHILE`);
-      axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
-      .then(response => {
-        self.search_results = response.data;
-        console.log(self.search_results)
-      })
-      .catch(error => {
-        alert(`SAS :: Error happened: ${error}`);
-      })
-      .then(function () {});
-
+      if(self.location.address_string != '') {
+        alert(`This might take a while ...`);
+        axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
+        .then(response => {
+          self.search_results = response.data;
+          console.log(self.search_results)
+        })
+        .catch(error => {
+          alert(`SAS :: Error happened: ${error}`);
+        })
+        .then(function () {});
+      }
     }
   },
   computed: {
