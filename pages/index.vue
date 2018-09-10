@@ -45,7 +45,6 @@ import axios from 'axios'
 import searchInput from '~/components/searchInput.vue'
 import modal from '~/components/modal.vue'
 
-
 export default {
   components: {
     searchInput,
@@ -81,7 +80,6 @@ export default {
     }
   },
   computed: {
-
     groupCategories() {
       return [...new Set(this.groups.map(g => g.group))]
     }

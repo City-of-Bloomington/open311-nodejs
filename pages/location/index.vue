@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <headerNav />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <div class="search">
         <div class="form-group" v-if="!geoError">
           <div v-if="loading" class="loader-wrapper">
@@ -37,8 +37,6 @@
             {{address.streetAddress}} - - - {{address.latitude}},{{address.longitude}}
         </li>
       </ul>
-
-
 
       <div id="map-element" v-if="!geoError"></div>
 
@@ -90,6 +88,7 @@ export default {
   },
   data() {
     return {
+      top:              '',
       geoError:         false,
       loading:          false,
       location: {
@@ -104,6 +103,7 @@ export default {
   },
   mounted() {
     var self = this;
+    self.topHeight();
     self.loading = true;
     self.geoError = false;
 
@@ -134,8 +134,6 @@ export default {
                   + `longitude: ${self.location.long}`
       );
     }
-
-
   },
   watch: {
     locationUpdate: function() {
@@ -146,6 +144,9 @@ export default {
     }
   },
   methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
+    },
     updateAddressString(lat,long){
       axios.get(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location=${long},${lat}`)
       .then(response => {

@@ -1,14 +1,12 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <headerNav />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
-
-      <!--     {{responseData}} -->
 
       <nuxt-link to="/" class="button ok-button">
         <span>ok</span>
@@ -36,6 +34,15 @@ export default {
   },
   data() {
     return {
+      top:  '',
+    }
+  },
+  mounted() {
+    this.topHeight();
+  },
+  methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
     }
   },
   computed: {

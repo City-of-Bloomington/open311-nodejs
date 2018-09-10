@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <headerNav />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <ul class="subcategories">
         <li v-for="subCat in subGroupList"
           :key="subCat.service_name"
@@ -38,11 +38,13 @@ export default {
   },
   data() {
     return {
+      top:       '',
       showModal: false,
       allData:   []
     }
   },
   mounted() {
+    this.topHeight();
     axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
     .then(res => { this.allData = res.data })
     .catch(err => {
@@ -50,6 +52,9 @@ export default {
     });
   },
   methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
+    },
     subGroupName(name) {
       return this.$store.commit('storeSubGroupName', name)
     }

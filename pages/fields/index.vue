@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <headerNav />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <h2>General information fields.</h2>
       <div class="form-group camera-wrapper">
         <label>Include Media</label>
@@ -186,6 +186,7 @@ export default {
   },
   data() {
     return {
+      top:              '',
       modalImage:       null,
       showBiggerImage:  false,
       formElements:     {},
@@ -199,11 +200,15 @@ export default {
     }
   },
   mounted() {
+    this.topHeight();
     axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
     .then(res => { this.formElements = res.data })
     .catch(err => { console.log(`Fields page error: ${err}`); });
   },
   methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
+    },
     dataURItoBlob(dataURI) {
       // convert base64/URLEncoded data component to raw binary data held in a string
       var byteString;

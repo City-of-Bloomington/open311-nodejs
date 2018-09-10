@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="top">
+    <div class="top" ref="top">
       <headerNav />
     </div>
 
-    <main>
+    <main v-bind:style="{top}">
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -57,15 +57,22 @@ export default {
   },
   data() {
     return {
+      top:          '',
       userInfo: {
         first_name: '',
-        last_name: '',
-        phone: '',
-        email: ''
+        last_name:  '',
+        phone:      '',
+        email:      ''
       }
     }
   },
+  mounted() {
+    this.topHeight();
+  },
   methods: {
+    topHeight() {
+      this.top = this.$refs.top.clientHeight + 'px';
+    },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
     }
