@@ -56,17 +56,14 @@ html {
 // }
 
 main {
-  background: red;
   position: relative;
-  // top: 193px;
   width: 520px;
   margin: 0 auto;
 }
 
 .top {
   z-index: 1000;
-  // background: #183365;
-  background: green;
+  background: $biscay;
   position: fixed;
   padding: 20px 0;
   max-width: 100%;
