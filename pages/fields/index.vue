@@ -20,8 +20,7 @@
           type="file"
           accept="image/jpeg, image/jpg, image/png"
           @change="uploadImage"
-          ref="fileInput"
-          multiple>
+          ref="fileInput">
 
         <div class="video-wrapper" v-show="showVideoElm">
           <video
@@ -195,7 +194,8 @@ export default {
       video:            {},
       canvas:           {},
       captures:         [],
-      response:         {}
+      response:         {},
+      singleImgMessage: 'Sorry, we only support a single image at the moment.'
     }
   },
   mounted() {
@@ -227,7 +227,11 @@ export default {
       this.canvas = this.$refs.canvas;
       var context = this.canvas.getContext("2d")
       context.drawImage(this.video, 0, 0, 640, 480);
-      this.captures.push(canvas.toDataURL("image/png"));
+      if(this.captures.length < 1) {
+        this.captures.push(canvas.toDataURL("image/png"));
+      } else {
+        alert(this.singleImgMessage);
+      }
     },
     openCamera() {
       this.showVideoElm = true;
@@ -253,9 +257,13 @@ export default {
       const image = e.target.files[0];
       const reader = new FileReader();
       reader.readAsDataURL(image);
-      reader.onload = e => {
-        this.captures.push(e.target.result);
-      };
+      if(this.captures.length < 1) {
+        reader.onload = e => {
+          this.captures.push(e.target.result);
+        };
+      } else {
+        alert(this.singleImgMessage);
+      }
     },
     biggerImage(c) {
       this.showBiggerImage = true;
