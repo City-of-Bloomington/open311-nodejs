@@ -101,14 +101,7 @@ export default {
     this.geoLocate();
 
     var self = this;
-    setTimeout(function(){ self.initMap() }, 5000);
-
-    // document.onreadystatechange = () => {
-    //   alert('she ready tho??');
-    //   if (document.readyState == "complete") {
-    //     this.initMap();
-    //   }
-    // }
+    setTimeout(function(){ self.initMap(self.location.lat,self.location.long); }, 3000);
   },
   watch: {
     locationUpdate: function() {
@@ -138,13 +131,17 @@ export default {
       }
 
       var geolocation_options = {
-        enableHighAccuracy: true
+        enableHighAccuracy: true,
+        timeout           : 27000
       };
 
       function displayLocationInfo(position) {
         self.location.lat = position.coords.latitude;
         self.location.long = position.coords.longitude;
-        self.updateMap(self.location.lat,self.location.long);
+        // self.initMap(self.location.lat,self.location.long);
+        // self.initMap();
+        // self.updateMap(self.location.lat,self.location.long);
+        console.log(position);
         console.log(`Original -- latitude: `
                     + `${self.location.lat} | `
                     + `longitude: ${self.location.long}`
@@ -152,17 +149,13 @@ export default {
       };
     },
     updateAddressString(lat,long){
-
-      // does this return x/y backwards?!
-      axios.get(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location=${long},${lat}`)
+      axios.get(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location=${long},${lat}`)
       .then(response => {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;
-
-        // it's backwards?
-        // this.location.lat = response.data.location.x;
-        // this.location.long = response.data.location.y;
-        console.log(`updateAddressString() :: `, response.data.address.Match_addr);
+        this.location.lat = response.data.location.x;
+        this.location.long = response.data.location.y;
+        console.log(`updateAddressString() :: `,response.data);
       })
       .catch(error => {this.loading = false; })
       .then(function () {});
@@ -170,13 +163,15 @@ export default {
     storeCommitLocationInfo() {
       return this.$store.commit('storeLocationInfo', this.location)
     },
-    initMap() {
+    initMap(lat,long) {
       var self = this;
 
       var mymap = L.map('map-element');
       this.mymap = mymap;
 
-      mymap.setView([this.location.lat,this.location.long], 20);
+      mymap.setView([self.location.lat,self.location.long], 20);
+
+      // mymap.setView([lat,long], 20);
 
       var crosshairIcon = L.icon({
         iconUrl:      '/crosshair.png',
@@ -217,10 +212,10 @@ export default {
     clearSearch() {
 
       this.loading = false;
-      this.location.lat = '';
-      this.location.long = '';
-      this.search_results = '';
-      this.location.address_string = '';
+      this.location.lat = '',
+      this.location.long = '',
+      this.search_results = '',
+      this.location.address_string = ''
       // this.mymap.setView([39.1636505,-86.525757], 13);
     },
     addressResult(address) {

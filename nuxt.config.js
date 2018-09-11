@@ -43,7 +43,7 @@ module.exports = {
     open311Key:  process.env.OPEN_311_KEY,
     apiUrl:      process.env.API_URL || 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/',
     osmUrl:      process.env.OSM_URL || 'https://nominatim.openstreetmap.org/reverse?format=jsonv2',
-    mapBoxUrl:   process.env.MAPBOX_URL || 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+    mapBoxUrl:   process.env.MAPBOX_URL || 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.mvt?access_token={accessToken}',
     mapBoxKey:   process.env.MAPBOX_KEY
   },
   plugins: [
