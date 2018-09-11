@@ -119,20 +119,17 @@ export default {
     function displayLocationInfo(position) {
       self.location.lat = position.coords.latitude;
       self.location.long = position.coords.longitude;
-      self.initMap();
+      self.initMap(self.location.lat,self.location.long);
       console.log(`Original -- latitude: `
                   + `${self.location.lat} | `
                   + `longitude: ${self.location.long}`
       );
-    }
+    };
   },
   watch: {
     locationUpdate: function() {
       this.updateAddressString(this.location.lat,this.location.long);
-    },
-    // mapsCords: function() {
-    //   this.initMap(this.location.lat,this.location.long);
-    // }
+    }
   },
   methods: {
     topHeight() {
@@ -160,7 +157,9 @@ export default {
       var self = this;
 
       var mymap = L.map('map-element');
-      mymap.setView([self.location.lat,self.location.long], 20);
+      this.mymap = mymap;
+
+      mymap.setView([lat,long], 20);
 
       var crosshairIcon = L.icon({
         iconUrl:      '/crosshair.png',
@@ -195,6 +194,9 @@ export default {
         accessToken:  `${process.env.mapBoxKey}`
       }).addTo(mymap);
     },
+    updateMap(lat,long) {
+      this.mymap.setView([lat,long], 20);
+    },
     clearSearch() {
       this.loading = false;
       this.location.lat = '',
@@ -203,10 +205,11 @@ export default {
       this.location.address_string = ''
     },
     addressResult(address) {
-      console.dir(JSON.stringify(address)),
-      this.location.lat = address.latitude,
-      this.location.long = address.longitude,
-      this.location.address_string = address.streetAddress
+      console.dir(JSON.stringify(address));
+      this.location.lat = address.latitude;
+      this.location.long = address.longitude;
+      this.location.address_string = address.streetAddress;
+      this.updateMap(this.location.lat,this.location.long);
     },
     searchAddressString() {
       var self = this;
