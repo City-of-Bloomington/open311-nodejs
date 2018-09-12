@@ -11,16 +11,65 @@
     margin: 0;
   }
 
-  &:after {
+  .locate {
     position: absolute;
-    content: '';
-    top: 6px;
-    right: 6px;
-    background-image: url("data:image/svg+xml,%0A%3Csvg id='search-icon' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='26.9238281px' height='27.2495117px' viewBox='0 0 26.9238281 27.2495117' enable-background='new 0 0 26.9238281 27.2495117' xml:space='preserve'%3E%3Cpath id='icon' fill='%23FFFFFF' d='M26.9238281,25.128418l-6.1652832-6.1652832c1.6081543-2,2.576416-4.5352783,2.576416-7.295166 C23.3349609,5.234375,18.1005859,0,11.6674805,0C5.2338867,0,0,5.234375,0,11.6679688 c0,6.4331055,5.2338867,11.6674805,11.6674805,11.6674805c2.5933838,0,4.9837646-0.861084,6.9231567-2.2980347l6.2120972,6.2120972 L26.9238281,25.128418z M3,11.6679688C3,6.8886719,6.8881836,3,11.6674805,3c4.7788086,0,8.6674805,3.8886719,8.6674805,8.6679688 c0,4.7788086-3.8886719,8.6674805-8.6674805,8.6674805C6.8881836,20.3354492,3,16.4467773,3,11.6679688z'/%3E%3C/svg%3E");
-    background-size: contain;
+    top: 0;
+    left: 0;
     width: 20px;
-    height: 20px;
+    height: 100%;
+    display: block;
+
+    span {
+      @include visuallyHidden();
+    }
+
+    &:before {
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: contain;
+      width: 20px;
+      height: 20px;
+    }
   }
+
+  .clear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    display: block;
+
+    span {
+      @include visuallyHidden();
+    }
+
+    &:before {
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14.994 14.994'%3E%3Ctitle%3Eclear-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='clear-icon'%3E%3Cline x1='14.287' y1='0.707' x2='0.707' y2='14.287' fill='none' stroke='%23fff' stroke-miterlimit='10' stroke-width='2'/%3E%3Cline x1='0.707' y1='0.707' x2='14.287' y2='14.287' fill='none' stroke='%23fff' stroke-miterlimit='10' stroke-width='2'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");      width: 20px;
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  // &:after {
+  //   position: absolute;
+  //   content: '';
+  //   top: 6px;
+  //   right: 6px;
+  //   background-image: url("data:image/svg+xml,%0A%3Csvg id='search-icon' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='26.9238281px' height='27.2495117px' viewBox='0 0 26.9238281 27.2495117' enable-background='new 0 0 26.9238281 27.2495117' xml:space='preserve'%3E%3Cpath id='icon' fill='%23FFFFFF' d='M26.9238281,25.128418l-6.1652832-6.1652832c1.6081543-2,2.576416-4.5352783,2.576416-7.295166 C23.3349609,5.234375,18.1005859,0,11.6674805,0C5.2338867,0,0,5.234375,0,11.6679688 c0,6.4331055,5.2338867,11.6674805,11.6674805,11.6674805c2.5933838,0,4.9837646-0.861084,6.9231567-2.2980347l6.2120972,6.2120972 L26.9238281,25.128418z M3,11.6679688C3,6.8886719,6.8881836,3,11.6674805,3c4.7788086,0,8.6674805,3.8886719,8.6674805,8.6679688 c0,4.7788086-3.8886719,8.6674805-8.6674805,8.6674805C6.8881836,20.3354492,3,16.4467773,3,11.6679688z'/%3E%3C/svg%3E");
+  //   background-size: contain;
+  //   width: 20px;
+  //   height: 20px;
+  // }
 
   label {
     @include visuallyHidden;
@@ -31,6 +80,7 @@
     background: rgba(225,225,225,0.2);
     color: white;
     margin: 0;
+    padding: 5px 40px 5px 45px !important;
 
     &::placeholder {
       color: white;

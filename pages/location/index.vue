@@ -13,36 +13,43 @@
 
           <label for="location">Location:</label>
           <input v-model="location.address_string"
+                 v-on:keyup.enter="searchAddressString"
                  type="text"
                  id="location"
                  ref="location-input">
-          <button type="button" @click="getCurrentPosition">Locate Me</button>
-          <button type="button" @click="searchAddressString">Search</button>
-          <button type="button" @click="clearSearch">Clear</button>
+          <button type="button" class="locate" @click="getCurrentPosition">
+            <span>Locate Me</span>
+          </button>
+
+          <button type="button" class="clear" @click="clearSearch">
+            <span>Clear Search</span>
+          </button>
         </div>
       </div>
 
-      <h3 v-if="loading">Detecting your location.</h3>
+      <h3 v-if="loading">Loading location data.</h3>
 
       <div v-if="geoError">
         <h3>It's helpful to report the issue location.</h3><br>
         <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
       </div>
 
-      <div id="map-element" v-if="!geoError"></div>
+      <div class="search-results" ref="results" v-if="showResults">
+        <h3 v-if="addressResults">Search Results:</h3>
+        <ul>
+          <li v-for="address in addressResults"
+              :key="address.streetAddress"
+              @click="addressResult(address)">
+              {{address.streetAddress}}
+          </li>
+        </ul>
+      </div>
 
-      <h3 v-if="addressResults">Search Results:</h3>
-      <ul>
-        <li v-for="address in addressResults"
-            :key="address.streetAddress"
-            @click="addressResult(address)">
-            {{address.streetAddress}}
-        </li>
-      </ul>
+      <div id="map-element" v-if="!geoError"></div>
 
       <footer>
         <nuxt-link
-          v-if="!loading"
+          v-if="showNextButton"
           to="/fields"
           class="button next-button"
           @click.native="storeCommitLocationInfo">Next</nuxt-link>
@@ -52,6 +59,9 @@
 </template>
 
 <style type="text/css">
+  .leaflet-control-attribution {
+    display: none;
+  }
 
   h3 strong {
     font-weight: 600;
@@ -59,6 +69,14 @@
 
   h4 {
     margin: 0 0 20px 0;
+  }
+
+  button {
+    color: white;
+  }
+
+  .form-group {
+    margin: 0 0 20px 0 !important;
   }
 
   .loader-wrapper {
@@ -91,13 +109,17 @@ export default {
         long:           null,
         address_string: null
       },
+      showMap:          true,
       map:              null,
       search_results:   null,
-      addressesList:    null
+      addressesList:    null,
+      showResults:      true
     }
   },
   mounted() {
     var self = this;
+    self.loading = true;
+    self.geoError = false;
     self.topHeight();
     self.geoLocatePromise()
     .then(position => {
@@ -112,15 +134,8 @@ export default {
       self.initMap();
     })
     .catch(function(){
-      alert('error')
+      console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
     });
-
-
-    // self.geoLocate().then(function() {
-    //   console.log('promise then...')
-    //   setTimeout(function(){ self.initMap() }, 5000);
-    // })
-    // self.initMap();
   },
   watch: {
     locationUpdate: function() {
@@ -130,73 +145,6 @@ export default {
   methods: {
     topHeight() {
       this.top = this.$refs.top.clientHeight + 'px';
-    },
-    geoLocate() {
-      // if (navigator.geolocation) {
-      //   console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
-      //   return new Promise((resolve, reject) =>  {
-      //     var self = this;
-      //     navigator.geolocation.getCurrentPosition(displayLocationInfo, resolve, reject);
-      //     resolve(displayLocationInfo);
-
-      //     self.loading = true;
-      //     self.geoError = false;
-
-      //     function displayLocationInfo(position) {
-      //       self.location.lat = position.coords.latitude;
-      //       self.location.long = position.coords.longitude;
-      //       self.updateMap(self.location.lat,self.location.long);
-      //       console.log(`Original -- latitude: `
-      //                   + `${self.location.lat} | `
-      //                   + `longitude: ${self.location.long}`
-      //       );
-      //     }
-      //   }, error => {
-      //     self.loading = false;
-      //     self.geoError = true;
-      //     console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      //     reject(error);
-      //   })
-      // } else {
-      //   console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      // }
-      // geoPromise().then(geo => {
-      //   alert('running geoloco');
-      // }).catch(error => {
-      //   alert('NOT running geoloco');
-      // });
-      // return geoPromise;
-
-        // var self = this;
-        // self.loading = true;
-        // self.geoError = false;
-
-        // if(navigator.geolocation){
-        //   navigator.geolocation.getCurrentPosition(displayLocationInfo, geolocation_error, geolocation_options);
-        //   console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
-        // } else {
-        //   console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-        // }
-
-        // function geolocation_error() {
-          // self.loading = false;
-          // self.geoError = true;
-          // console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-        // }
-
-        // var geolocation_options = {
-        //   enableHighAccuracy: true
-        // };
-
-        // function displayLocationInfo(position) {
-          // self.location.lat = position.coords.latitude;
-          // self.location.long = position.coords.longitude;
-          // self.updateMap(self.location.lat,self.location.long);
-          // console.log(`Original -- latitude: `
-          //             + `${self.location.lat} | `
-          //             + `longitude: ${self.location.long}`
-          // );
-        // };
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -212,6 +160,7 @@ export default {
     },
     getCurrentPosition() {
       var self = this;
+      self.loading = true;
       self.geoLocatePromise()
       .then(position => {
         if(position.coords) {
@@ -223,40 +172,35 @@ export default {
                       + `longitude: ${self.location.long}`
           );
         } else {
-          console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+          console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
       })
       .catch( error => {
         console.log(error);
-        // var msg = null;
-        // switch(error.code) {
-        //   case error.PERMISSION_DENIED:
-        //       msg = "User denied the request for Geolocation.";
-        //       break;
-        //   case error.POSITION_UNAVAILABLE:
-        //       msg = "Location information is unavailable.";
-        //       break;
-        //   case error.TIMEOUT:
-        //       msg = "The request to get user location timed out.";
-        //       break;
-        //   case error.UNKNOWN_ERROR:
-        //       msg = "An unknown error occurred.";
-        //       break;
-        // }
-        // alert(msg);
+        var errMsg = null;
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+              errMsg = "User denied the request for Geolocation.";
+              break;
+          case error.POSITION_UNAVAILABLE:
+              errMsg = "Location information is unavailable.";
+              break;
+          case error.TIMEOUT:
+              errMsg = "The request to get user location timed out.";
+              break;
+          case error.UNKNOWN_ERROR:
+              errMsg = "An unknown error occurred.";
+              break;
+        }
+        console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       })
     },
     updateAddressString(lat,long){
-
       // does this return x/y backwards?!
       axios.get(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location=${long},${lat}`)
       .then(response => {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;
-
-        // it's backwards?
-        // this.location.lat = response.data.location.x;
-        // this.location.long = response.data.location.y;
         console.log(`updateAddressString() :: `, response.data.address.Match_addr);
       })
       .catch(error => {this.loading = false; })
@@ -298,7 +242,7 @@ export default {
       });
 
       L.tileLayer(process.env.mapBoxUrl,{
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        attribution:  false,
         maxZoom:      18,
         setView:      true,
         detectRetina: true,
@@ -310,7 +254,6 @@ export default {
       this.mymap.setView([lat,long], 20);
     },
     clearSearch() {
-
       this.loading = false;
       this.location.lat = '';
       this.location.long = '';
@@ -324,13 +267,15 @@ export default {
       this.location.long = address.longitude;
       this.location.address_string = address.streetAddress;
       this.updateMap(this.location.lat,this.location.long);
+      this.showResults = false;
     },
     searchAddressString() {
       var self = this;
+      self.loading = true;
       if(self.location.address_string != '') {
-        alert(`This might take a while ...`);
         axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
         .then(response => {
+          self.loading = false;
           self.search_results = response.data;
           console.log(self.search_results)
         })
@@ -348,6 +293,13 @@ export default {
     },
     addressResults() {
       return this.search_results
+    },
+    showNextButton() {
+      this.address_string;
+      this.location.lat;
+      this.location.long;
+      this.loading;
+      return this.loading == false && this.address_string != '' && this.location.lat != '' && this.location.long != '';
     }
   }
 }
