@@ -16,7 +16,7 @@
                  type="text"
                  id="location"
                  ref="location-input">
-          <button type="button" @click="geoLocate">Locate Me</button>
+          <button type="button" @click="getCurrentPosition">Locate Me</button>
           <button type="button" @click="searchAddressString">Search</button>
           <button type="button" @click="clearSearch">Clear</button>
         </div>
@@ -97,18 +97,30 @@ export default {
     }
   },
   mounted() {
-    this.topHeight();
-    this.geoLocate();
-
     var self = this;
-    setTimeout(function(){ self.initMap() }, 5000);
+    self.topHeight();
+    self.geoLocatePromise()
+    .then(position => {
+      if(position.coords) {
+        self.location.lat = position.coords.latitude;
+        self.location.long = position.coords.longitude;
+      } else {
+        console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      }
+    })
+    .then(function(){
+      self.initMap();
+    })
+    .catch(function(){
+      alert('error')
+    });
 
-    // document.onreadystatechange = () => {
-    //   alert('she ready tho??');
-    //   if (document.readyState == "complete") {
-    //     this.initMap();
-    //   }
-    // }
+
+    // self.geoLocate().then(function() {
+    //   console.log('promise then...')
+    //   setTimeout(function(){ self.initMap() }, 5000);
+    // })
+    // self.initMap();
   },
   watch: {
     locationUpdate: function() {
@@ -120,36 +132,119 @@ export default {
       this.top = this.$refs.top.clientHeight + 'px';
     },
     geoLocate() {
-      alert('running geoloco');
-      var self = this;
-      self.loading = true;
-      self.geoError = false;
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(displayLocationInfo, geolocation_error, geolocation_options);
+      // if (navigator.geolocation) {
+      //   console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
+      //   return new Promise((resolve, reject) =>  {
+      //     var self = this;
+      //     navigator.geolocation.getCurrentPosition(displayLocationInfo, resolve, reject);
+      //     resolve(displayLocationInfo);
+
+      //     self.loading = true;
+      //     self.geoError = false;
+
+      //     function displayLocationInfo(position) {
+      //       self.location.lat = position.coords.latitude;
+      //       self.location.long = position.coords.longitude;
+      //       self.updateMap(self.location.lat,self.location.long);
+      //       console.log(`Original -- latitude: `
+      //                   + `${self.location.lat} | `
+      //                   + `longitude: ${self.location.long}`
+      //       );
+      //     }
+      //   }, error => {
+      //     self.loading = false;
+      //     self.geoError = true;
+      //     console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      //     reject(error);
+      //   })
+      // } else {
+      //   console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      // }
+      // geoPromise().then(geo => {
+      //   alert('running geoloco');
+      // }).catch(error => {
+      //   alert('NOT running geoloco');
+      // });
+      // return geoPromise;
+
+        // var self = this;
+        // self.loading = true;
+        // self.geoError = false;
+
+        // if(navigator.geolocation){
+        //   navigator.geolocation.getCurrentPosition(displayLocationInfo, geolocation_error, geolocation_options);
+        //   console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
+        // } else {
+        //   console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        // }
+
+        // function geolocation_error() {
+          // self.loading = false;
+          // self.geoError = true;
+          // console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        // }
+
+        // var geolocation_options = {
+        //   enableHighAccuracy: true
+        // };
+
+        // function displayLocationInfo(position) {
+          // self.location.lat = position.coords.latitude;
+          // self.location.long = position.coords.longitude;
+          // self.updateMap(self.location.lat,self.location.long);
+          // console.log(`Original -- latitude: `
+          //             + `${self.location.lat} | `
+          //             + `longitude: ${self.location.long}`
+          // );
+        // };
+    },
+    geoLocatePromise() {
+      if (navigator.geolocation) {
         console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
+        return new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        )
       } else {
-        console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        return new Promise(
+          resolve => resolve({})
+        )
       }
-
-      function geolocation_error() {
-        self.loading = false;
-        self.geoError = true;
-        console.log(`%c .: User Blocked Geolocation :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      }
-
-      var geolocation_options = {
-        enableHighAccuracy: true
-      };
-
-      function displayLocationInfo(position) {
-        self.location.lat = position.coords.latitude;
-        self.location.long = position.coords.longitude;
-        self.updateMap(self.location.lat,self.location.long);
-        console.log(`Original -- latitude: `
-                    + `${self.location.lat} | `
-                    + `longitude: ${self.location.long}`
-        );
-      };
+    },
+    getCurrentPosition() {
+      var self = this;
+      self.geoLocatePromise()
+      .then(position => {
+        if(position.coords) {
+          self.location.lat = position.coords.latitude;
+          self.location.long = position.coords.longitude;
+          self.updateMap(self.location.lat,self.location.long);
+          console.log(`Original -- latitude: `
+                      + `${self.location.lat} | `
+                      + `longitude: ${self.location.long}`
+          );
+        } else {
+          console.log(`%c .: Geolocation NOT supported :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        }
+      })
+      .catch( error => {
+        console.log(error);
+        // var msg = null;
+        // switch(error.code) {
+        //   case error.PERMISSION_DENIED:
+        //       msg = "User denied the request for Geolocation.";
+        //       break;
+        //   case error.POSITION_UNAVAILABLE:
+        //       msg = "Location information is unavailable.";
+        //       break;
+        //   case error.TIMEOUT:
+        //       msg = "The request to get user location timed out.";
+        //       break;
+        //   case error.UNKNOWN_ERROR:
+        //       msg = "An unknown error occurred.";
+        //       break;
+        // }
+        // alert(msg);
+      })
     },
     updateAddressString(lat,long){
 
