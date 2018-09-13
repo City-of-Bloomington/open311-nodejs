@@ -22,7 +22,8 @@
           @change="uploadImage"
           ref="fileInput">
 
-        <div class="video-wrapper" v-show="showVideoElm">
+        <!-- <div class="video-wrapper" v-show="showVideoElm"> -->
+        <div class="video-wrapper" v-show="false">
           <video
             ref="video"
             id="video"
@@ -54,9 +55,10 @@
           </li>
         </ul>
 
-        <button @click="$refs.fileInput.click()">Upload File</button>
+        <button @click="$refs.fileInput.click()" class="image-input">Include Image</button>
 
         <button
+          v-show="false"
           v-on:click="openCamera()"
           class="button open"
           alt="Open camera"
