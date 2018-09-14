@@ -77,21 +77,24 @@ ul {
   padding: 0;
   list-style: none;
 
-  &.subcategories {
+  li {
+    padding: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 
+    a {
+      display: block;
+      color: white;
+      padding: 10px 15px;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &.address-results {
     li {
-      padding: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-
-      a {
-        display: block;
-        color: white;
-        padding: 10px 15px;
-      }
-
-      &:last-of-type {
-        border-bottom: none;
-      }
+      padding: 10px 15px;
     }
   }
 }

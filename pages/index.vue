@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top" ref="top">
-      <search-input />
+      <search-input :data="groups" field="service_name"/>
     </div>
 
     <main v-bind:style="{top}">

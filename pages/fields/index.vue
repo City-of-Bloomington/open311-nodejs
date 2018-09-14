@@ -4,8 +4,8 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}">
-      <h2>General information fields.</h2>
+    <main v-bind:style="{top}" class="fields">
+      <h2>General information:</h2>
       <div class="form-group camera-wrapper">
         <label>Include Media</label>
 
@@ -75,68 +75,71 @@
         </textarea>
       </div>
 
-      <h2>{{ showSubGroupName }} specific information fields.</h2>
-      <div class="form-group" v-for="item in formFields" :key="item.code">
-        <div v-if="item.datatype === 'string'">
-          <label :for="item.key">{{ item.description }}</label>
-          <input
-            v-model="defaultFields[item.code]"
-            type="text"
-            :id="item.name"
-            :name="item.name" />
-        </div>
-
-        <div v-else-if="item.datatype === 'number'">
-          <label :for="item.key">{{ item.description }}</label>
-          <input
-            type="number"
-            v-model="defaultFields[item.code]"
-            :id="item.name"
-            :name="item.name" />
-        </div>
-
-        <div v-else-if="item.datatype === 'datetime'">
-          <label :for="item.key">{{ item.description }}</label>
-          <input
-            type="datetime-local"
-            v-model="defaultFields[item.code]"
-            :id="item.name"
-            :name="item.name" />
-        </div>
-
-        <div v-else-if="item.datatype === 'text'">
-          <label :for="item.description">{{ item.description }}</label>
-          <textarea
-            v-model="defaultFields[item.code]"
-            :id="item.name"
-            :name="item.name"
-            wrap="hard"></textarea>
-        </div>
-
-        <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-          <legend>{{ item.description }}</legend>
-          <div v-for="value in item.values" :key="value.code" :item="item">
+      <div v-if="hasFormAttributes">
+        <h2>{{ showSubGroupName }} specific information:</h2>
+        <div class="form-group" v-for="item in formFields" :key="item.code">
+          <div v-if="item.datatype === 'string'">
+            <label :for="item.key">{{ item.description }}</label>
             <input
-              type="radio"
               v-model="defaultFields[item.code]"
-              :id="item.code"
-              :value="value.key"
-              :name="item.code" />
-            <label :for="value.key">{{ value.name }}</label>
+              type="text"
+              :id="item.name"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'number'">
+            <label :for="item.key">{{ item.description }}</label>
+            <input
+              type="number"
+              v-model="defaultFields[item.code]"
+              :id="item.name"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'datetime'">
+            <label :for="item.key">{{ item.description }}</label>
+            <input
+              type="datetime-local"
+              v-model="defaultFields[item.code]"
+              :id="item.name"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'text'">
+            <label :for="item.description">{{ item.description }}</label>
+            <textarea
+              v-model="defaultFields[item.code]"
+              :id="item.name"
+              :name="item.name"
+              wrap="hard"></textarea>
+          </div>
+
+          <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
+            <legend>{{ item.description }}</legend>
+            <div v-for="value in item.values" :key="value.code" :item="item">
+              <input
+                type="radio"
+                v-model="defaultFields[item.code]"
+                :id="item.code"
+                :value="value.key"
+                :name="item.code" />
+              <label :for="value.key">{{ value.name }}</label>
+            </div>
+          </div>
+
+          <div v-else-if="item.datatype === 'multivaluelist'">
+            <label :for="item.description">{{ item.description }}</label>
+            <select :id="item.key" v-model="defaultFields[item.code]">
+              <option
+                v-for="item in item.values"
+                :value="item.key"
+                :key="item.name">{{ item.name }}
+            </option>
+            </select>
           </div>
         </div>
-
-        <div v-else-if="item.datatype === 'multivaluelist'">
-          <label :for="item.description">{{ item.description }}</label>
-          <select :id="item.key" v-model="defaultFields[item.code]">
-            <option
-              v-for="item in item.values"
-              :value="item.key"
-              :key="item.name">{{ item.name }}
-          </option>
-          </select>
-        </div>
       </div>
+
 
       <footer>
         <nuxt-link
@@ -157,6 +160,20 @@
 </template>
 
 <style lang="scss">
+
+  main {
+    .fields {
+      h2 {
+        border-bottom: 1px solid rgba(225,225,225,0.2);
+        margin: 0 0 10px 0;
+      }
+
+      .form-group {
+        margin: 0 0 40px 0 !important;
+      }
+    }
+  }
+
   .modal-header {
     display: none;
   }
@@ -213,6 +230,7 @@ export default {
       this.top = this.$refs.top.clientHeight + 'px';
     },
     dataURItoBlob(dataURI) {
+      alert(dataURI);
       // convert base64/URLEncoded data component to raw binary data held in a string
       var byteString;
       if (dataURI.split(',')[0].indexOf('base64') >= 0)
@@ -285,8 +303,8 @@ export default {
       this.$store.commit('storeFormInfo', this.defaultFields);
 
       var formData     = new FormData();
-      var dataURL = this.postMedia;
-      var blob = this.dataURItoBlob(dataURL);
+      var dataURL      = this.postMedia;
+      var blob         = this.dataURItoBlob(dataURL);
       var requestAttrs = this.defaultFields;
 
       formData.append("api_key", process.env.open311Key)
@@ -299,6 +317,7 @@ export default {
       formData.append("last_name", this.postLastName)
       formData.append("phone", this.postPhone)
       formData.append("description", this.postDefaultDescription)
+
       formData.append("media", blob)
 
       Object.keys(requestAttrs).map(function(key) {
@@ -359,6 +378,13 @@ export default {
     },
     formFields() {
       return this.formElements.attributes
+    },
+    hasFormAttributes() {
+      var array = this.formElements.attributes
+      if (Array.isArray(array) && array.length) {
+        return true
+      }
+      return false
     }
   }
 }

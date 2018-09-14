@@ -36,7 +36,7 @@
 
       <div class="search-results" ref="results" v-if="showResults">
         <h3 v-if="addressResults">Search Results:</h3>
-        <ul>
+        <ul class="address-results">
           <li v-for="address in addressResults"
               :key="address.streetAddress"
               @click="addressResult(address)">

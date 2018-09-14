@@ -75,6 +75,12 @@
     @include visuallyHidden;
   }
 
+  &.homepage-search {
+    input {
+      padding: 5px 10px !important;
+    }
+  }
+
   input {
     border: none;
     background: rgba(225,225,225,0.2);
@@ -89,7 +95,8 @@
 }
 
 .auto-suggest {
-  display: none;
+  // display: none;
+  // display: block;
   position: absolute;
   background-color: white;
   border-radius: 4px;
@@ -104,6 +111,7 @@
     padding: 0;
 
     li {
+      cursor: pointer;
       border-bottom: 1px solid rgba(24,51,101,1);
       // padding: 5px 10px;
       color: rgba(24,51,101,1);

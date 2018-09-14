@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}">
+    <main v-bind:style="{top}" class="thank-you">
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
 
@@ -16,6 +16,11 @@
 </template>
 
 <style type="text/css">
+  main h2 {
+    border-bottom: none;
+    margin: 0;
+  }
+
   p {
     margin: 0 0 20px 0;
   }
