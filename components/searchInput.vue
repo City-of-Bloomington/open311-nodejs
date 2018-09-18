@@ -6,7 +6,6 @@
       <input type="text"
              v-model="input"
              @keydown.tab.prevent="complete()"
-             @focus="focus(true)"
              @blur="blur(false)"
              placeholder="Search"/>
       <button type="button" class="clear" @click="clearSearch" v-if="focused">
@@ -49,15 +48,6 @@ export default {
   },
   methods: {
     complete(i) {
-
-      // if (i == undefined) {
-      //   for (let row of this.data) {
-      //     if (this.filter(row)) {
-      //       this.select(row)
-      //       return
-      //     }
-      //   }
-      // }
       this.select(this.data[i]);
       this.focused = false;
       this.$router.push({ path: 'info' })
@@ -71,16 +61,16 @@ export default {
     filter(row) {
       return row[this.field].toLowerCase().indexOf(this.input.toLowerCase()) != -1
     },
-    focus(val) {
-      console.log('focused');
-      console.log(this.input.length);
-      this.focused = val
-    },
     blur(val) {
       this.focused = val
       console.log('blur');
     },
     clearSearch() { this.input = '' }
+  },
+  watch: {
+    'input': function(val, oldVal){
+      ((val.length >= 1) ? this.focused = true : this.focused = false)
+    }
   },
   updated() {
     this.$emit('input', this.input)
