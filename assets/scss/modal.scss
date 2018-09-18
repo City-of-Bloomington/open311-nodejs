@@ -1,6 +1,8 @@
 body.showing-modal {
   overflow: hidden;
   position: fixed;
+  left: 0;
+  right: 0;
 }
 
 .modal-mask {

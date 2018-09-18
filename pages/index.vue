@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <button class="text-btn" @click="showModal(true)">- Disclaimer -</button>
+      <button class="text-btn" @click="showModal(true)">- Click to Read Disclaimer -</button>
       <modal v-if="showingModal">
         <h4 slot="header">uReport: Disclaimer</h4>
         <p slot="body"><strong>PLEASE NOTE:</strong></p>
@@ -37,6 +37,7 @@
 
         <button slot="footer" @click="showModal(false)">Ok</button>
       </modal>
+      <p class="emergency">.: No Emergency Usage :.</p>
     </main>
   </div>
 </template>
@@ -65,16 +66,13 @@ export default {
       groups: []
     }
   },
-  // asyncData ({}) {
-  //   return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
-  //   .then((res) => { this.groups = res.data; })
-  //   .catch((err) => { console.log(err); });
-  // },
+  asyncData ({req, params}) {
+    return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
+    .then((res) => { return { groups: res.data }})
+    .catch((err) => { console.log(err); });
+  },
   mounted() {
     this.topHeight();
-    axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
-    .then(res => { this.groups = res.data })
-    .catch(err => { console.log(err); });
   },
   methods: {
     topHeight() {
