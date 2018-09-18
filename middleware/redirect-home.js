@@ -1,9 +1,9 @@
 export default function (context, params, route, redirect) {
-  // If the user has no service code selection,
+  // If the user has no group selection,
   // and visits a later page ... this redirects them home
   // so they can make a selection.
-  const serviceCode = context.store.getters['subGroupCode'];
-  if(serviceCode == '') {
+  const group = context.store.getters['group'];
+  if(group == '') {
     return context.redirect('/');
   }
 }

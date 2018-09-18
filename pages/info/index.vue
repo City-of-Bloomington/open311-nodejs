@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}">
+    <main v-bind:style="{paddingTop}">
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -52,13 +52,17 @@
 import headerNav from '~/components/nav.vue'
 
 export default {
-  // middleware: 'redirect-home',
+  head () {
+    return {
+      titleTemplate: `%s - ${this.$store.getters.subGroup}`
+    }
+  },
   components: {
     headerNav
   },
   data() {
     return {
-      top:          '',
+      paddingTop:          '',
       userInfo: {
         first_name: '',
         last_name:  '',
@@ -72,7 +76,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)

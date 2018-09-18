@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}" class="thank-you">
+    <main v-bind:style="{paddingTop}" class="thank-you">
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
 
@@ -34,13 +34,18 @@
 import headerNav from '~/components/nav.vue'
 
 export default {
-  middleware: 'redirect-home',
+  middleware: ['redirect-home'],
+  head () {
+    return {
+      titleTemplate: `%s - Thanks!`
+    }
+  },
   components: {
     headerNav
   },
   data() {
     return {
-      top:  '',
+      paddingTop:  '',
     }
   },
   mounted() {
@@ -48,7 +53,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     }
   },
   computed: {

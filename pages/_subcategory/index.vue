@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}">
+    <main v-bind:style="{paddingTop}">
       <ul class="subcategories">
         <li v-for="subCat in subGroupList"
           :key="subCat.service_name"
@@ -15,7 +15,7 @@
 
       <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
       <modal v-if="showModal">
-        <h3 slot="header">uReport: Can't Find It</h3>
+        <h4 slot="header">uReport: Can't Find It</h4>
         <p slot="body">Can't find what you are looking for?</p>
 
         <p slot="body">You may send an e-mail directly to <strong>info@bloomington.in.gov</strong>, or call the City at <strong>812.349.3400</strong>.</p>
@@ -32,15 +32,24 @@ import headerNav from '~/components/nav.vue'
 import modal from '~/components/modal.vue'
 
 export default {
+  middleware: 'redirect-home',
+  head () {
+    return {
+      titleTemplate: `%s - ${this.$store.getters.group}`,
+      bodyAttrs: {
+        class: this.showingModal ? 'showing-modal' : ''
+      }
+    }
+  },
   components: {
     modal,
     headerNav
   },
   data() {
     return {
-      top:       '',
-      showModal: false,
-      allData:   []
+      paddingTop:       '',
+      showModal:        false,
+      allData:          []
     }
   },
   mounted() {
@@ -53,7 +62,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     },
     subGroupName(name) {
       return this.$store.commit('storeSubGroupName', name)

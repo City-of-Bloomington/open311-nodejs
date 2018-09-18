@@ -7,7 +7,7 @@
              v-model="input"
              @keydown.tab.prevent="complete()"
              @focus="focus(true)"
-             @blur="focus(false)"
+             @blur="blur(false)"
              placeholder="Search"/>
       <button type="button" class="clear" @click="clearSearch" v-if="focused">
         <span>Clear Search</span>
@@ -65,24 +65,21 @@ export default {
     select(row) {
       this.input = row[this.field];
       this.selected = true;
-
-      // this.row.service_name;
-      // this.row.group;
-      // this.row.service_code;
-
-      // this.$store.commit('storeGroupName', row.group)
-      // this.$store.commit('storeGroupName', row.service_name)
-      // this.$store.commit('storeGroupName', row.service_code)
-
-      this.$store.commit('storeSubGroupName', row)
-
-      // alert(JSON.stringify(row.service_name))
+      this.$store.commit('storeSubGroupName', row);
 
     },
     filter(row) {
       return row[this.field].toLowerCase().indexOf(this.input.toLowerCase()) != -1
     },
-    focus(val) { this.focused = val },
+    focus(val) {
+      console.log('focused');
+      console.log(this.input.length);
+      this.focused = val
+    },
+    blur(val) {
+      this.focused = val
+      console.log('blur');
+    },
     clearSearch() { this.input = '' }
   },
   updated() {

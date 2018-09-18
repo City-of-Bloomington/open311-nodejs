@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}">
+    <main v-bind:style="{paddingTop}">
       <div class="search">
         <div class="form-group" v-if="!geoError">
           <div v-if="loading" class="loader-wrapper">
@@ -96,12 +96,17 @@ if (process.browser) {
 
 export default {
   middleware: 'redirect-home',
+  head () {
+    return {
+      titleTemplate: `%s - ${this.$store.getters.subGroup}`
+    }
+  },
   components: {
     headerNav
   },
   data() {
     return {
-      top:              '',
+      paddingTop:              '',
       geoError:         false,
       loading:          false,
       location: {
@@ -144,7 +149,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {

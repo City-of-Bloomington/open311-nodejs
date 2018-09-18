@@ -4,7 +4,8 @@
       <search-input :data="groups" field="service_name"/>
     </div>
 
-    <main v-bind:style="{top}">
+    <main v-bind:style="{paddingTop}">
+    <!-- <main> -->
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"
@@ -18,9 +19,9 @@
         </div>
       </div>
 
-      <button class="text-btn" @click="showModal = true">- Disclaimer -</button>
-      <modal v-if="showModal">
-        <h3 slot="header">uReport: Disclaimer</h3>
+      <button class="text-btn" @click="showModal(true)">- Disclaimer -</button>
+      <modal v-if="showingModal">
+        <h4 slot="header">uReport: Disclaimer</h4>
         <p slot="body"><strong>PLEASE NOTE:</strong></p>
         <p slot="body"><i>This system is <strong>not</strong> for reporting emergencies or imminent safety hazards.</i></p>
 
@@ -34,7 +35,7 @@
 
         <p slot="body">You may also send an e-mail directly to info@bloomington.in.gov, or call the City at <strong>812.349.3400</strong>.</p>
 
-        <button slot="footer" @click="showModal = false">OK</button>
+        <button slot="footer" @click="showModal(false)">Ok</button>
       </modal>
     </main>
   </div>
@@ -46,17 +47,29 @@ import searchInput from '~/components/searchInput.vue'
 import modal from '~/components/modal.vue'
 
 export default {
+  head () {
+    return {
+      bodyAttrs: {
+        class: this.showingModal ? 'showing-modal' : ''
+      }
+    }
+  },
   components: {
     searchInput,
     modal
   },
   data() {
     return {
-      top: '',
-      showModal: false,
+      paddingTop: '',
+      showingModal: false,
       groups: []
     }
   },
+  // asyncData ({}) {
+  //   return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
+  //   .then((res) => { this.groups = res.data; })
+  //   .catch((err) => { console.log(err); });
+  // },
   mounted() {
     this.topHeight();
     axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
@@ -65,7 +78,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     },
     groupsAsCss(group) {
       return group
@@ -76,6 +89,11 @@ export default {
     },
     groupName(name) {
       return this.$store.commit('storeGroupName', name)
+    },
+    showModal(val) {
+      console.log(this.showingModal)
+      console.log(val)
+      this.showingModal = val;
     }
   },
   computed: {

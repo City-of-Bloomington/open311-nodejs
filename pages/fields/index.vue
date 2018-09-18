@@ -4,7 +4,7 @@
       <headerNav />
     </div>
 
-    <main v-bind:style="{top}" class="fields">
+    <main v-bind:style="{paddingTop}" class="fields">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
         <label>Include Media</label>
@@ -193,12 +193,10 @@ import modal from '~/components/modal.vue'
 export default {
   head () {
     return {
-      script: [
-        { src: './webrtc-adapter/adapter.js' }
-      ]
+      titleTemplate: `%s - ${this.$store.getters.subGroup}`
     }
   },
-  middleware: 'redirect-home',
+  middleware: ['redirect-home'],
   props: ['item'],
   components: {
     headerNav,
@@ -206,7 +204,7 @@ export default {
   },
   data() {
     return {
-      top:              '',
+      paddingTop:              '',
       modalImage:       null,
       showBiggerImage:  false,
       formElements:     {},
@@ -227,7 +225,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.top = this.$refs.top.clientHeight + 'px';
+      this.paddingTop = `${this.$refs.top.clientHeight}px`;
     },
     dataURItoBlob(dataURI) {
       if(dataURI) {
@@ -318,12 +316,13 @@ export default {
       formData.append("last_name", this.postLastName)
       formData.append("phone", this.postPhone)
       formData.append("description", this.postDefaultDescription)
-
       formData.append("media", blob)
 
       Object.keys(requestAttrs).map(function(key) {
         return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
       }).join('&');
+
+      // this.$router.push({ path: 'confirm' })
 
       axios.post(`${process.env.apiUrl}${process.env.postApi}`,
         formData
