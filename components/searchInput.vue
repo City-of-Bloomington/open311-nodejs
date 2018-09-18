@@ -8,7 +8,7 @@
              @keydown.tab.prevent="complete()"
              @blur="blur(false)"
              placeholder="Search"/>
-      <button type="button" class="clear" @click="clearSearch" v-if="focused">
+      <button type="button" class="clear" @click="clearSearch" v-if="showClearBtn">
         <span>Clear Search</span>
       </button>
 
@@ -34,7 +34,8 @@ export default {
   data() {
     return {
       input: '',
-      focused: false
+      focused: false,
+      showClearBtn: false
     }
   },
   props: {
@@ -56,7 +57,6 @@ export default {
       this.input = row[this.field];
       this.selected = true;
       this.$store.commit('storeSubGroupName', row);
-
     },
     filter(row) {
       return row[this.field].toLowerCase().indexOf(this.input.toLowerCase()) != -1
@@ -65,14 +65,24 @@ export default {
       this.focused = val
       console.log('blur');
     },
-    clearSearch() { this.input = '' }
+    clearSearch() {
+      console.log('clicked');
+      this.input = ''
+    }
   },
   watch: {
     'input': function(val, oldVal){
-      ((val.length >= 1) ? this.focused = true : this.focused = false)
+      if(val.length >= 1) {
+        this.focused = true
+        this.showClearBtn = true
+      } else {
+        this.focused = false
+        this.showClearBtn = false
+      }
     }
   },
   updated() {
+    console.log('emit updated')
     this.$emit('input', this.input)
   }
 }
