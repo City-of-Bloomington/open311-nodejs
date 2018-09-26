@@ -142,13 +142,7 @@
 
 
       <footer>
-        <nuxt-link
-          to="/confirm"
-          class="button next-button"
-          @click.native="submitPost()">Next</nuxt-link>
-
-        <!-- <button class="button next-button" @click="storeCommitFormInfo()">Store</button> -->
-        <!-- <button class="button next-button" @click="submitPost()">Submit</button> -->
+        <button class="button next-button" @click="submitPost()">Submit</button>
       </footer>
 
       <modal v-if="showBiggerImage">
@@ -329,6 +323,9 @@ export default {
       )
       .then(response => {
         this.$store.commit('storeResponseInfo', response.data[0]);
+      })
+      .then(response => {
+        this.$router.push({ path: 'confirm' })
       })
       .catch(error => {
         console.log(error);

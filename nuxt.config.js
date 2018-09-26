@@ -6,8 +6,8 @@ module.exports = {
       { name: 'viewport',
         content: 'width=device-width, initial-scale=1'
       },
-      { hid: 'description',
-        name: 'description',
+      { hid: 'uReport',
+        name: 'uReport',
         content: 'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
       }
     ],
@@ -29,7 +29,23 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
+    '@nuxtjs/pwa',
   ],
+  workbox: {
+    dev: true,
+    importScripts: ['/sw.js'],
+    runtimeCaching: [{
+      urlPattern: 'https://fonts.googleapis.com/.*',
+      handler: 'cacheFirst',
+      method: 'GET',
+      strategyOptions: {cacheableResponse: {statuses: [0, 200]}}
+    }]
+  },
+  manifest: {
+    name: 'uReport',
+    description: 'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
+    theme_color: '#1e59ae'
+  },
   axios: {
     proxy: true,
     credentials: true,

@@ -8,6 +8,7 @@
 /* Import Components */
 @import 'colors.scss';
 @import 'mixins.scss';
+@import 'topbar.scss';
 @import 'type.scss';
 @import 'buttons.scss';
 @import 'camera.scss';
@@ -66,6 +67,7 @@ html {
 
 main {
   position: relative;
+  display: block;
   width: 520px;
   margin: 0 auto;
 }
@@ -118,12 +120,26 @@ ul {
 
 .grid {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-items: center;
   justify-items: center;
 
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    // IE10+
+    position: relative;
+    width: 520px;
+    margin: 0 auto;
+  }
+
+  > div {
+    flex-basis: 50%;
+    margin-bottom: 20px;
+  }
+
   .item {
+    display: block;
     cursor: pointer;
     background: transparent;
     border: none;

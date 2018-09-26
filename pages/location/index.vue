@@ -6,25 +6,27 @@
 
     <main v-bind:style="{paddingTop}">
       <div class="search">
-        <div class="form-group" v-if="!geoError">
-          <div v-if="loading" class="loader-wrapper">
-            <div class="bar"></div>
+        <form action="" @submit.prevent>
+          <div class="form-group" v-if="!geoError">
+            <div v-if="loading" class="loader-wrapper">
+              <div class="bar"></div>
+            </div>
+
+            <label for="location">Location:</label>
+            <input v-model="location.address_string"
+                   v-on:keyup.enter="searchAddressString"
+                   type="text"
+                   id="location"
+                   ref="location-input">
+            <button type="button" class="locate" @click="getCurrentPosition">
+              <span>Locate Me</span>
+            </button>
+
+            <button type="button" class="clear" @click="clearSearch">
+              <span>Clear Search</span>
+            </button>
           </div>
-
-          <label for="location">Location:</label>
-          <input v-model="location.address_string"
-                 v-on:keyup.enter="searchAddressString"
-                 type="text"
-                 id="location"
-                 ref="location-input">
-          <button type="button" class="locate" @click="getCurrentPosition">
-            <span>Locate Me</span>
-          </button>
-
-          <button type="button" class="clear" @click="clearSearch">
-            <span>Clear Search</span>
-          </button>
-        </div>
+        </form>
       </div>
 
       <h3 v-if="loading">Loading location data.</h3>
