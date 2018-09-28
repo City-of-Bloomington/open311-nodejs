@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="top" ref="top">
+      <topBar />
       <search-input :data="groups" field="service_name"/>
     </div>
 
@@ -46,6 +47,7 @@
 import axios from 'axios'
 import searchInput from '~/components/searchInput.vue'
 import modal from '~/components/modal.vue'
+import topBar from '~/components/topBar.vue'
 
 export default {
   head () {
@@ -57,7 +59,8 @@ export default {
   },
   components: {
     searchInput,
-    modal
+    modal,
+    topBar
   },
   data() {
     return {
@@ -76,7 +79,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.top.clientHeight}px`;
+      this.paddingTop = `${this.$refs.top.clientHeight + 50}px`;
     },
     groupsAsCss(group) {
       return group

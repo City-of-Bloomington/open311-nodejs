@@ -1,9 +1,6 @@
 .search {
-  // z-index: 1;
   position: relative;
-  // width: inherit;
   margin: 0 auto;
-  // background: pink;
   max-width: 520px;
 
   .form-group {
@@ -78,6 +75,8 @@
   }
 
   &.homepage-search {
+    top: 50px;
+
     input {
       padding: 5px 10px !important;
     }

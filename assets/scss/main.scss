@@ -254,6 +254,33 @@ button {
   margin: 0 0 20px 0;
 }
 
+.disclaimer {
+  .container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 520px;
+    width: 100%;
+
+    div {
+      &:first-of-type {
+        margin-left: auto;
+      }
+    }
+  }
+
+  h1 {
+    margin: 0 0 20px 0;
+  }
+
+  p {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    line-height: 25px;
+  }
+}
 
 // Smartphones
 @media only screen
@@ -266,10 +293,27 @@ and (max-device-width : 480px) {
   }
 
   .top {
-    width: calc(100% - 40px);
+    // width: calc(100% - 40px);
+    .homepage-search {
+      width: calc(100% - 40px);
+    }
+  }
+
+  .disclaimer {
+    .container {
+      width: calc(100% - 40px);
+    }
+  }
+
+  header {
+    .container {
+      width: calc(100% - 40px);
+    }
   }
 
   nav {
+    width: calc(100% - 40px);
+
     h1 {
       font-size: 24px;
     }

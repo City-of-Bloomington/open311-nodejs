@@ -20,6 +20,10 @@ module.exports = {
         href: 'https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600|Abel'}
     ]
   },
+  serverMiddleware: [{path: '/subfolder/test', handler: '~/middleware/api/post.js'}],
+  router: {
+    base: process.env.NODE_ENV === 'dev' ? '/' : '/ureport/'
+  },
   loading: { color: '#FFFFFF' },
   css: [
     '@/assets/vendor/normalize/normalize.css',
@@ -31,7 +35,7 @@ module.exports = {
     '@nuxtjs/proxy',
     '@nuxtjs/pwa',
   ],
-  workbox: {
+  /*workbox: {
     dev: true,
     importScripts: ['/sw.js'],
     runtimeCaching: [{
@@ -40,7 +44,7 @@ module.exports = {
       method: 'GET',
       strategyOptions: {cacheableResponse: {statuses: [0, 200]}}
     }]
-  },
+  },*/
   manifest: {
     name: 'uReport',
     description: 'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
