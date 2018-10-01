@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-bottom: 10px;">
+  <div>
     <topBar />
     <nav v-bind:style="{top}" ref="nHeight">
       <nuxt-link to="/" class="nav-back" ref="nav-back">
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     navTopSpacing() {
-      this.top = `${this.headerHeight + 12}px`;
+      this.top = `${this.headerHeight}px`;
     },
     nHeight() {
       this.navHeight = this.$refs.nHeight.clientHeight;

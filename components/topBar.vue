@@ -23,11 +23,9 @@ export default {
   },
   mounted() {
     this.hHeight();
-
   },
   methods: {
     hHeight() {
-      // +2 for the border-bottm height
       this.headerHeight = this.$refs.hHeight.clientHeight;
       return this.$store.commit('storeHeaderHeight', this.headerHeight)
     }

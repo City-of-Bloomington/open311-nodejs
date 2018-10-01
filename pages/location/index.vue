@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
