@@ -1,7 +1,7 @@
 nav {
   position: relative;
   // top: 52px;
-  padding: 42px 0 0 0;
+  padding: 10px 0;
   display: flex;
   flex-flow: wrap;
   margin: 0 auto;
@@ -9,12 +9,13 @@ nav {
 
   h1 {
     display: inline-block;
+    line-height: 30px;
   }
 
   h2 {
     position: relative;
     width: 100%;
-    margin: 0 0 0 55px;
+    margin: 0 0 0 46px;
     overflow: hidden;
 
     &:after {
@@ -35,8 +36,8 @@ nav {
     background-size: contain;
     background-repeat: no-repeat;
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     margin: 0 15px 0 0;
 
     span {

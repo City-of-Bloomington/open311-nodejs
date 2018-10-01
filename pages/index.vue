@@ -2,7 +2,7 @@
   <div>
     <div class="top" ref="top">
       <topBar />
-      <search-input :data="groups" field="service_name"/>
+      <search-input :data="groups" field="service_name" v-bind:style="{top}"/>
     </div>
 
     <main v-bind:style="{paddingTop}">
@@ -65,8 +65,8 @@ export default {
   data() {
     return {
       paddingTop:   '',
+      top:          '',
       showingModal: false,
-      topBarHeight: 52,
       groups:       []
     }
   },
@@ -77,11 +77,14 @@ export default {
   },
   mounted() {
     this.topHeight();
+    this.searchPos();
   },
   methods: {
     topHeight() {
-      // 52px is the height of the fixed top navbar
-      this.paddingTop = `${this.$refs.top.clientHeight + this.topBarHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.searchHeight}px`;
+    },
+    searchPos() {
+      this.top = `${this.headerHeight}px`;
     },
     groupsAsCss(group) {
       return group
@@ -102,6 +105,12 @@ export default {
   computed: {
     groupCategories() {
       return [...new Set(this.groups.map(g => g.group))]
+    },
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    searchHeight() {
+      return this.$store.getters.searchHeight
     }
   }
 }

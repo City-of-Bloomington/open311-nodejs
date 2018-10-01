@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 const Store = () => {
   return new Vuex.Store({
     state: {
+      header_height: '',
+      search_height: '',
+      nav_height:    '',
       serviceInfos: {
         service_group: {
           group:          '',
@@ -43,6 +46,15 @@ const Store = () => {
       },
       storeResponseInfo(state, payload) {
         state.serviceInfos.service_response = payload
+      },
+      storeHeaderHeight(state, payload) {
+        state.header_height = payload
+      },
+      storeSearchHeight(state, payload) {
+        state.search_height = payload
+      },
+      storeNavHeight(state, payload) {
+        state.nav_height = payload
       }
     },
     actions: {},
@@ -52,7 +64,10 @@ const Store = () => {
       subGroupCode:   state => state.serviceInfos.service_group.service_code,
       response:       state => state.serviceInfos.service_response,
       firstName:      state => state.serviceInfos.personal_info.first_name,
-      requestID:      state => state.serviceInfos.service_response.service_request_id
+      requestID:      state => state.serviceInfos.service_response.service_request_id,
+      headerHeight:   state => state.header_height,
+      searchHeight:   state => state.search_height,
+      navHeight:      state => state.nav_height
     }
   })
 }

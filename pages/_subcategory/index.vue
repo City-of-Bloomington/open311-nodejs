@@ -48,8 +48,8 @@ export default {
   data() {
     return {
       paddingTop:   '',
-      showModal:        false,
-      allData:          []
+      showModal:    false,
+      allData:      []
     }
   },
   mounted() {
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
     },
     subGroupName(name) {
       return this.$store.commit('storeSubGroupName', name)
@@ -74,6 +74,12 @@ export default {
         g => g.group == this.$store.state.serviceInfos.service_group.group
       );
       return allsubGroups
+    },
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
     }
   }
 }

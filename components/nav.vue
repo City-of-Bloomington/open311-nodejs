@@ -1,7 +1,7 @@
 <template>
-  <div style="padding-bottom: 10px;" ref="topBar">
+  <div style="padding-bottom: 10px;">
     <topBar />
-    <nav v-bind:style="{navTopPadding}">
+    <nav v-bind:style="{top}" ref="nHeight">
       <nuxt-link to="/" class="nav-back" ref="nav-back">
         <span>back</span>
       </nuxt-link>
@@ -20,22 +20,29 @@ export default {
   },
   data() {
     return {
-      navTopPadding: '',
+      top:       '',
+      navHeight: '',
       showModal:  false,
       allData:    []
     }
   },
   mounted() {
-    this.radicalHeight();
+    this.navTopSpacing();
+    this.nHeight();
   },
   methods: {
-    radicalHeight() {
-      this.navTopPadding = `${this.$refs.topBar.clientHeight - 10}px`;
+    navTopSpacing() {
+      this.top = `${this.headerHeight + 12}px`;
+    },
+    nHeight() {
+      this.navHeight = this.$refs.nHeight.clientHeight;
+      return this.$store.commit('storeNavHeight', this.navHeight)
     }
   },
   computed: {
     group()   { return this.$store.getters.group },
-    subGroup(){ return this.$store.getters.subGroup }
+    subGroup(){ return this.$store.getters.subGroup },
+    headerHeight() { return this.$store.getters.headerHeight }
   },
   watch: {
     confirmRoute: function() {

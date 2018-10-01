@@ -108,7 +108,7 @@ export default {
   },
   data() {
     return {
-      paddingTop:              '',
+      paddingTop:       '',
       geoError:         false,
       loading:          false,
       location: {
@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -307,6 +307,12 @@ export default {
       this.location.long;
       this.loading;
       return this.loading == false && this.address_string != '' && this.location.lat != '' && this.location.long != '';
+    },
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
     }
   }
 }

@@ -198,7 +198,7 @@ export default {
   },
   data() {
     return {
-      paddingTop:              '',
+      paddingTop:       '',
       modalImage:       null,
       showBiggerImage:  false,
       formElements:     {},
@@ -219,7 +219,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
     },
     dataURItoBlob(dataURI) {
       if(dataURI) {
@@ -382,6 +382,12 @@ export default {
         return true
       }
       return false
+    },
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
     }
   }
 }

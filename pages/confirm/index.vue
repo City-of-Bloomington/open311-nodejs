@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
     }
   },
   computed: {
@@ -71,6 +71,12 @@ export default {
         return `<strong>${this.firstName}</strong>, thanks for the report!`
       }
       return `Thanks for the report!`
+    },
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
     }
   }
 }

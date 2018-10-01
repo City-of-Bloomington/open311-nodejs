@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      paddingTop:          '',
+      paddingTop:   '',
       userInfo: {
         first_name: '',
         last_name:  '',
@@ -76,12 +76,19 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
+      this.paddingTop = `${this.headerHeight + this.navHeight + 20}px`;
     },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
     }
   },
-  computed: {}
+  computed: {
+    headerHeight() {
+      return this.$store.getters.headerHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
+    }
+  }
 }
 </script>
