@@ -303,6 +303,17 @@ and (max-device-width : 480px) {
     .container {
       width: calc(100% - 40px);
     }
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      margin-left: auto;
+    }
   }
 
   header {

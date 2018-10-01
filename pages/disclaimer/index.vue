@@ -1,13 +1,16 @@
 <template>
   <div class="disclaimer">
-    <div class="top" ref="top" style="background: red;">
+    <div class="top" ref="top" style="padding: 0; height: 52px; display: flex; justify-content: center;">
       <div class="container">
-        <div @click="$router.back()">close</div>
+        <h1>uReport: Disclaimer</h1>
+        <div @click="$router.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.994 14.994"><title>close</title><g id="close-icon" data-name="close-icon"><line x1="14.287" y1="0.707" x2="0.707" y2="14.287" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/><line x1="0.707" y1="0.707" x2="14.287" y2="14.287" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/></g></svg>
+        </div>
       </div>
     </div>
 
     <main v-bind:style="{paddingTop}">
-      <h1>uReport: Disclaimer</h1>
+
 
       <h2>Please Note:</h2>
       <p><strong><i>This system is not for reporting emergencies or imminent safety hazards.</i></strong></p>
@@ -47,7 +50,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.top.clientHeight + 50}px`;
+      this.paddingTop = `${this.$refs.top.clientHeight + 10}px`;
     }
   },
   computed: {}
