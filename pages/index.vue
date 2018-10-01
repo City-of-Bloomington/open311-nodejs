@@ -6,7 +6,6 @@
     </div>
 
     <main v-bind:style="{paddingTop}">
-    <!-- <main> -->
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"
@@ -20,24 +19,6 @@
         </div>
       </div>
 
-      <button class="text-btn" @click="showModal(true)">- Click to Read Disclaimer -</button>
-      <modal v-if="showingModal">
-        <h4 slot="header">uReport: Disclaimer</h4>
-        <p slot="body"><strong>PLEASE NOTE:</strong></p>
-        <p slot="body"><i>This system is <strong>not</strong> for reporting emergencies or imminent safety hazards.</i></p>
-
-        <p slot="body">If this is an emergency, please immediately dial <strong>911</strong> for assistance.</p>
-
-        <p slot="body">If this is a safety hazard that could cause an injury, please immediately call <strong>City Utilities Control at 812-339-1444</strong>.</p>
-
-        <p slot="body">This number is staffed 24 hours a day. The appropriate staff will be dispatched to address the safety hazard.</p>
-
-        <p slot="body">When in doubt, please call, even if you are not sure.</p>
-
-        <p slot="body">You may also send an e-mail directly to info@bloomington.in.gov, or call the City at <strong>812.349.3400</strong>.</p>
-
-        <button slot="footer" @click="showModal(false)">Ok</button>
-      </modal>
       <p class="emergency">.: No Emergency Usage :.</p>
     </main>
   </div>
