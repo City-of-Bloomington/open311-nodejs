@@ -1,7 +1,7 @@
 <template>
-  <div style="border-bottom:1px solid yellow; min-height: 125px;">
+  <div style="padding-bottom: 10px;" ref="topBar">
     <topBar />
-    <nav>
+    <nav v-bind:style="{navTopPadding}">
       <nuxt-link to="/" class="nav-back" ref="nav-back">
         <span>back</span>
       </nuxt-link>
@@ -15,12 +15,27 @@
 import topBar from './topBar.vue'
 
 export default {
+  components: {
+    topBar
+  },
+  data() {
+    return {
+      navTopPadding: '',
+      showModal:  false,
+      allData:    []
+    }
+  },
+  mounted() {
+    this.radicalHeight();
+  },
+  methods: {
+    radicalHeight() {
+      this.navTopPadding = `${this.$refs.topBar.clientHeight - 10}px`;
+    }
+  },
   computed: {
     group()   { return this.$store.getters.group },
     subGroup(){ return this.$store.getters.subGroup }
-  },
-  components: {
-    topBar
   },
   watch: {
     confirmRoute: function() {

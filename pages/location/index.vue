@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="top" ref="top">
+    <div class="top" ref="topHeight">
       <headerNav />
     </div>
 
@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.top.clientHeight}px`;
+      this.paddingTop = `${this.$refs.topHeight.clientHeight}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {

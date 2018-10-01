@@ -64,9 +64,10 @@ export default {
   },
   data() {
     return {
-      paddingTop: '',
+      paddingTop:   '',
       showingModal: false,
-      groups: []
+      topBarHeight: 52,
+      groups:       []
     }
   },
   asyncData ({req, params}) {
@@ -79,7 +80,8 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.$refs.top.clientHeight + 50}px`;
+      // 52px is the height of the fixed top navbar
+      this.paddingTop = `${this.$refs.top.clientHeight + this.topBarHeight}px`;
     },
     groupsAsCss(group) {
       return group
