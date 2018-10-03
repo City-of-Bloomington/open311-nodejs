@@ -1,6 +1,8 @@
 module.exports = function (req, res, next) {
   // req is the Node.js http request object
-  console.log(req.path)
+  console.log(req);
+  // console.log(res);
+  console.dir('send it and send to confirm')
 
   // res is the Node.js http response object
 

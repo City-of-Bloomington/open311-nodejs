@@ -20,7 +20,7 @@ module.exports = {
         href: 'https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600|Abel'}
     ]
   },
-  serverMiddleware: [{path: '/subfolder/test', handler: '~/middleware/api/post.js'}],
+  serverMiddleware: ['~/api/index'],
   router: {
     base: process.env.NODE_ENV === 'dev' ? '/' : '/ureport/'
   },
