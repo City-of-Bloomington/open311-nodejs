@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top" ref="topHeight">
-      <headerNav />
-    </div>
+    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
+    </header>
 
     <main v-bind:style="{paddingTop}" class="fields">
       <h2>General information:</h2>
@@ -208,7 +208,21 @@ export default {
       canvas:           {},
       captures:         [],
       response:         {},
-      singleImgMessage: 'Sorry, we only support a single image at the moment.'
+      singleImgMessage: 'Sorry, we only support a single image at the moment.',
+      stepActive: {
+        one:   false,
+        two:   false,
+        three: false,
+        four:  false,
+        five:  true
+      },
+      stepComplete: {
+        one:   true,
+        two:   true,
+        three: true,
+        four:  true,
+        five:  false
+      }
     }
   },
   mounted() {
@@ -219,7 +233,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     dataURItoBlob(dataURI) {
       if(dataURI) {
@@ -398,11 +412,14 @@ export default {
       }
       return false
     },
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     navHeight() {
       return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
     }
   }
 }

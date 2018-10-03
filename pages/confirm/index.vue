@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top" ref="topHeight">
+    <header ref="topHeight" v-bind:style="{height: paddingTop}">
       <headerNav />
-    </div>
+    </header>
 
     <main v-bind:style="{paddingTop}" class="thank-you">
       <h2 v-html="thankYou"></h2><br>
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     }
   },
   computed: {
@@ -72,11 +72,14 @@ export default {
       }
       return `Thanks for the report!`
     },
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     navHeight() {
       return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
     }
   }
 }

@@ -12,6 +12,7 @@
 @import 'type.scss';
 @import 'buttons.scss';
 @import 'camera.scss';
+@import 'progress-stepper.scss';
 @import 'nav.scss';
 @import 'forms.scss';
 @import 'search.scss';
@@ -72,7 +73,7 @@ main {
   margin: 0 auto;
 }
 
-.top {
+header {
   z-index: 10000;
   background: $biscay;
   position: fixed;
@@ -292,12 +293,6 @@ and (max-device-width : 480px) {
     padding: 20px 0;
   }
 
-  .top {
-    // width: calc(100% - 40px);
-    .homepage-search {
-      width: calc(100% - 40px);
-    }
-  }
 
   .disclaimer {
     .container {
@@ -317,9 +312,23 @@ and (max-device-width : 480px) {
   }
 
   header {
+    .homepage-search {
+      width: calc(100% - 40px);
+    }
+
     .container {
       width: calc(100% - 40px);
     }
+
+    .top-bar {
+      .container {
+        width: calc(100% - 40px);
+      }
+    }
+  }
+
+  .progress-stepper {
+    width: calc(100% - 40px);
   }
 
   nav {

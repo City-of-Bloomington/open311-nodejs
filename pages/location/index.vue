@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top" ref="topHeight">
-      <headerNav />
-    </div>
+    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+      <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
+    </header>
 
     <main v-bind:style="{paddingTop}">
       <div class="search">
@@ -120,7 +120,21 @@ export default {
       map:              null,
       search_results:   null,
       addressesList:    null,
-      showResults:      true
+      showResults:      true,
+      stepActive: {
+        one:   false,
+        two:   false,
+        three: false,
+        four:  true,
+        five:  false
+      },
+      stepComplete: {
+        one:   true,
+        two:   true,
+        three: true,
+        four:  false,
+        five:  false
+      }
     }
   },
   mounted() {
@@ -151,7 +165,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -308,11 +322,14 @@ export default {
       this.loading;
       return this.loading == false && this.address_string != '' && this.location.lat != '' && this.location.long != '';
     },
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     navHeight() {
       return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
     }
   }
 }

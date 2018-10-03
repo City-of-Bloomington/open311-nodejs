@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="top" ref="top">
+    <header ref="top" v-bind:style="{height: paddingTop}">
       <topBar />
       <search-input :data="groups" field="service_name" v-bind:style="{top}"/>
-    </div>
+    </header>
 
     <main v-bind:style="{paddingTop}">
       <div class="grid">
@@ -62,10 +62,10 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.searchHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.searchHeight}px`;
     },
     searchPos() {
-      this.top = `${this.headerHeight}px`;
+      this.top = `${this.topbarHeight}px`;
     },
     groupsAsCss(group) {
       return group
@@ -87,8 +87,8 @@ export default {
     groupCategories() {
       return [...new Set(this.groups.map(g => g.group))]
     },
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     searchHeight() {
       return this.$store.getters.searchHeight

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top" ref="topHeight">
-      <headerNav />
-    </div>
+    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+      <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
+    </header>
 
     <main v-bind:style="{paddingTop}">
       <ul class="subcategories">
@@ -49,7 +49,21 @@ export default {
     return {
       paddingTop:   '',
       showModal:    false,
-      allData:      []
+      allData:      [],
+      stepActive: {
+        one:   false,
+        two:   true,
+        three: false,
+        four:  false,
+        five:  false
+      },
+      stepComplete: {
+        one:   true,
+        two:   false,
+        three: false,
+        four:  false,
+        five:  false
+      }
     }
   },
   mounted() {
@@ -62,7 +76,7 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     subGroupName(name) {
       return this.$store.commit('storeSubGroupName', name)
@@ -75,11 +89,14 @@ export default {
       );
       return allsubGroups
     },
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     navHeight() {
       return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top" ref="topHeight">
-      <headerNav />
-    </div>
+    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
+    </header>
 
     <main v-bind:style="{paddingTop}">
       <div class="form-group">
@@ -68,6 +68,20 @@ export default {
         last_name:  '',
         phone:      '',
         email:      ''
+      },
+      stepActive: {
+        one:   false,
+        two:   false,
+        three: true,
+        four:  false,
+        five:  false
+      },
+      stepComplete: {
+        one:   true,
+        two:   true,
+        three: false,
+        four:  false,
+        five:  false
       }
     }
   },
@@ -76,18 +90,21 @@ export default {
   },
   methods: {
     topHeight() {
-      this.paddingTop = `${this.headerHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
     }
   },
   computed: {
-    headerHeight() {
-      return this.$store.getters.headerHeight
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
     },
     navHeight() {
       return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
     }
   }
 }

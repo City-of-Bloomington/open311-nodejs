@@ -3,9 +3,10 @@ import Vuex from 'vuex'
 const Store = () => {
   return new Vuex.Store({
     state: {
-      header_height: '',
-      search_height: '',
-      nav_height:    '',
+      topbar_height:      '',
+      search_height:      '',
+      nav_height:         '',
+      stepper_height:     '',
       serviceInfos: {
         service_group: {
           group:          '',
@@ -47,14 +48,17 @@ const Store = () => {
       storeResponseInfo(state, payload) {
         state.serviceInfos.service_response = payload
       },
-      storeHeaderHeight(state, payload) {
-        state.header_height = payload
+      storeTopBarHeight(state, payload) {
+        state.topbar_height = payload
       },
       storeSearchHeight(state, payload) {
         state.search_height = payload
       },
       storeNavHeight(state, payload) {
         state.nav_height = payload
+      },
+      storeStepperHeight(state, payload) {
+        state.stepper_height = payload
       }
     },
     actions: {},
@@ -65,9 +69,10 @@ const Store = () => {
       response:       state => state.serviceInfos.service_response,
       firstName:      state => state.serviceInfos.personal_info.first_name,
       requestID:      state => state.serviceInfos.service_response.service_request_id,
-      headerHeight:   state => state.header_height,
+      topbarHeight:   state => state.topbar_height,
       searchHeight:   state => state.search_height,
-      navHeight:      state => state.nav_height
+      navHeight:      state => state.nav_height,
+      stepperHeight:  state => state.stepper_height
     }
   })
 }
