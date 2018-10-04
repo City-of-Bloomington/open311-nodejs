@@ -43,11 +43,11 @@
     </div>
 
     <nav v-bind:style="{top: stepperHeight + 'px'}" ref="nHeight">
-      <nuxt-link to="/" class="nav-back" ref="nav-back">
+      <nuxt-link to="/" class="nav-back" ref="navBack" v-if="!hideBackButton">
         <span>back</span>
       </nuxt-link>
       <h1 v-html="group"></h1>
-      <h2 v-html="subGroup"></h2>
+      <h2 v-html="subGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
     </nav>
   </div>
 </template>
@@ -62,17 +62,19 @@ export default {
   },
   data() {
     return {
-      top:           '',
-      navHeight:     '',
-      stepperHeight: '',
-      showModal:     false,
-      allData:       []
+      top:             '',
+      navHeight:       '',
+      stepperHeight:   '',
+      showModal:       false,
+      allData:         [],
+      hideBackButton:  false
     }
   },
   mounted() {
     this.navTopSpacing();
     this.nHeight();
     this.psHeight();
+    this.confirmRoute();
   },
   methods: {
     navTopSpacing() {
@@ -85,6 +87,11 @@ export default {
     psHeight() {
       this.stepperHeight = this.$refs.psHeight.clientHeight;
       return this.$store.commit('storeStepperHeight', this.stepperHeight)
+    },
+    confirmRoute() {
+      if(this.$route.path == '/confirm') {
+        this.hideBackButton = true;
+      }
     }
   },
   computed: {
@@ -94,7 +101,7 @@ export default {
   },
   watch: {
     confirmRoute: function() {
-      if (this.$route.path === "/confirm") {
+      if (this.$route.path == "/confirm") {
         alert('confirm screen')
       } else  {
         alert('not confirm screen')
