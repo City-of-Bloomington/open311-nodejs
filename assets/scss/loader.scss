@@ -3,6 +3,16 @@
   width: 100%;
   margin: 0;
   padding: 0;
+  position: absolute;
+  top: 15px;
+  right: 0;
+  left: 250px;
+
+  &.location {
+    left: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+  }
 
   .bar {
     animation: loader 2s cubic-bezier(.17,.37,.43,.67) infinite;
@@ -19,6 +29,16 @@
 
   50% {
     transform: translate(200px,0);
+    background-color: $fern;
+    width: 25px;
+  }
+}
+
+@keyframes locMobileloader {
+  0% , 100% { transform: translate(0,0); }
+
+  50% {
+    transform: translate(85px,0);
     background-color: $fern;
     width: 25px;
   }

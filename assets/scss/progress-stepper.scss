@@ -9,7 +9,9 @@
   line-height: 25px;
 
   span {
-    flex: 1 1 10%;
+    &.title {
+      flex: 1 1 10%;
+    }
   }
 
   div {
@@ -69,6 +71,17 @@
       display: block;
       top: 50%;
       transform: translateY(-50%);
+    }
+
+    svg {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 15px;
+      height: 12px;
+      display: block;
+      fill: white;
     }
   }
 }

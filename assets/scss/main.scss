@@ -114,6 +114,7 @@ ul {
 
   &.address-results {
     li {
+      cursor: pointer;
       padding: 10px 15px;
     }
   }
@@ -273,13 +274,21 @@ button {
   }
 
   h1 {
-    margin: 0 0 20px 0;
+    margin: 0;
   }
 
   p {
     margin: 0 0 20px 0;
     font-size: 18px;
     line-height: 25px;
+  }
+
+  svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    cursor: pointer;
   }
 }
 
@@ -297,17 +306,6 @@ and (max-device-width : 480px) {
   .disclaimer {
     .container {
       width: calc(100% - 40px);
-    }
-
-    h1 {
-      margin-bottom: 0;
-    }
-
-    svg {
-      display: block;
-      width: 20px;
-      height: 20px;
-      margin-left: auto;
     }
   }
 
@@ -360,6 +358,15 @@ and (max-device-width : 480px) {
         width: 100px;
         height: 100px;
       }
+    }
+  }
+
+  .loader-wrapper {
+    width: 100px;
+    left: 190px;
+
+    .bar {
+      animation: locMobileloader 2s cubic-bezier(.17,.37,.43,.67) infinite;
     }
   }
 

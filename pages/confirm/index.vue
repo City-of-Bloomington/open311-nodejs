@@ -1,7 +1,7 @@
 <template>
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
-      <headerNav />
+      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
     <main v-bind:style="{paddingTop}" class="thank-you">
@@ -34,7 +34,7 @@
 import headerNav from '~/components/nav.vue'
 
 export default {
-  middleware: ['redirect-home'],
+  // middleware: ['redirect-home'],
   head () {
     return {
       titleTemplate: `%s - Thanks!`
@@ -46,6 +46,22 @@ export default {
   data() {
     return {
       paddingTop:  '',
+      stepActive: {
+        one:   false,
+        two:   false,
+        three: false,
+        four:  false,
+        five:  false,
+        six:   true,
+      },
+      stepComplete: {
+        one:   true,
+        two:   true,
+        three: true,
+        four:  true,
+        five:  true,
+        six:   false
+      }
     }
   },
   mounted() {

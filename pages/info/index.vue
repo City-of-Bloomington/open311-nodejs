@@ -74,14 +74,16 @@ export default {
         two:   false,
         three: true,
         four:  false,
-        five:  false
+        five:  false,
+        six:   false
       },
       stepComplete: {
         one:   true,
         two:   true,
         three: false,
         four:  false,
-        five:  false
+        five:  false,
+        six:   false
       }
     }
   },

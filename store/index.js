@@ -7,6 +7,7 @@ const Store = () => {
       search_height:      '',
       nav_height:         '',
       stepper_height:     '',
+      loc_search_height:  '',
       serviceInfos: {
         service_group: {
           group:          '',
@@ -59,20 +60,24 @@ const Store = () => {
       },
       storeStepperHeight(state, payload) {
         state.stepper_height = payload
+      },
+      storeLocSearchHeight(state, payload) {
+        state.loc_search_height = payload
       }
     },
     actions: {},
     getters: {
-      group:          state => state.serviceInfos.service_group.group,
-      subGroup:       state => state.serviceInfos.service_group.service_name,
-      subGroupCode:   state => state.serviceInfos.service_group.service_code,
-      response:       state => state.serviceInfos.service_response,
-      firstName:      state => state.serviceInfos.personal_info.first_name,
-      requestID:      state => state.serviceInfos.service_response.service_request_id,
-      topbarHeight:   state => state.topbar_height,
-      searchHeight:   state => state.search_height,
-      navHeight:      state => state.nav_height,
-      stepperHeight:  state => state.stepper_height
+      group:            state => state.serviceInfos.service_group.group,
+      subGroup:         state => state.serviceInfos.service_group.service_name,
+      subGroupCode:     state => state.serviceInfos.service_group.service_code,
+      response:         state => state.serviceInfos.service_response,
+      firstName:        state => state.serviceInfos.personal_info.first_name,
+      requestID:        state => state.serviceInfos.service_response.service_request_id,
+      topbarHeight:     state => state.topbar_height,
+      searchHeight:     state => state.search_height,
+      navHeight:        state => state.nav_height,
+      stepperHeight:    state => state.stepper_height,
+      locSearchHeight:  state => state.loc_search_height
     }
   })
 }

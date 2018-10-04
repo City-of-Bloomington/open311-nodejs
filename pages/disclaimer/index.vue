@@ -9,9 +9,7 @@
       </div>
     </div>
 
-    <main v-bind:style="{paddingTop}">
-
-
+    <main>
       <h2>Please Note:</h2>
       <p><strong><i>This system is not for reporting emergencies or imminent safety hazards.</i></strong></p>
 

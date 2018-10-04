@@ -214,14 +214,16 @@ export default {
         two:   false,
         three: false,
         four:  false,
-        five:  true
+        five:  true,
+        six:   false
       },
       stepComplete: {
         one:   true,
         two:   true,
         three: true,
         four:  true,
-        five:  false
+        five:  false,
+        six:   false
       }
     }
   },
@@ -314,7 +316,7 @@ export default {
       var blob         = this.dataURItoBlob(dataURL);
       var requestAttrs = this.defaultFields;
 
-      formData.append("api_key", '')
+      formData.append("api_key", process.env.open311Key)
       formData.append("service_code", this.postServiceCode)
       formData.append("lat", this.postLat)
       formData.append("long", this.postLong)
@@ -332,26 +334,11 @@ export default {
 
       // this.$router.push({ path: '/api' })
 
-      axios.post(`/ureport/api`, formData )
-      .then(response => {
-        console.log('sent to /api');
-        // console.log(response.data);
-        // this.$store.commit('storeResponseInfo', response.data);
-      })
-      .then(response => {
-        this.$router.push({ path: 'confirm' })
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-
-
-      // axios.post(`https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json`,
-      //   formData
-      // )
+      // axios.post(`/ureport/api`, formData )
       // .then(response => {
-      //   this.$store.commit('storeResponseInfo', response.data[0]);
+      //   console.log('sent to /api');
+      //   // console.log(response.data);
+      //   // this.$store.commit('storeResponseInfo', response.data);
       // })
       // .then(response => {
       //   this.$router.push({ path: 'confirm' })
@@ -359,6 +346,21 @@ export default {
       // .catch(error => {
       //   console.log(error);
       // });
+
+
+
+      axios.post(`https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json`,
+        formData
+      )
+      .then(response => {
+        this.$store.commit('storeResponseInfo', response.data[0]);
+      })
+      .then(response => {
+        this.$router.push({ path: 'confirm' })
+      })
+      .catch(error => {
+        console.log(error);
+      });
     }
   },
   computed: {

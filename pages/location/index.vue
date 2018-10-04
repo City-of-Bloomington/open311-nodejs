@@ -2,14 +2,16 @@
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
       <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
-    </header>
 
-    <main v-bind:style="{paddingTop}">
-      <div class="search">
+      <div class="search container" v-bind:style="{top: searchTop}" ref="lsHeight">
         <form action="" @submit.prevent>
           <div class="form-group" v-if="!geoError">
-            <div v-if="loading" class="loader-wrapper">
-              <div class="bar"></div>
+
+            <div v-if="loading">
+              <h3 style="position: absolute; margin: 0 0 0 40px; line-height: 33px;">Finding your location.</h3>
+              <div class="loader-wrapper">
+                <div class="bar"></div>
+              </div>
             </div>
 
             <label for="location">Location:</label>
@@ -28,13 +30,21 @@
           </div>
         </form>
       </div>
+    </header>
 
-      <h3 v-if="loading">Loading location data.</h3>
-
+    <main v-bind:style="{paddingTop}">
       <div v-if="geoError">
         <h3>It's helpful to report the issue location.</h3><br>
         <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
       </div>
+
+      <div style="position: relative;">
+        <h3 v-if="loadingLocation">Gathering results:</h3>
+        <div v-if="loadingLocation" class="loader-wrapper location">
+          <div class="bar"></div>
+        </div>
+      </div>
+
 
       <div class="search-results" ref="results" v-if="showResults">
         <h3 v-if="addressResults">Search Results:</h3>
@@ -80,11 +90,6 @@
   .form-group {
     margin: 0 0 20px 0 !important;
   }
-
-  .loader-wrapper {
-    position: absolute;
-    top: 42px;
-  }
 </style>
 
 <script>
@@ -108,8 +113,11 @@ export default {
   },
   data() {
     return {
+      searchTop:        '',
+      locSearchHeight:  '',
       paddingTop:       '',
       geoError:         false,
+      loadingLocation:  false,
       loading:          false,
       location: {
         lat:            null,
@@ -126,14 +134,16 @@ export default {
         two:   false,
         three: false,
         four:  true,
-        five:  false
+        five:  false,
+        six:   false,
       },
       stepComplete: {
         one:   true,
         two:   true,
         three: true,
         four:  false,
-        five:  false
+        five:  false,
+        six:   false,
       }
     }
   },
@@ -141,6 +151,8 @@ export default {
     var self = this;
     self.loading = true;
     self.geoError = false;
+    this.searchPos();
+    this.locationSearchHeight();
     self.topHeight();
     self.geoLocatePromise()
     .then(position => {
@@ -164,8 +176,15 @@ export default {
     }
   },
   methods: {
+    searchPos() {
+      this.searchTop = `${this.topbarHeight}px`;
+    },
+    locationSearchHeight() {
+      this.locSearchHeight = this.$refs.lsHeight.clientHeight;
+      return this.$store.commit('storeLocSearchHeight', this.locSearchHeight)
+    },
     topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight + this.locSearchHeight + 20}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -292,18 +311,18 @@ export default {
     },
     searchAddressString() {
       var self = this;
-      self.loading = true;
+      self.loadingLocation = true;
+      console.log('loading search results');
       if(self.location.address_string != '') {
         axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
         .then(response => {
-          self.loading = false;
+          self.loadingLocation = false;
           self.search_results = response.data;
           console.log(self.search_results)
         })
         .catch(error => {
           alert(`SAS :: Error happened: ${error}`);
         })
-        .then(function () {});
       }
     }
   },
