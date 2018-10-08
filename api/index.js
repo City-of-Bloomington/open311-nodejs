@@ -9,52 +9,40 @@ var CircularJSON = require('circular-json');
 const https = require('https');
 var request = require('request');
 
-
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-// https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json
 
-// var options = {
-//   hostname: 'https://ureport-stage.bloomington.in.gov',
-//   port: 443,
-//   path: '/crm-test/open311/v2/requests.json',
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/x-www-form-urlencoded',
-//     'Content-Length': Buffer.byteLength(post_data)
-//   }
-// };
+let postURL = 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json';
 
-app.post("/", upload.fields([]), function(req, res, next) {
+
+app.post('/', upload.fields([]), function(req, res, next) {
+  // res.redirect(postURL);
+  // res.setHeader('Content-Type', 'multipart/form-data');
+
   let formData = req.body;
   formData.api_key = process.env.OPEN_311_KEY;
-  let postURL = 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json';
-  console.log(formData);
 
-  // request.post({url: postURL, formData: formData}, function (error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //     console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  //     console.log('body:', body);
-  //   }
-  //   console.log('error:', error); // Print the error if one occurred
-  // });
+  // console.log(formData);
+  // console.log('sent via server??');
 
-  // axios.post(postURL, formData)
-  // .then(response => {
-  //   console.log(formData);
-  //   console.log('sent via server??');
-  //   console.log(postURL);
-  //   // res.send(response.status);
-  //   // console.log(CircularJSON.stringify(response))
-  //   // res.send(CircularJSON.stringify(response)) // <= send data to the client
-  // })
-  // .catch(err => {
-  //   console.log(err)
-  // })
+  // res.send(formData);
+  // res.json(formData)
+
+  axios.post(postURL, formData)
+  .then(response => {
+    console.log(formData);
+    console.log('sent via server??');
+    console.log(postURL);
+  })
+  .then(response => {
+    // response.send('POST request to confirm page')
+  })
+  .catch(err => {
+    console.log(err)
+  })
 
   next();
 });
-
 
 module.exports = {
   path: "/api/",

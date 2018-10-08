@@ -5,11 +5,12 @@
 
       <div class="search container" v-bind:style="{top: searchTop}" ref="lsHeight">
         <form action="" @submit.prevent>
-          <div class="form-group" v-if="!geoError">
+          <div class="form-group">
 
             <div v-if="loading">
-              <h3 style="position: absolute; margin: 0 0 0 40px; line-height: 33px;">Finding your location.</h3>
-              <div class="loader-wrapper">
+              <h3 v-if="!geoError" style="position: absolute; margin: 0 0 0 40px; font-size: 20px; line-height: 33px;">Finding your location.</h3>
+              <h3 v-if="geoError" style="position: absolute; margin: 0 0 0 45px; font-size: 20px; line-height: 33px;">Can't find your location.</h3>
+              <div class="loader-wrapper" v-if="!geoError">
                 <div class="bar"></div>
               </div>
             </div>
@@ -19,7 +20,8 @@
                    v-on:keyup.enter="searchAddressString"
                    type="text"
                    id="location"
-                   ref="location-input">
+                   ref="location-input"
+                   autocomplete="off">
             <button type="button" class="locate" @click="getCurrentPosition">
               <span>Locate Me</span>
             </button>
@@ -33,18 +35,38 @@
     </header>
 
     <main v-bind:style="{paddingTop}">
-      <div v-if="geoError">
-        <h3>It's helpful to report the issue location.</h3><br>
-        <p>Please allow your browser to access your location or you may click <strong>Next</strong> to move on without reporting a location.</p><br>
+      <!-- sge  --  {{showGeoErrorHelp}}<br>
+      sbtn  --  {{showNextButton}}<br>
+      la  --  {{location.address_string}}<br>
+      ll  --  {{location.lat}}<br>
+      long  --  {{location.long}}<br>
+      load  --  {{loading}}<br>
+      ge  --  {{geoError}}<br><br><br><br> -->
+      <div v-if="showGeoErrorHelp">
+        <h3>Please report the issue location.</h3><br>
+        <p>You may search for an address manually without using the Geolocation API.</p><br>
+        <p>- or -</p><br>
+        <p>How to enable (Geolocation API) using:</p>
+        <ul>
+          <li>
+            <a href="https://support.google.com/chrome/answer/142065?hl=en" target="_blank">Google Chrome</a>
+          </li>
+          <li>
+            <a href="https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites" target="_blank">FireFox</a>
+          </li>
+          <li>
+            <a href="https://support.apple.com/en-us/HT204690" target="_blank">Safari</a>
+          </li>
+        </ul>
       </div>
 
-      <div style="position: relative;">
-        <h3 v-if="loadingLocation">Gathering results:</h3>
-        <div v-if="loadingLocation" class="loader-wrapper location">
+      <!-- <div style="position: relative;" v-if="loadingLocation"> -->
+        <div style="position: relative;" v-if="loadingLocation">
+        <h3>Gathering results:</h3>
+        <div class="loader-wrapper location">
           <div class="bar"></div>
         </div>
       </div>
-
 
       <div class="search-results" ref="results" v-if="showResults">
         <h3 v-if="addressResults">Search Results:</h3>
@@ -54,17 +76,18 @@
               @click="addressResult(address)">
               {{address.streetAddress}}
           </li>
+          <h4 v-show="addressResults.length == 0 && !loadingLocation">No results</h4>
         </ul>
       </div>
 
-      <div id="map-element" v-if="!geoError"></div>
+      <div id="map-element" ref="mapElement"></div>
 
       <footer>
         <nuxt-link
           v-if="showNextButton"
           to="/fields"
           class="button next-button"
-          @click.native="storeCommitLocationInfo">Next</nuxt-link>
+          @click.native="storeCommitLocationInfo && !loadingLocation">Next</nuxt-link>
       </footer>
     </main>
   </div>
@@ -128,7 +151,7 @@ export default {
       map:              null,
       search_results:   null,
       addressesList:    null,
-      showResults:      true,
+      showResults:      false,
       stepActive: {
         one:   false,
         two:   false,
@@ -144,7 +167,9 @@ export default {
         four:  false,
         five:  false,
         six:   false,
-      }
+      },
+      cityHallLong: '-86.5369425',
+      cityHallLat:  '39.1703084'
     }
   },
   mounted() {
@@ -167,7 +192,12 @@ export default {
       self.initMap();
     })
     .catch(function(){
+      self.geoError = true;
+      self.loading = false;
       console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      self.location.lat = self.cityHallLat;
+      self.location.long = self.cityHallLong;
+      self.initMap();
     });
   },
   watch: {
@@ -241,10 +271,10 @@ export default {
       .then(response => {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;
+        this.updateMap(this.location.lat,this.location.long);
         console.log(`updateAddressString() :: `, response.data.address.Match_addr);
       })
-      .catch(error => {this.loading = false; })
-      .then(function () {});
+      .catch(error => {this.loading = false; });
     },
     storeCommitLocationInfo() {
       return this.$store.commit('storeLocationInfo', this.location)
@@ -292,6 +322,8 @@ export default {
     },
     updateMap(lat,long) {
       this.mymap.setView([lat,long], 20);
+      this.$refs.mapElement.style.display = "block";
+      this.mymap.invalidateSize();
     },
     clearSearch() {
       this.loading = false;
@@ -299,7 +331,7 @@ export default {
       this.location.long = '';
       this.search_results = '';
       this.location.address_string = '';
-      // this.mymap.setView([39.1636505,-86.525757], 13);
+      this.$refs.mapElement.style.display = "none";
     },
     addressResult(address) {
       console.dir(JSON.stringify(address));
@@ -316,6 +348,7 @@ export default {
       if(self.location.address_string != '') {
         axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
         .then(response => {
+          self.showResults = true;
           self.loadingLocation = false;
           self.search_results = response.data;
           console.log(self.search_results)
@@ -335,11 +368,21 @@ export default {
       return this.search_results
     },
     showNextButton() {
-      this.address_string;
+      this.location.address_string;
       this.location.lat;
       this.location.long;
       this.loading;
-      return this.loading == false && this.address_string != '' && this.location.lat != '' && this.location.long != '';
+      // this.geoError;
+      return this.loading == false && (this.location.address_string != null || this.location.address_string != '') && this.location.lat != '' && this.location.long != '';
+
+      // return (this.location.address_string != null || this.location.address_string != "");
+    },
+    showGeoErrorHelp() {
+      this.geoError;
+      this.loadingLocation;
+      this.showResults;
+      this.location.address_string;
+      return this.geoError && this.loadingLocation == false && this.showResults == false && (this.location.address_string == null || this.location.address_string == '');
     },
     topbarHeight() {
       return this.$store.getters.topbarHeight

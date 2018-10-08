@@ -7,8 +7,6 @@
     <main v-bind:style="{paddingTop}" class="fields">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
-        <label>Include Media</label>
-
         <!-- <input
           type="file"
           accept="image/jpeg, image/jpg, image/png"
@@ -55,7 +53,7 @@
           </li>
         </ul>
 
-        <button @click="$refs.fileInput.click()" class="image-input">Include Image</button>
+        <button @click="$refs.fileInput.click()" class="image-input">Include Photo</button>
 
         <button
           v-show="false"
@@ -316,7 +314,7 @@ export default {
       var blob         = this.dataURItoBlob(dataURL);
       var requestAttrs = this.defaultFields;
 
-      formData.append("api_key", process.env.open311Key)
+      formData.append("api_key", '')
       formData.append("service_code", this.postServiceCode)
       formData.append("lat", this.postLat)
       formData.append("long", this.postLong)
@@ -334,26 +332,14 @@ export default {
 
       // this.$router.push({ path: '/api' })
 
-      // axios.post(`/ureport/api`, formData )
-      // .then(response => {
-      //   console.log('sent to /api');
-      //   // console.log(response.data);
-      //   // this.$store.commit('storeResponseInfo', response.data);
-      // })
-      // .then(response => {
-      //   this.$router.push({ path: 'confirm' })
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
-
-
-
-      axios.post(`https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json`,
-        formData
-      )
+      axios.post(`/ureport/api`, formData )
       .then(response => {
-        this.$store.commit('storeResponseInfo', response.data[0]);
+        for (var pair of formData.entries()) {
+          console.log(pair[0]+ ', ' + pair[1]);
+        }
+        console.log('sent to /api');
+        // console.log(response.data);
+        // this.$store.commit('storeResponseInfo', response.data);
       })
       .then(response => {
         this.$router.push({ path: 'confirm' })
@@ -361,6 +347,21 @@ export default {
       .catch(error => {
         console.log(error);
       });
+
+
+      // Working
+      // axios.post(`https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json`,
+      //   formData
+      // )
+      // .then(response => {
+      //   this.$store.commit('storeResponseInfo', response.data[0]);
+      // })
+      // .then(response => {
+      //   this.$router.push({ path: 'confirm' })
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      // });
     }
   },
   computed: {

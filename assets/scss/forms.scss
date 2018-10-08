@@ -25,16 +25,6 @@
     margin: 0 0 5px 0;
   }
 
-  input:not([type=radio]):not([type=checkbox]),
-  textarea {
-    border: none;
-    display: block;
-    width: 100%;
-    padding: 5px 10px;
-    background-clip: padding-box;
-    border-radius: 4px;
-  }
-
   select {
     width: 100%;
   }
@@ -43,6 +33,16 @@
     min-height: 50px;
     max-width: 100%;
     min-width: 100%;
+  }
+
+  input:not([type=radio]):not([type=checkbox]),
+  textarea {
+    border: none;
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    background-clip: padding-box;
+    border-radius: 4px;
   }
 
   input {
