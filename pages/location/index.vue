@@ -87,7 +87,7 @@
           v-if="showNextButton"
           to="/fields"
           class="button next-button"
-          @click.native="storeCommitLocationInfo && !loadingLocation">Next</nuxt-link>
+          @click.native="storeCommitLocationInfo">Next</nuxt-link>
       </footer>
     </main>
   </div>
@@ -277,6 +277,7 @@ export default {
       .catch(error => {this.loading = false; });
     },
     storeCommitLocationInfo() {
+      alert(this.location);
       return this.$store.commit('storeLocationInfo', this.location)
     },
     initMap() {
@@ -323,7 +324,7 @@ export default {
     updateMap(lat,long) {
       this.mymap.setView([lat,long], 20);
       this.$refs.mapElement.style.display = "block";
-      this.mymap.invalidateSize();
+      // this.mymap.invalidateSize();
     },
     clearSearch() {
       this.loading = false;

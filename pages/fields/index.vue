@@ -18,7 +18,8 @@
           type="file"
           accept="image/jpeg, image/jpg, image/png"
           @change="uploadImage"
-          ref="fileInput">
+          ref="fileInput"
+          name="media">
 
         <!-- <div class="video-wrapper" v-show="showVideoElm"> -->
         <div class="video-wrapper" v-show="false">

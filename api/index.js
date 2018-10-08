@@ -13,20 +13,14 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 let postURL = 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json';
+var multerIMG = upload.single('media');
 
-
-app.post('/', upload.fields([]), function(req, res, next) {
-  // res.redirect(postURL);
-  // res.setHeader('Content-Type', 'multipart/form-data');
+app.post('/', multerIMG, function (req, res, next) {
+  console.log(req.file);
 
   let formData = req.body;
   formData.api_key = process.env.OPEN_311_KEY;
-
-  // console.log(formData);
-  // console.log('sent via server??');
-
-  // res.send(formData);
-  // res.json(formData)
+  formData.media = req.file.path;
 
   axios.post(postURL, formData)
   .then(response => {
@@ -42,7 +36,36 @@ app.post('/', upload.fields([]), function(req, res, next) {
   })
 
   next();
-});
+})
+
+// app.post('/', upload.fields([]), function(req, res, next) {
+//   // res.redirect(postURL);
+//   // res.setHeader('Content-Type', 'multipart/form-data');
+
+//   let formData = req.body;
+//   formData.api_key = process.env.OPEN_311_KEY;
+
+//   // console.log(formData);
+//   // console.log('sent via server??');
+
+//   // res.send(formData);
+//   // res.json(formData)
+
+//   axios.post(postURL, formData)
+//   .then(response => {
+//     console.log(formData);
+//     console.log('sent via server??');
+//     console.log(postURL);
+//   })
+//   .then(response => {
+//     // response.send('POST request to confirm page')
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
+
+//   next();
+// });
 
 module.exports = {
   path: "/api/",
