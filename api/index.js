@@ -20,7 +20,11 @@ app.post('/', multerIMG, function (req, res, next) {
 
   let formData = req.body;
   formData.api_key = process.env.OPEN_311_KEY;
-  formData.media = req.file.path;
+
+  if(req.file) {
+    formData.media = req.file.path;
+  }
+
 
   axios.post(postURL, formData)
   .then(response => {
@@ -29,6 +33,7 @@ app.post('/', multerIMG, function (req, res, next) {
     console.log(postURL);
   })
   .then(response => {
+    console.log(response);
     // response.send('POST request to confirm page')
   })
   .catch(err => {
