@@ -8,9 +8,6 @@
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
 
-      <!-- {{serviceReqID}}<br><br>
-      {{responseData}} -->
-
       <nuxt-link to="/" class="button ok-button">
         <span>ok</span>
       </nuxt-link>
