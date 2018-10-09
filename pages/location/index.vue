@@ -277,7 +277,6 @@ export default {
       .catch(error => {this.loading = false; });
     },
     storeCommitLocationInfo() {
-      alert(this.location);
       return this.$store.commit('storeLocationInfo', this.location)
     },
     initMap() {
