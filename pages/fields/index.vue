@@ -315,7 +315,7 @@ export default {
       var blob         = this.dataURItoBlob(dataURL);
       var requestAttrs = this.defaultFields;
 
-      // formData.append("api_key", '')
+      // formData.append("api_key", process.env.open311Key)
       formData.append("service_code", this.postServiceCode)
       formData.append("lat", this.postLat)
       formData.append("long", this.postLong)
@@ -339,12 +339,11 @@ export default {
           console.log(pair[0]+ ', ' + pair[1]);
         }
         console.log('sent to /api');
-
-        // this.$store.commit('storeResponseInfo', response.data);
+        this.$store.commit('storeResponseInfo', response);
       })
       .then(response => {
-        console.log(response);
-        // this.$router.push({ path: 'confirm' })
+        console.log('client res :: ', response);
+        this.$router.push({ path: 'confirm' })
       })
       .catch(error => {
         console.log(error);

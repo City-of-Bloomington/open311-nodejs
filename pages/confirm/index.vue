@@ -8,6 +8,9 @@
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
 
+      <!-- {{serviceReqID}}<br><br>
+      {{responseData}} -->
+
       <nuxt-link to="/" class="button ok-button">
         <span>ok</span>
       </nuxt-link>
@@ -46,6 +49,7 @@ export default {
   data() {
     return {
       paddingTop:  '',
+      serviceReqID: '',
       stepActive: {
         one:   false,
         two:   false,
@@ -66,10 +70,15 @@ export default {
   },
   mounted() {
     this.topHeight();
+    this.serviceID();
   },
   methods: {
     topHeight() {
       this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
+    },
+    serviceID() {
+      var resData = JSON.parse(this.responseData)[0];
+      this.serviceReqID = resData.service_request_id;
     }
   },
   computed: {
@@ -77,10 +86,10 @@ export default {
       return this.$store.getters.firstName
     },
     requestID() {
-      return `Your case number is: <strong>${this.$store.getters.requestID}</strong>`
+      return `Your case number is: <strong>${this.serviceReqID}</strong>`
     },
     responseData() {
-      return this.$store.getters.response
+      return this.$store.getters.response.data.body;
     },
     thankYou() {
       if(this.firstName != '') {
