@@ -10,7 +10,8 @@
         <div v-for="group in groupCategories"
              :key="group"
              @click="groupName(group)">
-          <nuxt-link :to="'/subcategory'"
+
+          <nuxt-link :to="{name:'subcategory', params:{subcategory:groupsAsCss(`${group}`)}}"
                      v-bind:class="groupsAsCss(`${group}`)"
                      class="item">
             <div class="icon"></div>
