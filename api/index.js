@@ -1,14 +1,17 @@
 require('dotenv').config();
 var express = require("express");
 var app = express();
-var multer  = require('multer');
+// var multer  = require('multer');
 
-var upload = multer({ dest: 'uploads/' });
+// var upload = multer({ dest: 'uploads/' });
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage });
 
 
 // var bodyParser = require('body-parser');
+const busboyBodyParser = require('busboy-body-parser');
+app.use(busboyBodyParser());
+
 // var axios = require('axios');
 // var CircularJSON = require('circular-json');
 // const https = require('https');
@@ -19,13 +22,13 @@ var request = require('request');
 
 let postURL = 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json';
 
-app.post('/', upload.single('media'), function (req, res, next) {
+app.post('/', function (req, res, next) {
   let formInfos = req.body;
   formInfos.api_key = process.env.OPEN_311_KEY;
 
-  if(req.file) {
-    formInfos.media = req.file;
-    // console.log(req.file);
+  if(req.files) {
+    formInfos.media = req.files.media.data;
+    console.log(req.files);
   }
 
   request.post({url: postURL, form: formInfos}, function optionalCallback(err, httpResponse, body) {

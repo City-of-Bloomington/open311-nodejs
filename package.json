@@ -17,6 +17,7 @@
     "@nuxtjs/pwa": "^2.5.0",
     "axios-debug": "0.0.4",
     "body-parser": "^1.18.3",
+    "busboy-body-parser": "^0.3.2",
     "circular-json": "^0.5.7",
     "dotenv": "^6.0.0",
     "file-system": "^2.2.2",
