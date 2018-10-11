@@ -5,6 +5,7 @@
     </header>
 
     <main v-bind:style="{paddingTop}">
+      iiiii{{ $route.params }}
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -57,7 +58,7 @@ export default {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`
     }
   },
-  middleware: ['redirect-home'],
+  // middleware: ['redirect-home'],
   components: {
     headerNav
   },
@@ -87,6 +88,9 @@ export default {
         six:   false
       }
     }
+  },
+  created() {
+    console.log('info page created')
   },
   mounted() {
     this.topHeight();

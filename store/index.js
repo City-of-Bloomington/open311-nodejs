@@ -12,7 +12,8 @@ const Store = () => {
         service_group: {
           group:          '',
           service_name:   '',
-          service_code:   ''
+          service_code:   '',
+          route_code:     ''
         },
         personal_info: {
           first_name:     '',
@@ -33,6 +34,9 @@ const Store = () => {
     mutations: {
       storeGroupName(state, payload) {
         state.serviceInfos.service_group.group = payload
+      },
+      storeRouteCode(state, payload) {
+        state.serviceInfos.service_group.route_code = payload
       },
       storeSubGroupName(state, payload) {
         state.serviceInfos.service_group = payload
@@ -70,6 +74,7 @@ const Store = () => {
       group:            state => state.serviceInfos.service_group.group,
       subGroup:         state => state.serviceInfos.service_group.service_name,
       subGroupCode:     state => state.serviceInfos.service_group.service_code,
+      routeCode:        state => state.serviceInfos.service_group.route_code,
       response:         state => state.serviceInfos.service_response,
       firstName:        state => state.serviceInfos.personal_info.first_name,
       requestID:        state => state.serviceInfos.service_response.service_request_id,

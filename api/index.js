@@ -27,7 +27,7 @@ app.post('/', function (req, res, next) {
   formInfos.api_key = process.env.OPEN_311_KEY;
 
   if(req.files) {
-    formInfos.media = req.files.media.data;
+    formInfos.media = req.files;
     console.log(req.files);
   }
 

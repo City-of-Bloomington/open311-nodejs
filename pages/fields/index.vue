@@ -343,7 +343,7 @@ export default {
       })
       .then(response => {
         console.log('client res :: ', response);
-        // this.$router.push({ path: 'confirm' })
+        this.$router.push({ path: 'confirm' })
       })
       .catch(error => {
         console.log(error);

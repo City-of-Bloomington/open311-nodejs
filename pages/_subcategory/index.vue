@@ -9,20 +9,18 @@
       {{allDatas()}}<br><br>
       {{group}}<br><br> -->
       <ul class="subcategories">
-        <li
-          v-if="!groupProperName"
-          v-for="subCat in subGroupList"
-          :key="subCat.service_name"
-          @click="subGroupName(subCat)">
-          <nuxt-link :to="{name:'info', params:{info:subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
+        <li v-if="!groupProperName"
+            v-for="subCat in subGroupList"
+            :key="subCat.service_name"
+            @click="subGroupName(subCat)">
+            <nuxt-link :to="{name:'subcategory-info', params:{'info':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
 
-        <li
-          v-if="groupProperName"
-          v-for="groups in allDatas()"
-          :key="groups.service_name"
-          @click="subGroupName(groups)">
-          <nuxt-link :to="{name:'info', params:{info:groups.service_code}}">{{ groups.service_name }}</nuxt-link>
+        <li v-if="groupProperName"
+            v-for="groups in allDatas()"
+            :key="groups.service_name"
+            @click="subGroupName(groups)">
+            <nuxt-link :to="{name:'subcategory-info', params:{'info':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
         </li>
       </ul>
 
@@ -36,6 +34,7 @@
         <button slot="footer" @click="showModal = false">OK</button>
       </modal>
     </main>
+    <nuxt-child/>
   </div>
 </template>
 
@@ -45,7 +44,7 @@ import headerNav from '~/components/nav.vue'
 import modal from '~/components/modal.vue'
 
 export default {
-  // middleware: 'redirect-home',
+  middleware: 'redirect-home',
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.group}`,
@@ -83,6 +82,15 @@ export default {
         six:   false
       }
     }
+  },
+  created() {
+    // this.$router.beforeEach((to, from, next) => {
+    //   // if (to.fullPath.includes('%2F')) {
+    //   //   next(to.fullPath.replace('%2F', '/'));
+    //   // }
+    //   alert('entered')
+    //   next();
+    // });
   },
   mounted() {
     console.log('created mounted');
