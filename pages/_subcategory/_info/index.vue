@@ -5,7 +5,11 @@
     </header>
 
     <main v-bind:style="{paddingTop}">
-      iiiii{{ $route.params }}
+
+      <br><br>{{$route.params.info}}<br><br><br><br>
+
+      {{allDatas()}}<br><br>
+
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -50,6 +54,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import headerNav from '~/components/nav.vue'
 
 export default {
@@ -58,13 +63,15 @@ export default {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`
     }
   },
-  // middleware: ['redirect-home'],
+  middleware: ['redirect-home'],
   components: {
     headerNav
   },
   data() {
     return {
       paddingTop:   '',
+      routeCode:    '',
+      allData:      [],
       userInfo: {
         first_name: '',
         last_name:  '',
@@ -89,11 +96,23 @@ export default {
       }
     }
   },
-  created() {
-    console.log('info page created')
-  },
   mounted() {
     this.topHeight();
+    if(this.$store.state.serviceInfos.service_group.service_code == '') {
+      axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
+      .then(res => { this.allData = res.data })
+      .catch(err => {
+        console.log(err);
+      });
+
+      this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
+      this.$store.commit('storeRouteCode', this.routeCode);
+      console.log('RouteCode', this.routeCode);
+      console.log('empty ... do ur thing');
+      console.log(this.$store.getters.routeCode);
+      this.allDatas();
+    }
+
   },
   methods: {
     topHeight() {
@@ -101,6 +120,13 @@ export default {
     },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
+    },
+    allDatas() {
+      const allRoutesubGroups = this.allData.filter(
+        g => g.service_code == this.routeCode
+      );
+      console.log(allRoutesubGroups[0]);
+      // return allRoutesubGroups;
     }
   },
   computed: {
