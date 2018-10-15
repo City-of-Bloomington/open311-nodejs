@@ -17,9 +17,10 @@
         <input
           type="file"
           accept="image/jpeg, image/jpg, image/png"
-          @change="uploadImage"
+          @change="updateCanvasImage"
           ref="fileInput"
           name="media">
+
 
         <!-- <div class="video-wrapper" v-show="showVideoElm"> -->
         <div class="video-wrapper" v-show="false">
@@ -47,6 +48,10 @@
         </div>
 
         <canvas ref="canvas" id="canvas" width="640" height="480" v-show="false"></canvas>
+
+        <!-- <canvas ref="imgCanvas" id="img-canvas" width="640" height="480" v-show="true"></canvas> -->
+        <canvas id="imageCanvas" ref="imageCanvas" v-show="false"></canvas>
+
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
             <img :src="c" @click="biggerImage(c)" />
@@ -54,7 +59,7 @@
           </li>
         </ul>
 
-        <button @click="$refs.fileInput.click()" class="image-input">Include Photo</button>
+        <button @click="$refs.fileInput.click()" v-if="captures.length < 1" class="image-input">Include Photo</button>
 
         <button
           v-show="false"
@@ -203,6 +208,10 @@ export default {
       formElements:     {},
       defaultFields:    {},
       showVideoElm:     false,
+      imgContext:       null,
+      imgCanvas:        null,
+      selectedImage:    null,
+      imgElement:       null,
       video:            {},
       canvas:           {},
       captures:         [],
@@ -286,6 +295,57 @@ export default {
     },
     removeImage(c){
       this.captures.splice(this.captures.indexOf(c), 1);
+    },
+    updateCanvasImage(e) {
+      var self = this;
+      var reader, files = e.target.files;
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        var img = new Image();
+        img.onload = function() {
+          self.drawCanvasImage(img);
+        }
+        // console.log(files[0])
+        // self.captures.push(files[0]);
+        img.src = event.target.result;
+      };
+
+      reader.readAsDataURL(files[0]);
+    },
+    drawCanvasImage(img) {
+      var canvas = this.$refs.imageCanvas;
+      // canvas.width = img.width;
+      // canvas.height = img.height;
+
+      var MAX_WIDTH = 1000;
+      var MAX_HEIGHT = 1000;
+      var width = img.width;
+      var height = img.height;
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      if(this.captures.length < 1) {
+        this.captures.push(canvas.toDataURL());
+      } else {
+        alert(this.singleImgMessage);
+      }
+
+      // var ctx = canvas.getContext('2d');
+      // ctx.drawImage(img,0,0);
     },
     uploadImage(e, file){
       const image = e.target.files[0];

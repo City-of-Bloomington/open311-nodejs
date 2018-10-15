@@ -42,7 +42,7 @@ const Store = () => {
         state.serviceInfos.service_group.route_code = payload
       },
       storeSubGroupName(state, payload) {
-        state.serviceInfos.service_group = payload
+        state.serviceInfos.service_group.service_name = payload
       },
       storePersonalInfo(state, payload) {
         state.serviceInfos.personal_info = payload

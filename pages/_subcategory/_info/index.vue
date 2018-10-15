@@ -5,15 +5,6 @@
     </header>
 
     <main v-bind:style="{paddingTop}">
-
-      <!-- <br><br>{{$route.params.info}}<br><br>
-
-      All data<br>
-      {{allDatas()}}<br><br> -->
-
-      <!-- RCD<br>
-      {{allDatas}}<br><br> -->
-
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -102,19 +93,34 @@ export default {
     }
   },
   mounted() {
-    this.topHeight();
 
-    if(this.$store.state.serviceInfos.service_group.service_code == '') {
+    // alert('mounted');
+    // this.allDatas;
+    // this.routeDataGroup;
+
+    if(this.$store.state.serviceInfos.service_group.service_code){
+      this.topHeight();
+      console.log('has group');
+    } else if (this.$store.state.serviceInfos.service_group.service_code == '') {
+      console.log('no group');
       this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
 
       axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
       .then(res => { this.allData = res.data })
+      .then(res => {
+        this.allDatas;
+        this.routeDataGroup;
+        this.routeDataSubGroup;
+        // this.topHeight();
+      })
+      .then(res => {
+        this.topHeightPlus();
+      })
       .catch(err => {
         console.log(err);
       });
-
-      // this.routeData();
+      // console.log(this.routeDataGroup);
       // this.routeDataAssign();
     }
   },
@@ -122,25 +128,28 @@ export default {
     topHeight() {
       this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
+    topHeightPlus() {
+      // look into this extra spacing on refactor
+      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight + 30}px`;
+    },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
-    },
-    // routeData() {
-    //   const allRoutesubGroups = this.allData.filter(
-    //     g => g.service_code == this.routeCode
-    //   );
-    //   // this.$store.commit('storeGroupName', allRoutesubGroups[0].group);
-    //   console.log(allRoutesubGroups)
-    //   return this.routeCodeData = allRoutesubGroups;
-    // },
+    }
   },
   computed: {
     allDatas() {
       const allRoutesubGroups = this.allData.filter(
         g => g.service_code == this.routeCode
       );
-      this.$store.commit('storeGroupName', allRoutesubGroups[0].group);
       return allRoutesubGroups[0];
+    },
+    routeDataGroup() {
+      this.$store.commit('storeGroupName', this.allDatas.group);
+      return this.allDatas.group;
+    },
+    routeDataSubGroup() {
+      this.$store.commit('storeSubGroupName', this.allDatas.service_name);
+      return this.allDatas.service_name;
     },
     topbarHeight() {
       return this.$store.getters.topbarHeight

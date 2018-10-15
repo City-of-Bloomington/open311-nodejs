@@ -12,14 +12,14 @@
         <li v-if="!groupProperName"
             v-for="subCat in subGroupList"
             :key="subCat.service_name"
-            @click="subGroupName(subCat)">
+            @click="subGroupName(subCat.service_name)">
             <nuxt-link :to="{name:'subcategory-info', params:{'info':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
 
         <li v-if="groupProperName"
             v-for="groups in allDatas()"
             :key="groups.service_name"
-            @click="subGroupName(groups)">
+            @click="subGroupName(groups.service_name)">
             <nuxt-link :to="{name:'subcategory-info', params:{'info':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
         </li>
       </ul>
