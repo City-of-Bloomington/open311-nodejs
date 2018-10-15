@@ -4,7 +4,7 @@
       <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
-    <main v-bind:style="{paddingTop}" class="fields">
+    <main v-bind:style="{paddingTop}" ref="mainElm" class="fields">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
         <!-- <input
@@ -145,6 +145,7 @@
       </div>
 
 
+
       <footer>
         <button class="button next-button" @click="submitPost()">Submit</button>
       </footer>
@@ -202,12 +203,14 @@ export default {
   },
   data() {
     return {
+      percentCompleted: '',
       paddingTop:       '',
       modalImage:       null,
       showBiggerImage:  false,
       formElements:     {},
       defaultFields:    {},
       showVideoElm:     false,
+      mainElm:          '',
       imgContext:       null,
       imgCanvas:        null,
       selectedImage:    null,
@@ -350,6 +353,7 @@ export default {
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
     submitPost() {
+      this.$refs.mainElm.innerHTML = 'TEMP: Check console for submit completion % until UI is in place ...\n-_-';
       this.$store.commit('storeFormInfo', this.defaultFields);
 
       var formData     = new FormData();
@@ -357,7 +361,6 @@ export default {
       var blob         = this.dataURItoBlob(dataURL);
       var requestAttrs = this.defaultFields;
 
-      // formData.append("api_key", process.env.open311Key)
       formData.append("service_code", this.postServiceCode)
       formData.append("lat", this.postLat)
       formData.append("long", this.postLong)
@@ -373,7 +376,14 @@ export default {
         return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
       }).join('&');
 
-      axios.post(`${process.env.postProxy}`, formData )
+      var config = {
+        onUploadProgress: function (progressEvent) {
+          this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log('Percent Completed:' + this.percentCompleted);
+        }
+      }
+
+      axios.post(`${process.env.postProxy}`, formData, config)
       .then(response => {
         for (var pair of formData.entries()) {
           console.log(pair[0]+ ', ' + pair[1]);
