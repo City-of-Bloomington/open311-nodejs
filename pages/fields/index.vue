@@ -331,18 +331,14 @@ export default {
         return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
       }).join('&');
 
-      // this.$router.push({ path: '/api' })
-
-      axios.post(`/ureport/api`, formData )
+      axios.post(`${process.env.postProxy}`, formData )
       .then(response => {
         for (var pair of formData.entries()) {
           console.log(pair[0]+ ', ' + pair[1]);
         }
-        console.log('sent to /api');
         this.$store.commit('storeResponseInfo', response);
       })
       .then(response => {
-        console.log('client res :: ', response);
         this.$router.push({ path: 'confirm' })
       })
       .catch(error => {
@@ -351,7 +347,7 @@ export default {
 
 
       // Working
-      // axios.post(`https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/requests.json`,
+      // axios.post(`${process.env.API_URL}${process.env.POST_API}`,
       //   formData
       // )
       // .then(response => {

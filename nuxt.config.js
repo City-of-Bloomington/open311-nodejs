@@ -20,9 +20,9 @@ module.exports = {
         href: 'https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600|Abel'}
     ]
   },
-  serverMiddleware: ['~/api/index'],
+  serverMiddleware: ['~/post/index'],
   router: {
-    base: process.env.NODE_ENV === 'dev' ? '/' : '/ureport/'
+    base: process.env.NODE_ENV === 'dev' ? '/' : '/open311-nodejs/'
   },
   loading: { color: '#FFFFFF' },
   css: [
@@ -56,15 +56,16 @@ module.exports = {
     proxyHeaders: true
   },
   env: {
-    localPort:   process.env.LOCAL_PORT || 2222,
-    servicesApi: process.SERVICES_API || 'services.json',
-    postApi:     process.POST_API || 'requests.json',
-    attrsApi:    process.ATTRS_API || 'services/',
-    open311Key:  process.env.OPEN_311_KEY,
-    apiUrl:      process.env.API_URL || 'https://ureport-stage.bloomington.in.gov/crm-test/open311/v2/',
-    osmUrl:      process.env.OSM_URL || 'https://nominatim.openstreetmap.org/reverse?format=jsonv2',
-    mapBoxUrl:   process.env.MAPBOX_URL || 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.mvt?access_token={accessToken}',
-    mapBoxKey:   process.env.MAPBOX_KEY
+    localPort:      process.env.LOCAL_PORT || 2222,
+    servicesApi:    process.SERVICES_API || 'services.json',
+    postApi:        process.POST_API || 'requests.json',
+    attrsApi:       process.ATTRS_API || 'services/',
+    open311Key:     process.env.OPEN_311_KEY,
+    apiUrl:         process.env.API_URL || 'https://bloomington.in.gov/crm-test/open311/v2/',
+    postProxy:      process.env.POST_PROXY || '/open311-nodejs/post',
+    osmUrl:         process.env.OSM_URL || 'https://nominatim.openstreetmap.org/reverse?format=jsonv2',
+    mapBoxUrl:      process.env.MAPBOX_URL || 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.mvt?access_token={accessToken}',
+    mapBoxKey:      process.env.MAPBOX_KEY
   },
   plugins: [
     { src: '~/plugins/leaflet/leaflet.js', ssr: false}

@@ -6,9 +6,13 @@
 
     <main v-bind:style="{paddingTop}">
 
-      <br><br>{{$route.params.info}}<br><br><br><br>
+      <!-- <br><br>{{$route.params.info}}<br><br>
 
-      {{allDatas()}}<br><br>
+      All data<br>
+      {{allDatas()}}<br><br> -->
+
+      <!-- RCD<br>
+      {{allDatas}}<br><br> -->
 
       <div class="form-group">
         <label for="first-name">First Name:</label>
@@ -71,6 +75,7 @@ export default {
     return {
       paddingTop:   '',
       routeCode:    '',
+      routeCodeData:'',
       allData:      [],
       userInfo: {
         first_name: '',
@@ -98,21 +103,20 @@ export default {
   },
   mounted() {
     this.topHeight();
+
     if(this.$store.state.serviceInfos.service_group.service_code == '') {
+      this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
+      this.$store.commit('storeRouteCode', this.routeCode);
+
       axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
       .then(res => { this.allData = res.data })
       .catch(err => {
         console.log(err);
       });
 
-      this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
-      this.$store.commit('storeRouteCode', this.routeCode);
-      console.log('RouteCode', this.routeCode);
-      console.log('empty ... do ur thing');
-      console.log(this.$store.getters.routeCode);
-      this.allDatas();
+      // this.routeData();
+      // this.routeDataAssign();
     }
-
   },
   methods: {
     topHeight() {
@@ -121,15 +125,23 @@ export default {
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
     },
+    // routeData() {
+    //   const allRoutesubGroups = this.allData.filter(
+    //     g => g.service_code == this.routeCode
+    //   );
+    //   // this.$store.commit('storeGroupName', allRoutesubGroups[0].group);
+    //   console.log(allRoutesubGroups)
+    //   return this.routeCodeData = allRoutesubGroups;
+    // },
+  },
+  computed: {
     allDatas() {
       const allRoutesubGroups = this.allData.filter(
         g => g.service_code == this.routeCode
       );
-      console.log(allRoutesubGroups[0]);
-      // return allRoutesubGroups;
-    }
-  },
-  computed: {
+      this.$store.commit('storeGroupName', allRoutesubGroups[0].group);
+      return allRoutesubGroups[0];
+    },
     topbarHeight() {
       return this.$store.getters.topbarHeight
     },
