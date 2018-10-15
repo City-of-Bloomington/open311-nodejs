@@ -57,11 +57,21 @@ export default {
     .then((res) => { return { groups: res.data }})
     .catch((err) => { console.log(err); });
   },
+  created() {
+    this.clearState();
+  },
   mounted() {
     this.topHeight();
     this.searchPos();
   },
   methods: {
+    clearState() {
+      this.$store.commit('storeGroupName', '');
+      this.$store.commit('storeRouteCode', '');
+      this.$store.commit('storeGroupCode', '');
+      this.$store.commit('storeSubGroupName', '');
+      this.$store.commit('storeFormInfo', '');
+    },
     topHeight() {
       this.paddingTop = `${this.topbarHeight + this.searchHeight}px`;
     },

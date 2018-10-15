@@ -58,7 +58,18 @@ export default {
     complete(i) {
       this.select(this.data[i]);
       this.focused = false;
-      this.$router.push({ path: 'info' })
+      var selectedGroup = this.groupsAsCss(this.data[i].group);
+      var selectedCode  = this.data[i].service_code;
+      var selectedUrl = `${selectedGroup}/${selectedCode}`
+      console.log(selectedUrl);
+      this.$router.push({ path: selectedUrl })
+    },
+    groupsAsCss(group) {
+      return group
+      .replace(/\s+/g, '-')
+      .replace(/,/g, '')
+      .replace(/&/g, 'and')
+      .toLowerCase();
     },
     select(row) {
       this.input = row[this.field];
