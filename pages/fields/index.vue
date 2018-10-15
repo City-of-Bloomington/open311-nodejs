@@ -295,6 +295,7 @@ export default {
     },
     removeImage(c){
       this.captures.splice(this.captures.indexOf(c), 1);
+      this.$refs.fileInput.value = '';
     },
     updateCanvasImage(e) {
       var self = this;
@@ -305,8 +306,6 @@ export default {
         img.onload = function() {
           self.drawCanvasImage(img);
         }
-        // console.log(files[0])
-        // self.captures.push(files[0]);
         img.src = event.target.result;
       };
 
@@ -314,47 +313,30 @@ export default {
     },
     drawCanvasImage(img) {
       var canvas = this.$refs.imageCanvas;
-      // canvas.width = img.width;
-      // canvas.height = img.height;
-
-      var MAX_WIDTH = 1000;
-      var MAX_HEIGHT = 1000;
-      var width = img.width;
-      var height = img.height;
+      var max_width  = 1000;
+      var max_height = 1000;
+      var width      = img.width;
+      var height     = img.height;
 
       if (width > height) {
-        if (width > MAX_WIDTH) {
-          height *= MAX_WIDTH / width;
-          width = MAX_WIDTH;
+        if (width > max_width) {
+          height *= max_width / width;
+          width   = max_width;
         }
       } else {
-        if (height > MAX_HEIGHT) {
-          width *= MAX_HEIGHT / height;
-          height = MAX_HEIGHT;
+        if (height > max_height) {
+          width *= max_height / height;
+          height = max_height;
         }
       }
       canvas.width = width;
       canvas.height = height;
+
       var ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
 
       if(this.captures.length < 1) {
         this.captures.push(canvas.toDataURL());
-      } else {
-        alert(this.singleImgMessage);
-      }
-
-      // var ctx = canvas.getContext('2d');
-      // ctx.drawImage(img,0,0);
-    },
-    uploadImage(e, file){
-      const image = e.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
-      if(this.captures.length < 1) {
-        reader.onload = e => {
-          this.captures.push(e.target.result);
-        };
       } else {
         alert(this.singleImgMessage);
       }
