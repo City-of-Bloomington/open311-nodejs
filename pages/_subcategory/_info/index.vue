@@ -105,6 +105,21 @@ export default {
       this.routeDataGroup;
       this.routeDataSubGroup;
       this.topHeightPlus();
+
+      // axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
+      // .then(res => { this.allData = res.data })
+      // .then(res => {
+      //   this.allDatas;
+      //   this.routeDataGroup;
+      //   this.routeDataSubGroup;
+      //   // this.topHeight();
+      // })
+      // .then(res => {
+      //   this.topHeightPlus();
+      // })
+      // .catch(err => {
+      //   console.log(err);
+      // });
     }
   },
   methods: {

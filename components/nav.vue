@@ -107,6 +107,10 @@ export default {
         alert('not confirm screen')
       }
     }
+  },
+  updated() {
+    console.log('nav height updated')
+    this.$emit('nHeight', this.navHeight);
   }
 }
 </script>
