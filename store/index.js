@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const Store = () => {
   return new Vuex.Store({
@@ -8,6 +9,7 @@ const Store = () => {
       nav_height:         '',
       stepper_height:     '',
       loc_search_height:  '',
+      initGroupData:      {},
       serviceInfos: {
         service_group: {
           group:          '',
@@ -32,6 +34,9 @@ const Store = () => {
       }
     },
     mutations: {
+      storeInitGroupData(state, payload) {
+        state.initGroupData = payload
+      },
       storeGroupName(state, payload) {
         state.serviceInfos.service_group.group = payload
       },
@@ -72,8 +77,14 @@ const Store = () => {
         state.loc_search_height = payload
       }
     },
-    actions: {},
+    actions: {
+      async nuxtServerInit ({commit}) {
+        let {data} = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
+        commit('storeInitGroupData', data)
+      }
+    },
     getters: {
+      initGroupData:    state => state.initGroupData,
       group:            state => state.serviceInfos.service_group.group,
       subGroup:         state => state.serviceInfos.service_group.service_name,
       subGroupCode:     state => state.serviceInfos.service_group.service_code,

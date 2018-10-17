@@ -93,11 +93,6 @@ export default {
     }
   },
   mounted() {
-
-    // alert('mounted');
-    // this.allDatas;
-    // this.routeDataGroup;
-
     if(this.$store.state.serviceInfos.service_group.service_code){
       this.topHeight();
       console.log('has group');
@@ -106,22 +101,10 @@ export default {
       this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
 
-      axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
-      .then(res => { this.allData = res.data })
-      .then(res => {
-        this.allDatas;
-        this.routeDataGroup;
-        this.routeDataSubGroup;
-        // this.topHeight();
-      })
-      .then(res => {
-        this.topHeightPlus();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-      // console.log(this.routeDataGroup);
-      // this.routeDataAssign();
+      this.allDatas;
+      this.routeDataGroup;
+      this.routeDataSubGroup;
+      this.topHeightPlus();
     }
   },
   methods: {
@@ -137,8 +120,11 @@ export default {
     }
   },
   computed: {
+    allInitGroupData() {
+      return this.$store.getters.initGroupData
+    },
     allDatas() {
-      const allRoutesubGroups = this.allData.filter(
+      const allRoutesubGroups = this.allInitGroupData.filter(
         g => g.service_code == this.routeCode
       );
       return allRoutesubGroups[0];

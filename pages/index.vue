@@ -2,7 +2,7 @@
   <div>
     <header ref="top" v-bind:style="{height: paddingTop}">
       <topBar />
-      <search-input :data="groups" field="service_name" v-bind:style="{top}"/>
+      <search-input :data="allInitGroupData" field="service_name" v-bind:style="{top}"/>
     </header>
 
     <main v-bind:style="{paddingTop}">
@@ -52,11 +52,11 @@ export default {
       groups:       []
     }
   },
-  asyncData ({req, params}) {
-    return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
-    .then((res) => { return { groups: res.data }})
-    .catch((err) => { console.log(err); });
-  },
+  // asyncData ({req, params, store}) {
+  //   return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
+  //   .then((res) => { return { groups: res.data }})
+  //   .catch((err) => { console.log(err); });
+  // },
   created() {
     this.clearState();
   },
@@ -95,8 +95,11 @@ export default {
     }
   },
   computed: {
+    allInitGroupData() {
+      return this.$store.getters.initGroupData
+    },
     groupCategories() {
-      return [...new Set(this.groups.map(g => g.group))]
+      return [...new Set(this.allInitGroupData.map(g => g.group))]
     },
     topbarHeight() {
       return this.$store.getters.topbarHeight

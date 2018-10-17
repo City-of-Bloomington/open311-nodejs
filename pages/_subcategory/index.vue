@@ -83,38 +83,16 @@ export default {
       }
     }
   },
-  created() {
-    // this.$router.beforeEach((to, from, next) => {
-    //   // if (to.fullPath.includes('%2F')) {
-    //   //   next(to.fullPath.replace('%2F', '/'));
-    //   // }
-    //   alert('entered')
-    //   next();
-    // });
-  },
   mounted() {
     console.log('created mounted');
 
     this.topHeight();
-    axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
-    .then(res => { this.allData = res.data })
-    .catch(err => {
-      console.log(err);
-    });
 
     if(this.group == ''){
       this.groupRouteName = this.groupsAsLong(this.$route.params.subcategory);
       console.log('groupRouteName', this.groupRouteName);
       this.allDatas();
       this.formatGroupName();
-
-      // if(this.groupRouteName == 'streetsparkingtraffic'){
-      //   this.groupRouteName = 'Streets, Parking & Traffic';
-      // } else if (this.groupRouteName == 'cleanup-and-sanitation'){
-      //   this.groupRouteName = 'Cleanup & Sanitation';
-      // } else {
-      //   this.groupRouteName = 'Unknown';
-      // }
 
       if(this.groupRouteName == 'cleanupsanitation') {
         this.groupProperName = 'Cleanup & Sanitation';
@@ -152,7 +130,7 @@ export default {
       .toLowerCase();
     },
     allDatas() {
-      const allRoutesubGroups = this.allData.filter(
+      const allRoutesubGroups = this.allInitGroupData.filter(
         g => this.groupsAsLong(g.group) == this.groupRouteName
       );
       return allRoutesubGroups;
@@ -164,11 +142,14 @@ export default {
     }
   },
   computed: {
+    allInitGroupData() {
+      return this.$store.getters.initGroupData
+    },
     routePath() {
       return this.groupsAsLong(this.$route.path)
     },
     subGroupList() {
-      const allsubGroups = this.allData.filter(
+      const allsubGroups = this.allInitGroupData.filter(
         g => g.group == this.$store.state.serviceInfos.service_group.group
       );
       return allsubGroups
