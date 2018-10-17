@@ -4,7 +4,7 @@ var app                = express();
 var request            = require('request');
 const busboyBodyParser = require('busboy-body-parser');
 
-let postURL = `${process.env.API_URL}${process.env.POST_API}`;
+let postURL = `${process.env.PROD_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 app.post('/', function (req, res, next) {

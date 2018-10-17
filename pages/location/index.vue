@@ -316,7 +316,7 @@ export default {
         maxZoom:      18,
         setView:      true,
         detectRetina: true,
-        id:           'mapbox.streets',
+        id:           `${process.env.mapBoxId}`,
         accessToken:  `${process.env.mapBoxKey}`
       }).addTo(mymap);
     },
