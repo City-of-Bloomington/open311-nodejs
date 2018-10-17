@@ -104,7 +104,7 @@ export default {
       this.allDatas;
       this.routeDataGroup;
       this.routeDataSubGroup;
-      this.topHeightPlus();
+      this.topHeight();
 
       // axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
       // .then(res => { this.allData = res.data })

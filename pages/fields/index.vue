@@ -302,7 +302,7 @@ export default {
       this.$refs.fileInput.value = '';
     },
     updateCanvasImage(e) {
-      var imageLoad = require('blueimp-load-image-npm');
+      // var imageLoad = require('blueimp-load-image-npm');
       // let loadImage = require('blueimp-load-image');
       // const EXIF = require('exif-js');
 
@@ -310,6 +310,7 @@ export default {
       var reader, files = e.target.files;
       var reader = new FileReader();
       reader.onload = (e) => {
+        console.log(e);
         var img = new Image();
         img.onload = function() {
           self.drawCanvasImage(img);
@@ -319,7 +320,7 @@ export default {
             console.log(this.exifdata);
           });
         }
-        img.src = event.target.result;
+        img.src = e.target.result;
       };
       reader.readAsDataURL(files[0]);
     },
