@@ -96,13 +96,14 @@
 
     li {
       display: inline-block;
-      margin: 0 10px 0 0;
+      margin: 0;
 
       img {
         cursor: pointer;
+        margin: 0 0 5px 0;
         // transform: scaleX(-1);
-        width: 100px;
-        height: 75px;
+        // width: 100px;
+        // height: 75px;
       }
 
       button {

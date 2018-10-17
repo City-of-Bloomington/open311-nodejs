@@ -215,6 +215,7 @@ export default {
       imgCanvas:        null,
       selectedImage:    null,
       imgElement:       null,
+      imgOrientation:   '',
       video:            {},
       canvas:           {},
       captures:         [],
@@ -301,6 +302,10 @@ export default {
       this.$refs.fileInput.value = '';
     },
     updateCanvasImage(e) {
+      var imageLoad = require('blueimp-load-image-npm');
+      // let loadImage = require('blueimp-load-image');
+      // const EXIF = require('exif-js');
+
       var self = this;
       var reader, files = e.target.files;
       var reader = new FileReader();
@@ -308,14 +313,20 @@ export default {
         var img = new Image();
         img.onload = function() {
           self.drawCanvasImage(img);
+          const EXIF = require('exif-js');
+
+          EXIF.getData(img, function() {
+            console.log(this.exifdata);
+          });
         }
         img.src = event.target.result;
       };
-
       reader.readAsDataURL(files[0]);
     },
     drawCanvasImage(img) {
+
       var canvas = this.$refs.imageCanvas;
+
       var max_width  = 1000;
       var max_height = 1000;
       var width      = img.width;
@@ -343,6 +354,7 @@ export default {
       } else {
         alert(this.singleImgMessage);
       }
+      // this.exifData();
     },
     biggerImage(c) {
       this.showBiggerImage = true;
