@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header ref="top" v-bind:style="{height: paddingTop}">
+    <header ref="top">
       <topBar />
       <search-input :data="allInitGroupData" field="service_name" v-bind:style="{top}"/>
     </header>

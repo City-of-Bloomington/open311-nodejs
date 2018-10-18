@@ -314,46 +314,105 @@ export default {
         var img = new Image();
         img.onload = function() {
           self.drawCanvasImage(img);
-          const EXIF = require('exif-js');
-
-          EXIF.getData(img, function() {
-            console.log(this.exifdata);
-          });
         }
         img.src = e.target.result;
       };
       reader.readAsDataURL(files[0]);
     },
     drawCanvasImage(img) {
+      var self = this;
+      var canvas = self.$refs.imageCanvas;
 
-      var canvas = this.$refs.imageCanvas;
+      const EXIF = require('exif-js');
+
+      EXIF.getData(img, function() {
+        self.imgOrientation = this.exifdata.Orientation;
+        console.log(self.imgOrientation);
+        console.log(this.exifdata);
+      });
 
       var max_width  = 1000;
       var max_height = 1000;
       var width      = img.width;
       var height     = img.height;
+      var ctx = canvas.getContext("2d");
 
-      if (width > height) {
-        if (width > max_width) {
-          height *= max_width / width;
-          width   = max_width;
+      if (4 < self.imgOrientation && self.imgOrientation < 9) {
+        if (width > height) {
+          if (width > max_width) {
+            img.height *= max_width / img.width;
+            img.width   = max_width;
+
+            height  = img.height;
+            width   = img.width;
+
+            canvas.width = img.height;
+            canvas.height = img.width;
+          }
+        } else {
+          console.log('this here 1');
         }
       } else {
         if (height > max_height) {
-          width *= max_height / height;
-          height = max_height;
-        }
-      }
-      canvas.width = width;
-      canvas.height = height;
+          console.log('this here 2');
+          img.height *= max_height / img.width;
+          img.width   = max_width;
 
-      var ctx = canvas.getContext("2d");
+          height  = img.height;
+          width   = img.width;
+
+          canvas.width = img.height;
+          canvas.height = img.width;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      // canvas.width = height;
+      // canvas.height = width;
+
+
+
+
+      // if (width > height) {
+      //   if (width > max_width) {
+      //     height *= max_width / width;
+      //     width   = max_width;
+      //   }
+      // } else {
+      //   if (height > max_height) {
+      //     width *= max_height / height;
+      //     height = max_height;
+      //   }
+      // }
+      // canvas.width = width;
+      // canvas.height = height;
+
+      console.log('img width ::', img.width);
+      console.log('img height ::', img.height);
+      console.log('var width ::', width);
+      console.log('var height ::', height);
+      console.log('canvas width ::', canvas.width);
+      console.log('canvas height ::', canvas.height);
+
+      switch (self.imgOrientation) {
+        case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+        case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+        case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+        case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+        case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+        case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+        case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+        default: break;
+      }
+
       ctx.drawImage(img, 0, 0, width, height);
 
-      if(this.captures.length < 1) {
-        this.captures.push(canvas.toDataURL());
+      if(self.captures.length < 1) {
+        self.captures.push(canvas.toDataURL('image/jpeg'));
       } else {
-        alert(this.singleImgMessage);
+        alert(self.singleImgMessage);
       }
       // this.exifData();
     },
