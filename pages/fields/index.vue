@@ -366,7 +366,7 @@ export default {
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
     submitPost() {
-      this.$refs.mainElm.innerHTML = 'TEMP: Check console for submit completion % until UI is in place ...\n-_-';
+      this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
       this.$store.commit('storeFormInfo', this.defaultFields);
 
       var formData     = new FormData();
