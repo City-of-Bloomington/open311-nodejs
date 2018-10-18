@@ -20,43 +20,31 @@
         </div>
       </div>
 
+      <emerModal />
       <p class="emergency">.: No Emergency Usage :.</p>
     </main>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios       from 'axios'
+import emerModal   from '~/components/emerModal.vue'
 import searchInput from '~/components/searchInput.vue'
-import modal from '~/components/modal.vue'
-import topBar from '~/components/topBar.vue'
+import topBar      from '~/components/topBar.vue'
 
 export default {
-  head () {
-    return {
-      bodyAttrs: {
-        class: this.showingModal ? 'showing-modal' : ''
-      }
-    }
-  },
   components: {
+    emerModal,
     searchInput,
-    modal,
     topBar
   },
   data() {
     return {
       paddingTop:   '',
       top:          '',
-      showingModal: false,
       groups:       []
     }
   },
-  // asyncData ({req, params, store}) {
-  //   return axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
-  //   .then((res) => { return { groups: res.data }})
-  //   .catch((err) => { console.log(err); });
-  // },
   created() {
     this.clearState();
   },
@@ -87,11 +75,6 @@ export default {
     },
     groupName(name) {
       return this.$store.commit('storeGroupName', name)
-    },
-    showModal(val) {
-      console.log(this.showingModal)
-      console.log(val)
-      this.showingModal = val;
     }
   },
   computed: {

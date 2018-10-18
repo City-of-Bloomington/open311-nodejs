@@ -4,36 +4,40 @@ import axios from 'axios'
 const Store = () => {
   return new Vuex.Store({
     state: {
-      topbar_height:      '',
-      search_height:      '',
-      nav_height:         '',
-      stepper_height:     '',
-      loc_search_height:  '',
-      initGroupData:      {},
+      seen_non_emer_modal:     false,
+      topbar_height:           '',
+      search_height:           '',
+      nav_height:              '',
+      stepper_height:          '',
+      loc_search_height:       '',
+      initGroupData:           {},
       serviceInfos: {
         service_group: {
-          group:          '',
-          service_name:   '',
-          service_code:   '',
-          route_code:     ''
+          group:               '',
+          service_name:        '',
+          service_code:        '',
+          route_code:          ''
         },
         personal_info: {
-          first_name:     '',
-          last_name:      '',
-          phone:          '',
-          email:          ''
+          first_name:          '',
+          last_name:           '',
+          phone:               '',
+          email:               ''
         },
         location_info: {
-          loading:        '',
-          address_string: '',
-          lat:            '',
-          long:           ''
+          loading:             '',
+          address_string:      '',
+          lat:                 '',
+          long:                ''
         },
-        service_fields: {},
-        service_response: {}
+        service_fields:        {},
+        service_response:      {}
       }
     },
     mutations: {
+      seenNonEmerModal(state, payload){
+        state.seen_non_emer_modal = payload
+      },
       storeInitGroupData(state, payload) {
         state.initGroupData = payload
       },
@@ -84,6 +88,7 @@ const Store = () => {
       }
     },
     getters: {
+      seenNonEmerModal: state => state.seen_non_emer_modal,
       initGroupData:    state => state.initGroupData,
       group:            state => state.serviceInfos.service_group.group,
       subGroup:         state => state.serviceInfos.service_group.service_name,

@@ -38,6 +38,7 @@
                id="email">
       </div>
 
+      <emerModal />
       <footer>
         <nuxt-link to="/location"
                    class="button next-button"
@@ -49,7 +50,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios     from 'axios'
+import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 
 export default {
@@ -60,7 +62,8 @@ export default {
   },
   middleware: ['redirect-home'],
   components: {
-    headerNav
+    headerNav,
+    emerModal
   },
   data() {
     return {

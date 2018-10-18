@@ -33,15 +33,18 @@
 
         <button slot="footer" @click="showModal = false">OK</button>
       </modal>
+
+      <emerModal />
     </main>
     <nuxt-child/>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios     from 'axios'
+import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
-import modal from '~/components/modal.vue'
+import modal     from '~/components/modal.vue'
 
 export default {
   middleware: 'redirect-home',
@@ -55,6 +58,7 @@ export default {
   },
   components: {
     modal,
+    emerModal,
     headerNav
   },
   data() {
