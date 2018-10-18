@@ -4,7 +4,7 @@
       <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
     </header>
 
-    <main style="top: 155px;">
+    <main style="top: 155px; padding: 0;">
       <ul class="subcategories">
         <li v-if="!groupProperName"
             v-for="subCat in subGroupList"
