@@ -4,7 +4,7 @@
       <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
-    <main v-bind:style="{paddingTop}" ref="mainElm" class="fields">
+    <main style="top: 190px;" ref="mainElm" class="fields">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
         <!-- <input

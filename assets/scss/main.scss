@@ -127,6 +127,7 @@ ul {
   flex-direction: row;
   justify-items: center;
   justify-items: center;
+  margin: 0 0 20px 0;
 
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     // IE10+
@@ -235,7 +236,6 @@ ul {
     }
   }
 }
-
 
 button {
   cursor: pointer;

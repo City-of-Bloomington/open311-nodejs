@@ -1,10 +1,11 @@
 <template>
   <div>
-    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+    <!-- <header ref="topHeight" v-bind:style="{height: paddingTop}"> -->
+    <header ref="topHeight">
       <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
-    <main v-bind:style="{paddingTop}">
+    <main style="top: 190px;">
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -138,6 +139,15 @@ export default {
     }
   },
   computed: {
+    topbarHeight() {
+      return this.$store.getters.topbarHeight
+    },
+    navHeight() {
+      return this.$store.getters.navHeight
+    },
+    stepperHeight() {
+      return this.$store.getters.stepperHeight
+    },
     allInitGroupData() {
       return this.$store.getters.initGroupData
     },
@@ -154,15 +164,6 @@ export default {
     routeDataSubGroup() {
       this.$store.commit('storeSubGroupName', this.allDatas.service_name);
       return this.allDatas.service_name;
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
     }
   }
 }

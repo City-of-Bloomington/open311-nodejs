@@ -71,9 +71,10 @@ export default {
     }
   },
   mounted() {
-    this.navTopSpacing();
+
     this.nHeight();
     this.psHeight();
+    this.navTopSpacing();
     this.confirmRoute();
   },
   methods: {
@@ -82,11 +83,11 @@ export default {
     },
     nHeight() {
       this.navHeight = this.$refs.nHeight.clientHeight;
-      return this.$store.commit('storeNavHeight', this.navHeight)
+      return this.$store.commit('storeNavHeight', this.navHeight);
     },
     psHeight() {
       this.stepperHeight = this.$refs.psHeight.clientHeight;
-      return this.$store.commit('storeStepperHeight', this.stepperHeight)
+      return this.$store.commit('storeStepperHeight', this.stepperHeight);
     },
     confirmRoute() {
       if(this.$route.path == '/confirm') {

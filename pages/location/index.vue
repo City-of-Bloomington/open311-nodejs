@@ -3,7 +3,7 @@
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
       <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
 
-      <div class="search container" v-bind:style="{top: searchTop}" ref="lsHeight">
+      <div class="search container" style="top: 50px" ref="lsHeight">
         <form action="" @submit.prevent>
           <div class="form-group">
 
@@ -34,7 +34,7 @@
       </div>
     </header>
 
-    <main v-bind:style="{paddingTop}">
+    <main style="top: 240px">
       <!-- sge  --  {{showGeoErrorHelp}}<br>
       sbtn  --  {{showNextButton}}<br>
       la  --  {{location.address_string}}<br>

@@ -5,7 +5,7 @@
       <search-input :data="allInitGroupData" field="service_name" v-bind:style="{top}"/>
     </header>
 
-    <main v-bind:style="{paddingTop}">
+    <main style="top: 123px;">
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"

@@ -4,7 +4,7 @@
       <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
-    <main v-bind:style="{paddingTop}" class="thank-you">
+    <main style="top: 190px;" class="thank-you">
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3>
 

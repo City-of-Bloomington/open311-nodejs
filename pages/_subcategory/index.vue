@@ -4,10 +4,7 @@
       <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
     </header>
 
-    <main v-bind:style="{paddingTop}">
-      <!-- {{ $route.params }}<br><br>
-      {{allDatas()}}<br><br>
-      {{group}}<br><br> -->
+    <main style="top: 155px;">
       <ul class="subcategories">
         <li v-if="!groupProperName"
             v-for="subCat in subGroupList"
