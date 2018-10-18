@@ -1,11 +1,11 @@
 <template>
   <div>
-    <header ref="top">
+    <header ref="top" style="height: 135px;">
       <topBar />
       <search-input :data="allInitGroupData" field="service_name" v-bind:style="{top}"/>
     </header>
 
-    <main style="top: 123px;">
+    <main style="top: 135px;">
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"
