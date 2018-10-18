@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- <header ref="topHeight" v-bind:style="{height: paddingTop}"> -->
-    <header ref="topHeight">
+    <header ref="topHeight" style="height: 180px;">
       <headerNav :step-active="stepActive" :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 190px;">
+    <main style="top: 180px;">
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
