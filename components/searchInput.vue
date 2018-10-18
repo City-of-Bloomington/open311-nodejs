@@ -17,7 +17,7 @@
             :key="group.service_code"
             v-if="filter(group)"
             @mousedown="complete(i)">
-            <span v-html="group.group"></span>
+            <!-- <span v-html="group.group"></span> -->
             <ul>
               <li v-html="group.service_name"></li>
             </ul>
