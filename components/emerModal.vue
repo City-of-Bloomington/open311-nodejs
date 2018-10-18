@@ -1,6 +1,6 @@
 <template>
   <modal v-if="!seenEmerModal">
-    <h4 slot="header">uReport: Non-Emergency Use</h4>
+    <h4 slot="header">uReport: Non-Emergency Use Only</h4>
     <p slot="body">This system is not for reporting emergencies or imminent safety hazards.</p>
 
     <p slot="body">If this is an emergency, please immediately dial 911 for assistance.</p>

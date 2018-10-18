@@ -4,7 +4,6 @@
       <label>Search</label>
       <input type="text"
              v-model="input"
-             @keydown.tab.prevent="complete()"
              @blur="blur(false)"
              placeholder="Search"/>
       <button type="button" class="clear" @click="clearSearch" v-if="showClearBtn">
