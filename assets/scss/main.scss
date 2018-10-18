@@ -302,7 +302,6 @@ and (max-device-width : 480px) {
     padding: 20px 0;
   }
 
-
   .disclaimer {
     .container {
       width: calc(100% - 40px);
@@ -321,6 +320,10 @@ and (max-device-width : 480px) {
     .top-bar {
       .container {
         width: calc(100% - 40px);
+
+        span {
+          font-size: 16px;
+        }
       }
     }
   }
