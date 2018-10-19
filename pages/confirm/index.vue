@@ -34,7 +34,11 @@
 import headerNav from '~/components/nav.vue'
 
 export default {
-  // middleware: ['redirect-home'],
+  beforeRouteEnter (to, from, next) {
+    if(from.path == '/')
+      next('/');
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - Thanks!`

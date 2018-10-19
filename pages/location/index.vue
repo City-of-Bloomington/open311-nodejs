@@ -35,13 +35,6 @@
     </header>
 
     <main style="top: 240px">
-      <!-- sge  --  {{showGeoErrorHelp}}<br>
-      sbtn  --  {{showNextButton}}<br>
-      la  --  {{location.address_string}}<br>
-      ll  --  {{location.lat}}<br>
-      long  --  {{location.long}}<br>
-      load  --  {{loading}}<br>
-      ge  --  {{geoError}}<br><br><br><br> -->
       <div v-if="showGeoErrorHelp">
         <h3>Please report the issue location.</h3><br>
         <p>You may search for an address manually without using the Geolocation API.</p><br>
@@ -60,8 +53,7 @@
         </ul>
       </div>
 
-      <!-- <div style="position: relative;" v-if="loadingLocation"> -->
-        <div style="position: relative;" v-if="loadingLocation">
+      <div style="position: relative;" v-if="loadingLocation">
         <h3>Gathering results:</h3>
         <div class="loader-wrapper location">
           <div class="bar"></div>
@@ -125,7 +117,11 @@ if (process.browser) {
 }
 
 export default {
-  middleware: 'redirect-home',
+  beforeRouteEnter (to, from, next) {
+    if(from.path == '/')
+      next('/');
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`

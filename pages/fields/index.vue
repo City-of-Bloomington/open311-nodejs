@@ -190,12 +190,16 @@ import headerNav from '~/components/nav.vue'
 import modal from '~/components/modal.vue'
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    if(from.path == '/')
+      next('/');
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`
     }
   },
-  middleware: ['redirect-home'],
   props: ['item'],
   components: {
     headerNav,

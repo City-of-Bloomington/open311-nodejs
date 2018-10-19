@@ -44,7 +44,6 @@ import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
 
 export default {
-  middleware: 'redirect-home',
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.group}`,
@@ -108,7 +107,8 @@ export default {
       }  else if (this.groupRouteName == 'miscellaneous') {
         this.groupProperName = 'Miscellaneous';
       } else {
-        this.groupProperName = 'Unknown';
+        router.push({ path: '/' })
+        // this.groupProperName = 'Unknown';
       };
 
       this.group = this.$store.commit('storeGroupName', this.groupProperName)

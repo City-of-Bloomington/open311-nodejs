@@ -61,7 +61,6 @@ export default {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`
     }
   },
-  middleware: ['redirect-home'],
   components: {
     headerNav,
     emerModal
