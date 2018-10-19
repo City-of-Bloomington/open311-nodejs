@@ -87,7 +87,7 @@ export default {
       return this.$store.getters.firstName
     },
     requestID() {
-      return `Your case number is: <strong>${this.serviceReqID}</strong>`
+      return `Your service request number is: <strong>${this.serviceReqID}</strong>`
     },
     responseData() {
       return this.$store.getters.response.data.body;
