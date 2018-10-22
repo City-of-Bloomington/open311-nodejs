@@ -317,7 +317,7 @@ export default {
       }).addTo(mymap);
     },
     updateMap(lat,long) {
-      this.mymap.setView([lat,long], 20);
+      this.mymap.setView([lat,long]);
       this.$refs.mapElement.style.display = "block";
       // this.mymap.invalidateSize();
     },

@@ -17,20 +17,21 @@
 </template>
 
 <style type="text/css">
-  main h2 {
+
+  main.thank-you h2 {
     border-bottom: none;
     margin: 0;
   }
 
-  a {
+  main.thank-you a {
     border-bottom: 1px solid white;
   }
 
-  p {
+  main.thank-you p {
     margin: 0 0 20px 0;
   }
 
-  p:last-of-type {
+  main.thank-you p:last-of-type {
     margin: 0;
   }
 </style>
