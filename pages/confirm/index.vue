@@ -6,7 +6,8 @@
 
     <main style="top: 190px;" class="thank-you">
       <h2 v-html="thankYou"></h2><br>
-      <h3 v-html="requestID"></h3>
+      <h3 v-html="requestID"></h3><br>
+      <p v-html="crmMessageLink"></p>
 
       <nuxt-link to="/" class="button ok-button">
         <span>ok</span>
@@ -19,6 +20,10 @@
   main h2 {
     border-bottom: none;
     margin: 0;
+  }
+
+  a {
+    border-bottom: 1px solid white;
   }
 
   p {
@@ -49,6 +54,7 @@ export default {
   },
   data() {
     return {
+      crmBasePath: 'https://bloomington.in.gov/crm-test/tickets/view?ticket_id=',
       paddingTop:  '',
       serviceReqID: '',
       stepActive: {
@@ -83,6 +89,9 @@ export default {
     }
   },
   computed: {
+    crmMessageLink() {
+      return `To view your request status, <a href='${this.crmBasePath}${this.serviceReqID}' target='_blank'>click here</a>.`
+    },
     firstName() {
       return this.$store.getters.firstName
     },
