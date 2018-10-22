@@ -455,7 +455,6 @@ export default {
       } else {
         console.log('reCaptcha response :: ',grecaptcha.getResponse());
 
-        // this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
         this.$store.commit('storeFormInfo', this.defaultFields);
 
         var formData     = new FormData();
@@ -486,6 +485,8 @@ export default {
             console.log('Percent Completed:' + this.percentCompleted);
           }
         }
+
+        this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
 
         axios.post(`${process.env.postProxy}`, formData, config)
         .then(response => {
