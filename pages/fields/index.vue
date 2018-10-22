@@ -144,6 +144,7 @@
         </div>
       </div>
 
+      <p v-if="reCaptchaError">Error - Please validate the reCaptcha below.</p>
       <div class="g-recaptcha" :data-sitekey="reCaptchaSiteKey"></div>
 
       <footer>
@@ -220,6 +221,7 @@ export default {
   },
   data() {
     return {
+      reCaptchaError:   false,
       reCaptchaSiteKey: process.env.reCaptchaSiteKey,
       percentCompleted: '',
       paddingTop:       '',
@@ -448,6 +450,7 @@ export default {
     },
     submitPost() {
       if(!grecaptcha.getResponse()) {
+        this.reCaptchaError = true;
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
         console.log('reCaptcha response :: ',grecaptcha.getResponse());
@@ -486,17 +489,16 @@ export default {
 
         axios.post(`${process.env.postProxy}`, formData, config)
         .then(response => {
-          console.log('confirm then 1');
           for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
           }
           this.$store.commit('storeResponseInfo', response);
         })
         .then(response => {
-          console.log('confirm then 2');
           this.$router.push({ path: 'confirm' })
         })
         .catch(error => {
+          this.reCaptchaError = true;
           console.log(`%c .: SS :: ${JSON.stringify(error.response.data.responseDesc)} :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         });
       }
