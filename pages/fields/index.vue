@@ -144,7 +144,7 @@
         </div>
       </div>
 
-
+      <div class="g-recaptcha" :data-sitekey="reCaptchaSiteKey"></div>
 
       <footer>
         <button class="button next-button" @click="submitPost()">Submit</button>
@@ -169,6 +169,16 @@
 
       .form-group {
         margin: 0 0 40px 0 !important;
+      }
+    }
+
+    .g-recaptcha {
+      margin-bottom: 15px;
+    }
+
+    footer {
+      button {
+        margin-bottom: 15px;
       }
     }
   }
@@ -197,7 +207,10 @@ export default {
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.subGroup}`
+      titleTemplate: `%s - ${this.$store.getters.subGroup}`,
+        script: [
+        { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
+      ]
     }
   },
   props: ['item'],
@@ -207,6 +220,7 @@ export default {
   },
   data() {
     return {
+      reCaptchaSiteKey: process.env.reCaptchaSiteKey,
       percentCompleted: '',
       paddingTop:       '',
       modalImage:       null,
@@ -243,6 +257,7 @@ export default {
       }
     }
   },
+  created() {},
   mounted() {
     this.topHeight();
     axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
@@ -428,65 +443,63 @@ export default {
       console.log(this.defaultFields);
       // return this.$store.commit('storeFormInfo', this.defaultFields);
     },
+    reCaptchaValidate() {
+      console.log(grecaptcha.getResponse());
+    },
     submitPost() {
-      this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
-      this.$store.commit('storeFormInfo', this.defaultFields);
+      if(!grecaptcha.getResponse()) {
+        console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      } else {
+        console.log('reCaptcha response :: ',grecaptcha.getResponse());
 
-      var formData     = new FormData();
-      var dataURL      = this.postMedia;
-      var blob         = this.dataURItoBlob(dataURL);
-      var requestAttrs = this.defaultFields;
+        // this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
+        this.$store.commit('storeFormInfo', this.defaultFields);
 
-      formData.append("service_code", this.postServiceCode)
-      formData.append("lat", this.postLat)
-      formData.append("long", this.postLong)
-      formData.append("address_string", this.postAddressString)
-      formData.append("email", this.postEmail)
-      formData.append("first_name", this.postFirstName)
-      formData.append("last_name", this.postLastName)
-      formData.append("phone", this.postPhone)
-      formData.append("description", this.postDefaultDescription)
-      formData.append("media", blob)
+        var formData     = new FormData();
+        var dataURL      = this.postMedia;
+        var blob         = this.dataURItoBlob(dataURL);
+        var requestAttrs = this.defaultFields;
+        var captchaReponse = grecaptcha.getResponse();
 
-      Object.keys(requestAttrs).map(function(key) {
-        return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
-      }).join('&');
+        formData.append("g_recaptcha_response", captchaReponse)
+        formData.append("service_code", this.postServiceCode)
+        formData.append("lat", this.postLat)
+        formData.append("long", this.postLong)
+        formData.append("address_string", this.postAddressString)
+        formData.append("email", this.postEmail)
+        formData.append("first_name", this.postFirstName)
+        formData.append("last_name", this.postLastName)
+        formData.append("phone", this.postPhone)
+        formData.append("description", this.postDefaultDescription)
+        formData.append("media", blob)
 
-      var config = {
-        onUploadProgress: function (progressEvent) {
-          this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          console.log('Percent Completed:' + this.percentCompleted);
+        Object.keys(requestAttrs).map(function(key) {
+          return formData.append(`attribute[${key}]`,`${requestAttrs[key]}`);
+        }).join('&');
+
+        var config = {
+          onUploadProgress: function (progressEvent) {
+            this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            console.log('Percent Completed:' + this.percentCompleted);
+          }
         }
+
+        axios.post(`${process.env.postProxy}`, formData, config)
+        .then(response => {
+          console.log('confirm then 1');
+          for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+          }
+          this.$store.commit('storeResponseInfo', response);
+        })
+        .then(response => {
+          console.log('confirm then 2');
+          this.$router.push({ path: 'confirm' })
+        })
+        .catch(error => {
+          console.log(`%c .: SS :: ${JSON.stringify(error.response.data.responseDesc)} :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        });
       }
-
-      axios.post(`${process.env.postProxy}`, formData, config)
-      .then(response => {
-        for (var pair of formData.entries()) {
-          console.log(pair[0]+ ', ' + pair[1]);
-        }
-        this.$store.commit('storeResponseInfo', response);
-      })
-      .then(response => {
-        this.$router.push({ path: 'confirm' })
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-
-      // Working
-      // axios.post(`${process.env.API_URL}${process.env.POST_API}`,
-      //   formData
-      // )
-      // .then(response => {
-      //   this.$store.commit('storeResponseInfo', response.data[0]);
-      // })
-      // .then(response => {
-      //   this.$router.push({ path: 'confirm' })
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
     }
   },
   computed: {

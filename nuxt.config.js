@@ -61,25 +61,26 @@ module.exports = {
       proxyHeaders: true
     },
     env: {
-      baseUrl:     process.env.BASE_URL,
-      localPort:   process.env.LOCAL_PORT,
-      servicesApi: process.env.SERVICES_API,
-      postApi:     process.env.POST_API,
-      attrsApi:    process.env.ATTRS_API,
-      open311Key:  process.env.OPEN_311_KEY,
-      apiUrl:      process.env.PROD_API_URL, 
-      postProxy:   process.env.POST_PROXY,
-      osmUrl:      process.env.OSM_URL, 
-      mapBoxUrl:   process.env.MAPBOX_URL,
-      mapBoxKey:   process.env.MAPBOX_KEY,
-      mapBoxId:    process.env.MAPBOX_ID
+      baseUrl:              process.env.BASE_URL,
+      localPort:            process.env.LOCAL_PORT,
+      servicesApi:          process.env.SERVICES_API,
+      postApi:              process.env.POST_API,
+      attrsApi:             process.env.ATTRS_API,
+      open311Key:           process.env.OPEN_311_KEY,
+      apiUrl:               process.env.PROD_API_URL,
+      postProxy:            process.env.POST_PROXY,
+      osmUrl:               process.env.OSM_URL,
+      mapBoxUrl:            process.env.MAPBOX_URL,
+      mapBoxKey:            process.env.MAPBOX_KEY,
+      mapBoxId:             process.env.MAPBOX_ID,
+      reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
     },
     plugins: [
       { src: '~/plugins/leaflet/leaflet.js', ssr: false}
     ],
     build: {
       vendors: ['babel-polyfill'],
-  
+
       extend (config, { isDev, isClient }) {
         if (isDev && isClient) {
           config.module.rules.push({
