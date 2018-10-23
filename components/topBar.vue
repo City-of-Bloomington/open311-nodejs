@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       showDisclaimer: false,
-      logoUrl:        'https://bloomington.in.gov/',
+      logoUrl:        process.env.logoUrl,
       topBarHeight:   ''
     }
   },

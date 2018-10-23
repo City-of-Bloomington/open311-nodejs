@@ -54,13 +54,16 @@ module.exports = {
       theme_color: '#1e59ae'
     },
     axios: {
-      baseURL:     process.env.BASE_URL || '/open311-nodejs',
-      browserBaseURL:     process.env.BROWSER_BASE_URL || '/open311-nodejs',
-      proxy: true,
-      credentials: true,
-      proxyHeaders: true
+      baseURL:              process.env.BASE_URL,
+      browserBaseURL:       process.env.BROWSER_BASE_URL,
+      proxy:                true,
+      credentials:          true,
+      proxyHeaders:         true
     },
     env: {
+      crmBaseUrl:           process.env.CRM_BASE_URL,
+      crmTickets:           process.env.CRM_TICKETS,
+      logoUrl:              process.env.LOGO_URL,
       baseUrl:              process.env.BASE_URL,
       localPort:            process.env.LOCAL_PORT,
       servicesApi:          process.env.SERVICES_API,
@@ -69,6 +72,7 @@ module.exports = {
       open311Key:           process.env.OPEN_311_KEY,
       apiUrl:               process.env.PROD_API_URL,
       postProxy:            process.env.POST_PROXY,
+      arcgisRevGeo:         process.env.ARCGIS_REV_GEO,
       osmUrl:               process.env.OSM_URL,
       mapBoxUrl:            process.env.MAPBOX_URL,
       mapBoxKey:            process.env.MAPBOX_KEY,

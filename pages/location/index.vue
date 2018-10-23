@@ -42,13 +42,13 @@
         <p>How to enable (Geolocation API) using:</p>
         <ul>
           <li>
-            <a href="https://support.google.com/chrome/answer/142065?hl=en" target="_blank">Google Chrome</a>
+            <a :href="chromeGeoTutUrl" target="_blank">Google Chrome</a>
           </li>
           <li>
-            <a href="https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites" target="_blank">FireFox</a>
+            <a :href="firefoxGeoTutUrl" target="_blank">FireFox</a>
           </li>
           <li>
-            <a href="https://support.apple.com/en-us/HT204690" target="_blank">Safari</a>
+            <a :href="safariGeoTutUrl" target="_blank">Safari</a>
           </li>
         </ul>
       </div>
@@ -132,6 +132,9 @@ export default {
   },
   data() {
     return {
+      chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
+      firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
+      safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
       searchTop:        '',
       locSearchHeight:  '',
       paddingTop:       '',
@@ -303,7 +306,7 @@ export default {
     },
     updateAddressString(lat,long){
       // does this return x/y backwards?!
-      axios.get(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location=${long},${lat}`)
+      axios.get(`${process.env.arcgisRevGeo}${long},${lat}`)
       .then(response => {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;

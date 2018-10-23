@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      crmBasePath: 'https://bloomington.in.gov/crm-test/tickets/view?ticket_id=',
+      crmLink: `${process.env.crmBaseUrl}${process.env.crmTickets}`,
       paddingTop:  '',
       serviceReqID: '',
       stepActive: {
@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     crmMessageLink() {
-      return `To view your request status, <a href='${this.crmBasePath}${this.serviceReqID}' target='_blank'>click here</a>.`
+      return `To view your request status, <a href='${this.crmLink}${this.serviceReqID}' target='_blank'>click here</a>.`
     },
     firstName() {
       return this.$store.getters.firstName
