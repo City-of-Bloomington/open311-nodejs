@@ -139,9 +139,9 @@ export default {
       loadingLocation:  false,
       loading:          false,
       location: {
-        lat:            null,
-        long:           null,
-        address_string: null
+        lat:            this.hasLocationLat(),
+        long:           this.hasLocationLong(),
+        address_string: this.hasLocationAddress()
       },
       showMap:          true,
       map:              null,
@@ -170,31 +170,42 @@ export default {
   },
   mounted() {
     var self = this;
-    self.loading = true;
     self.geoError = false;
-    this.searchPos();
-    this.locationSearchHeight();
+    self.locationSearchHeight();
     self.topHeight();
-    self.geoLocatePromise()
-    .then(position => {
-      if(position.coords) {
-        self.location.lat = position.coords.latitude;
-        self.location.long = position.coords.longitude;
-      } else {
-        console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      }
-    })
-    .then(function(){
+
+    if(self.hasLocationLat() == '') {
+      alert('we have nothing');
+      self.loading = true;
+      self.searchPos();
+
+      self.geoLocatePromise()
+      .then(position => {
+        if(position.coords) {
+          self.location.lat = position.coords.latitude;
+          self.location.long = position.coords.longitude;
+        } else {
+          console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        }
+      })
+      .then(function(){
+        self.initMap();
+      })
+      .catch(function(){
+        self.geoError = true;
+        self.loading = false;
+        console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        self.location.lat = self.cityHallLat;
+        self.location.long = self.cityHallLong;
+        self.initMap();
+      });
+    } else {
+      self.location.lat = this.$store.getters.locationLat;
+      self.location.long = this.$store.getters.locationLong;
       self.initMap();
-    })
-    .catch(function(){
-      self.geoError = true;
-      self.loading = false;
-      console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      self.location.lat = self.cityHallLat;
-      self.location.long = self.cityHallLong;
-      self.initMap();
-    });
+    }
+
+
   },
   watch: {
     locationUpdate: function() {
@@ -202,6 +213,36 @@ export default {
     }
   },
   methods: {
+    hasLocationLat(){
+      if(
+        !this.$store.getters.locationLat ||
+        this.$store.getters.locationLat == '' ||
+        this.$store.getters.locationLat == null ||
+        this.$store.getters.locationLat == undefined
+      )
+        return ''
+      return this.$store.getters.locationLat
+    },
+    hasLocationLong(){
+      if(
+        !this.$store.getters.locationLong ||
+        this.$store.getters.locationLong == '' ||
+        this.$store.getters.locationLong == null ||
+        this.$store.getters.locationLong == undefined
+      )
+        return ''
+      return this.$store.getters.locationLong
+    },
+    hasLocationAddress(){
+      if(
+        !this.$store.getters.locationAddress ||
+        this.$store.getters.locationAddress == '' ||
+        this.$store.getters.locationAddress == null ||
+        this.$store.getters.locationAddress == undefined
+      )
+        return ''
+      return this.$store.getters.locationAddress
+    },
     searchPos() {
       this.searchTop = `${this.topbarHeight}px`;
     },
