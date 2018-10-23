@@ -47,16 +47,16 @@
         <span>back</span>
       </div>
       <h1 v-html="group"></h1>
-      <h2 v-html="subGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
+      <h2 v-html="subGroup" v-if="navSubGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
     </nav>
   </div>
 </template>
 
 <script>
-import topBar     from './topBar.vue'
+import topBar from './topBar.vue'
 
 export default {
-  props: ['stepActive','stepComplete'],
+  props: ['stepActive','stepComplete','navSubGroup'],
   components: {
     topBar
   },

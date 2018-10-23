@@ -1,7 +1,10 @@
 <template>
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
-      <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
+      <headerNav
+        :nav-sub-group="navSubGroup"
+        :step-active="stepActive"
+        :step-complete="stepComplete" />
 
       <div class="search container" style="top: 50px" ref="lsHeight">
         <form action="" @submit.prevent>
@@ -132,6 +135,8 @@ export default {
   },
   data() {
     return {
+      cityHallLong:     '-86.5369425',
+      cityHallLat:      '39.1703084',
       chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
       firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
       safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
@@ -151,24 +156,23 @@ export default {
       search_results:   null,
       addressesList:    null,
       showResults:      false,
+      navSubGroup:      true,
       stepActive: {
-        one:   false,
-        two:   false,
-        three: false,
-        four:  true,
-        five:  false,
-        six:   false,
+        one:            false,
+        two:            false,
+        three:          false,
+        four:           true,
+        five:           false,
+        six:            false,
       },
       stepComplete: {
-        one:   true,
-        two:   true,
-        three: true,
-        four:  false,
-        five:  false,
-        six:   false,
-      },
-      cityHallLong: '-86.5369425',
-      cityHallLat:  '39.1703084'
+        one:            true,
+        two:            true,
+        three:          true,
+        four:           false,
+        five:           false,
+        six:            false,
+      }
     }
   },
   mounted() {
@@ -385,7 +389,7 @@ export default {
       self.loadingLocation = true;
       console.log('loading search results');
       if(self.location.address_string != '') {
-        axios.get(`https://bloomington.in.gov/master_address/?format=json&queryType=address&query=${this.location.address_string}`)
+        axios.get(`${process.env.masterAddUrl}${this.location.address_string}`)
         .then(response => {
           self.showResults = true;
           self.loadingLocation = false;

@@ -72,6 +72,7 @@ module.exports = {
       open311Key:           process.env.OPEN_311_KEY,
       apiUrl:               process.env.PROD_API_URL,
       postProxy:            process.env.POST_PROXY,
+      masterAddUrl:         process.env.MASTER_ADD_URL,
       arcgisRevGeo:         process.env.ARCGIS_REV_GEO,
       osmUrl:               process.env.OSM_URL,
       mapBoxUrl:            process.env.MAPBOX_URL,

@@ -1,11 +1,14 @@
 <template>
   <div>
     <!-- <header ref="topHeight" v-bind:style="{height: paddingTop}"> -->
-    <header ref="topHeight" style="height: 180px;">
-      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
+    <header ref="topHeight" style="height: 190px;">
+      <headerNav
+        :nav-sub-group="navSubGroup"
+        :step-active="stepActive"
+        :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 180px;">
+    <main style="top: 190px;">
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -67,31 +70,32 @@ export default {
   },
   data() {
     return {
-      paddingTop:   '',
-      routeCode:    '',
-      routeCodeData:'',
-      allData:      [],
+      paddingTop:    '',
+      routeCode:     '',
+      routeCodeData: '',
+      allData:       [],
+      navSubGroup:   true,
       userInfo: {
-        first_name: this.hasFirstName(),
-        last_name:  this.hasLastName(),
-        phone:      this.hasPhone(),
-        email:      this.hasEmail()
+        first_name:  this.hasFirstName(),
+        last_name:   this.hasLastName(),
+        phone:       this.hasPhone(),
+        email:       this.hasEmail()
       },
       stepActive: {
-        one:   false,
-        two:   false,
-        three: true,
-        four:  false,
-        five:  false,
-        six:   false
+        one:         false,
+        two:         false,
+        three:       true,
+        four:        false,
+        five:        false,
+        six:         false
       },
       stepComplete: {
-        one:   true,
-        two:   true,
-        three: false,
-        four:  false,
-        five:  false,
-        six:   false
+        one:         true,
+        two:         true,
+        three:       false,
+        four:        false,
+        five:        false,
+        six:         false
       }
     }
   },

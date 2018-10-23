@@ -1,7 +1,10 @@
 <template>
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
-      <headerNav :step-active="stepActive" :step-complete="stepComplete"/>
+      <headerNav
+        :nav-sub-group="navSubGroup"
+        :step-active="stepActive"
+        :step-complete="stepComplete" />
     </header>
 
     <main style="top: 155px; padding: 0;">
@@ -59,27 +62,28 @@ export default {
   },
   data() {
     return {
-      groupName: '',
-      groupRouteName: '',
+      groupName:       '',
+      groupRouteName:  '',
       groupProperName: '',
-      paddingTop:   '',
-      showModal:    false,
-      allData:      [],
+      paddingTop:      '',
+      showModal:       false,
+      allData:         [],
+      navSubGroup:     false,
       stepActive: {
-        one:   false,
-        two:   true,
-        three: false,
-        four:  false,
-        five:  false,
-        six:   false
+        one:           false,
+        two:           true,
+        three:         false,
+        four:          false,
+        five:          false,
+        six:           false
       },
       stepComplete: {
-        one:   true,
-        two:   false,
-        three: false,
-        four:  false,
-        five:  false,
-        six:   false
+        one:           true,
+        two:           false,
+        three:         false,
+        four:          false,
+        five:          false,
+        six:           false
       }
     }
   },

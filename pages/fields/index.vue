@@ -1,7 +1,10 @@
 <template>
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
-      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
+      <headerNav
+        :nav-sub-group="navSubGroup"
+        :step-active="stepActive"
+        :step-complete="stepComplete" />
     </header>
 
     <main style="top: 190px;" ref="mainElm" class="fields">
@@ -221,6 +224,7 @@ export default {
   },
   data() {
     return {
+      navSubGroup:      true,
       reCaptchaError:   false,
       reCaptchaSiteKey: process.env.reCaptchaSiteKey,
       percentCompleted: '',
@@ -242,20 +246,20 @@ export default {
       response:         {},
       singleImgMessage: 'Sorry, we only support a single image at the moment.',
       stepActive: {
-        one:   false,
-        two:   false,
-        three: false,
-        four:  false,
-        five:  true,
-        six:   false
+        one:            false,
+        two:            false,
+        three:          false,
+        four:           false,
+        five:           true,
+        six:            false
       },
       stepComplete: {
-        one:   true,
-        two:   true,
-        three: true,
-        four:  true,
-        five:  false,
-        six:   false
+        one:            true,
+        two:            true,
+        three:          true,
+        four:           true,
+        five:           false,
+        six:            false
       }
     }
   },
