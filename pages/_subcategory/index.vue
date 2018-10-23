@@ -7,7 +7,7 @@
         :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 155px; padding: 0;">
+    <main style="top: 155px;">
       <ul class="subcategories">
         <li v-if="!groupProperName"
             v-for="subCat in subGroupList"
