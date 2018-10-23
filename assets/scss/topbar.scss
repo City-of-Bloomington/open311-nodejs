@@ -8,8 +8,6 @@
   padding: 10px 0;
   color: $biscay;
   font-size: 18px;
-  // font-family: 'IBM Plex Sans', sans-serif;
-  // font-weight: 400;
 
   .container {
     position: relative;
@@ -29,12 +27,13 @@
       }
 
       &:last-of-type {
+        cursor: pointer;
         margin-left: auto;
+
         svg {
           display: block;
           width: 20px;
           height: 20px;
-
         }
       }
     }

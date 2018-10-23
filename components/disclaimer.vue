@@ -27,8 +27,6 @@
 </template>
 
 <script>
-// import headerNav from '~/components/nav.vue'
-
 export default {
   props: ['showDisclaimer'],
   head () {
@@ -36,24 +34,10 @@ export default {
       titleTemplate: `%s - Disclaimer!`
     }
   },
-  components: {},
-  data() {
-    return {
-      paddingTop: '',
-      previousRoute: null,
-    }
-  },
-  mounted() {
-    // this.topHeight();
-  },
   methods: {
     showingDisclaimer(){
       this.$parent.showingDisclaimer();
     }
-    // topHeight() {
-    //   this.paddingTop = `${this.$refs.top.clientHeight + 10}px`;
-    // }
-  },
-  computed: {}
+  }
 }
 </script>
