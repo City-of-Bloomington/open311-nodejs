@@ -270,6 +270,13 @@ button {
   right: 0;
   height: 100%;
 
+  .top {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    height: 52px;
+  }
+
   .container {
     position: relative;
     display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div class="disclaimer" v-if="showDisclaimer">
-    <div class="top" ref="top" style="padding: 0; height: 52px; display: flex; justify-content: center;">
+    <div class="top" ref="top">
       <div class="container">
         <h1>uReport: Disclaimer</h1>
         <div @click="showingDisclaimer(false)">
@@ -29,11 +29,6 @@
 <script>
 export default {
   props: ['showDisclaimer'],
-  head () {
-    return {
-      titleTemplate: `%s - Disclaimer!`
-    }
-  },
   methods: {
     showingDisclaimer(){
       this.$parent.showingDisclaimer();
