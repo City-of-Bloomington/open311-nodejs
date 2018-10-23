@@ -1,9 +1,9 @@
 <template>
-  <div class="disclaimer">
+  <div class="disclaimer" v-if="showDisclaimer">
     <div class="top" ref="top" style="padding: 0; height: 52px; display: flex; justify-content: center;">
       <div class="container">
         <h1>uReport: Disclaimer</h1>
-        <div @click="$router.back()">
+        <div @click="showingDisclaimer(false)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14.994 14.994"><title>close</title><g id="close-icon" data-name="close-icon"><line x1="14.287" y1="0.707" x2="0.707" y2="14.287" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/><line x1="0.707" y1="0.707" x2="14.287" y2="14.287" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/></g></svg>
         </div>
       </div>
@@ -27,9 +27,10 @@
 </template>
 
 <script>
-import headerNav from '~/components/nav.vue'
+// import headerNav from '~/components/nav.vue'
 
 export default {
+  props: ['showDisclaimer'],
   head () {
     return {
       titleTemplate: `%s - Disclaimer!`
@@ -43,13 +44,15 @@ export default {
     }
   },
   mounted() {
-    this.topHeight();
-    console.dir(this.$router);
+    // this.topHeight();
   },
   methods: {
-    topHeight() {
-      this.paddingTop = `${this.$refs.top.clientHeight + 10}px`;
+    showingDisclaimer(){
+      this.$parent.showingDisclaimer();
     }
+    // topHeight() {
+    //   this.paddingTop = `${this.$refs.top.clientHeight + 10}px`;
+    // }
   },
   computed: {}
 }

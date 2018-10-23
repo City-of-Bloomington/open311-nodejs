@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import topBar from './topBar.vue'
+import topBar     from './topBar.vue'
 
 export default {
   props: ['stepActive','stepComplete'],
