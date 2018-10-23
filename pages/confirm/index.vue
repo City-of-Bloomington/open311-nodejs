@@ -12,9 +12,9 @@
       <h3 v-html="requestID"></h3><br>
       <p v-html="crmMessageLink"></p>
 
-      <nuxt-link to="/" class="button ok-button">
+      <div @click="goHome" class="button ok-button">
         <span>ok</span>
-      </nuxt-link>
+      </div>
     </main>
   </div>
 </template>
@@ -85,6 +85,9 @@ export default {
     this.serviceID();
   },
   methods: {
+    goHome() {
+      this.$router.go({ path: '/' });
+    },
     topHeight() {
       this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
