@@ -72,10 +72,10 @@ export default {
       routeCodeData:'',
       allData:      [],
       userInfo: {
-        first_name: '',
-        last_name:  '',
-        phone:      '',
-        email:      ''
+        first_name: this.hasFirstName(),
+        last_name:  this.hasLastName(),
+        phone:      this.hasPhone(),
+        email:      this.hasEmail()
       },
       stepActive: {
         one:   false,
@@ -126,6 +126,46 @@ export default {
     }
   },
   methods: {
+    hasFirstName(){
+      if(
+        !this.$store.getters.firstName ||
+        this.$store.getters.firstName == '' ||
+        this.$store.getters.firstName == null ||
+        this.$store.getters.firstName == undefined
+      )
+        return ''
+      return this.$store.getters.firstName
+    },
+    hasLastName(){
+      if(
+        !this.$store.getters.lastName ||
+        this.$store.getters.lastName == '' ||
+        this.$store.getters.lastName == null ||
+        this.$store.getters.lastName == undefined
+      )
+        return ''
+      return this.$store.getters.lastName
+    },
+    hasPhone(){
+      if(
+        !this.$store.getters.phone ||
+        this.$store.getters.phone == '' ||
+        this.$store.getters.phone == null ||
+        this.$store.getters.phone == undefined
+      )
+        return ''
+      return this.$store.getters.phone
+    },
+    hasEmail(){
+      if(
+        !this.$store.getters.email ||
+        this.$store.getters.email == '' ||
+        this.$store.getters.email == null ||
+        this.$store.getters.email == undefined
+      )
+        return ''
+      return this.$store.getters.email
+    },
     topHeight() {
       this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
