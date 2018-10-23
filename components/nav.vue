@@ -43,9 +43,9 @@
     </div>
 
     <nav v-bind:style="{top: stepperHeight + 'px'}" ref="nHeight">
-      <nuxt-link to="/" class="nav-back" ref="navBack" v-if="!hideBackButton">
+      <div @click="navBackButton" class="nav-back" ref="navBack" v-if="!hideBackButton">
         <span>back</span>
-      </nuxt-link>
+      </div>
       <h1 v-html="group"></h1>
       <h2 v-html="subGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
     </nav>
@@ -71,13 +71,15 @@ export default {
     }
   },
   mounted() {
-
     this.nHeight();
     this.psHeight();
     this.navTopSpacing();
     this.confirmRoute();
   },
   methods: {
+    navBackButton() {
+      return this.$router.back();
+    },
     navTopSpacing() {
       this.top = `${this.topbarHeight}px`;
     },

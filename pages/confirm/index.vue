@@ -23,7 +23,7 @@
     margin: 0;
   }
 
-  main.thank-you a {
+  main.thank-you p a {
     border-bottom: 1px solid white;
   }
 
