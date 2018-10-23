@@ -9,6 +9,7 @@
     </header>
 
     <main style="top: 190px;">
+      <p>You may submit anonymously by leaving these values empty.</p><br>
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
@@ -47,7 +48,6 @@
         <nuxt-link to="/location"
                    class="button next-button"
                    @click.native="storeCommitUserInfo">Next</nuxt-link>
-        <p>Or, you may submit anonymously.</p>
       </footer>
     </main>
   </div>
