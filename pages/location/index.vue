@@ -175,7 +175,6 @@ export default {
     self.topHeight();
 
     if(self.hasLocationLat() == '') {
-      alert('we have nothing');
       self.loading = true;
       self.searchPos();
 
