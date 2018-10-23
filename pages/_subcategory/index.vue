@@ -88,13 +88,10 @@ export default {
     }
   },
   mounted() {
-    console.log('created mounted');
-
     this.topHeight();
 
     if(this.group == ''){
       this.groupRouteName = this.groupsAsLong(this.$route.params.subcategory);
-      console.log('groupRouteName', this.groupRouteName);
       this.allDatas();
       this.formatGroupName();
 

@@ -102,9 +102,7 @@ export default {
   mounted() {
     if(this.$store.state.serviceInfos.service_group.service_code){
       this.topHeight();
-      console.log('has group');
     } else if (this.$store.state.serviceInfos.service_group.service_code == '') {
-      console.log('no group');
       this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
 

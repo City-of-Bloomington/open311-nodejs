@@ -1,7 +1,10 @@
 <template>
   <div>
     <header ref="topHeight" v-bind:style="{height: paddingTop}">
-      <headerNav :step-active="stepActive" :step-complete="stepComplete" />
+      <headerNav
+        :nav-sub-group="navSubGroup"
+        :step-active="stepActive"
+        :step-complete="stepComplete" />
     </header>
 
     <main style="top: 190px;" class="thank-you">
@@ -55,24 +58,25 @@ export default {
   },
   data() {
     return {
-      crmLink: `${process.env.crmBaseUrl}${process.env.crmTickets}`,
-      paddingTop:  '',
-      serviceReqID: '',
+      crmLink:        `${process.env.crmBaseUrl}${process.env.crmTickets}`,
+      paddingTop:     '',
+      serviceReqID:   '',
+      navSubGroup:    true,
       stepActive: {
-        one:   false,
-        two:   false,
-        three: false,
-        four:  false,
-        five:  false,
-        six:   true,
+        one:          false,
+        two:          false,
+        three:        false,
+        four:         false,
+        five:         false,
+        six:          true,
       },
       stepComplete: {
-        one:   true,
-        two:   true,
-        three: true,
-        four:  true,
-        five:  true,
-        six:   false
+        one:          true,
+        two:          true,
+        three:        true,
+        four:         true,
+        five:         true,
+        six:          false
       }
     }
   },

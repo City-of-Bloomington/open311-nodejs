@@ -335,7 +335,7 @@ export default {
       var reader, files = e.target.files;
       var reader = new FileReader();
       reader.onload = (e) => {
-        console.log(e);
+        // console.log(e);
         var img = new Image();
         img.onload = function() {
           self.drawCanvasImage(img);
@@ -352,8 +352,8 @@ export default {
 
       EXIF.getData(img, function() {
         self.imgOrientation = this.exifdata.Orientation;
-        console.log(self.imgOrientation);
-        console.log(this.exifdata);
+        // console.log(self.imgOrientation);
+        // console.log(this.exifdata);
       });
 
       var max_width  = 1000;
@@ -375,11 +375,11 @@ export default {
             canvas.height = img.width;
           }
         } else {
-          console.log('this here 1');
+          // console.log('this here 1');
         }
       } else {
         if (height > max_height) {
-          console.log('this here 2');
+          // console.log('this here 2');
           img.height *= max_height / img.width;
           img.width   = max_width;
 
@@ -394,32 +394,12 @@ export default {
         canvas.height = height;
       }
 
-      // canvas.width = height;
-      // canvas.height = width;
-
-
-
-
-      // if (width > height) {
-      //   if (width > max_width) {
-      //     height *= max_width / width;
-      //     width   = max_width;
-      //   }
-      // } else {
-      //   if (height > max_height) {
-      //     width *= max_height / height;
-      //     height = max_height;
-      //   }
-      // }
-      // canvas.width = width;
-      // canvas.height = height;
-
-      console.log('img width ::', img.width);
-      console.log('img height ::', img.height);
-      console.log('var width ::', width);
-      console.log('var height ::', height);
-      console.log('canvas width ::', canvas.width);
-      console.log('canvas height ::', canvas.height);
+      // console.log('img width ::', img.width);
+      // console.log('img height ::', img.height);
+      // console.log('var width ::', width);
+      // console.log('var height ::', height);
+      // console.log('canvas width ::', canvas.width);
+      // console.log('canvas height ::', canvas.height);
 
       switch (self.imgOrientation) {
         case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
@@ -445,19 +425,12 @@ export default {
       this.showBiggerImage = true;
       this.modalImage = c;
     },
-    storeCommitFormInfo() {
-      console.log(this.defaultFields);
-      // return this.$store.commit('storeFormInfo', this.defaultFields);
-    },
-    reCaptchaValidate() {
-      console.log(grecaptcha.getResponse());
-    },
     submitPost() {
       if(!grecaptcha.getResponse()) {
         this.reCaptchaError = true;
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
-        console.log('reCaptcha response :: ',grecaptcha.getResponse());
+        // console.log('reCaptcha response :: ',grecaptcha.getResponse());
 
         this.$store.commit('storeFormInfo', this.defaultFields);
 
@@ -494,9 +467,9 @@ export default {
 
         axios.post(`${process.env.postProxy}`, formData, config)
         .then(response => {
-          for (var pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]);
-          }
+          // for (var pair of formData.entries()) {
+          //   console.log(pair[0]+ ', ' + pair[1]);
+          // }
           this.$store.commit('storeResponseInfo', response);
         })
         .then(response => {

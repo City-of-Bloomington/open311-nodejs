@@ -102,17 +102,7 @@ export default {
     subGroup(){ return this.$store.getters.subGroup },
     topbarHeight() { return this.$store.getters.topbarHeight }
   },
-  watch: {
-    confirmRoute: function() {
-      if (this.$route.path == "/confirm") {
-        alert('confirm screen')
-      } else  {
-        alert('not confirm screen')
-      }
-    }
-  },
   updated() {
-    console.log('nav height updated')
     this.$emit('nHeight', this.navHeight);
   }
 }

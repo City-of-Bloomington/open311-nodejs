@@ -315,7 +315,7 @@ export default {
         this.loading = false;
         this.location.address_string = response.data.address.Match_addr;
         this.updateMap(this.location.lat,this.location.long);
-        console.log(`updateAddressString() :: `, response.data.address.Match_addr);
+        // console.log(`updateAddressString() :: `, response.data.address.Match_addr);
       })
       .catch(error => {this.loading = false; });
     },
@@ -348,10 +348,10 @@ export default {
       mymap.on('moveend', function(ev) {
         self.location.lat = mymap.getCenter().lat;
         self.location.long = mymap.getCenter().lng;
-        console.log(`Updated  -- latitude: `
-                  + `${self.location.lat} | `
-                  + `longitude: ${self.location.long}`
-        );
+        // console.log(`Updated  -- latitude: `
+        //           + `${self.location.lat} | `
+        //           + `longitude: ${self.location.long}`
+        // );
       });
 
       L.tileLayer(process.env.mapBoxUrl,{
