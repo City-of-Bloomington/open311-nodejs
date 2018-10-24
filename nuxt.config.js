@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
     router: {
       base: '/open311-nodejs'
