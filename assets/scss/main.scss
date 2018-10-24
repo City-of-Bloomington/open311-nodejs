@@ -320,7 +320,7 @@ and (max-device-width : 480px) {
   main {
     width: calc(100% - 40px);
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 0 0 20px 0;
   }
 
   .disclaimer {
