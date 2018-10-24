@@ -9,7 +9,7 @@
     </header>
 
     <main style="top: 190px;">
-      <p>You may submit anonymously by leaving these values empty.</p><br>
+      <p>To submit anonymously, leave these values empty.</p><br>
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="userInfo.first_name"
