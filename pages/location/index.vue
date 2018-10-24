@@ -274,6 +274,8 @@ export default {
     getCurrentPosition() {
       var self = this;
       self.loading = true;
+      if(self.location.address_string != '')
+        self.location.address_string = ''
       self.geoLocatePromise()
       .then(position => {
         if(position.coords) {
