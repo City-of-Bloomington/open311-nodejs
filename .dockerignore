@@ -1,14 +1,7 @@
 .DS_Store
-.env
 .editorconfig
-.nuxt
 .eslintrc.js
 node_modules
 npm-debug.log
-dist
 certs
-npm-debug.log
 yarn-error.log
-sw.*
-uploads
-build.sh
