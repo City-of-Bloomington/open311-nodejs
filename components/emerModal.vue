@@ -13,6 +13,13 @@
 import modal from '~/components/modal.vue'
 
 export default {
+  head () {
+    return {
+      bodyAttrs: {
+        class: !this.seenEmerModal ? 'showing-modal' : ''
+      }
+    }
+  },
   components: { modal },
   methods: {
     emerModal() {
