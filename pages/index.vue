@@ -33,6 +33,11 @@ import searchInput from '~/components/searchInput.vue'
 import topBar      from '~/components/topBar.vue'
 
 export default {
+  head () {
+    return {
+      titleTemplate: `%s - City of Bloomington`,
+    }
+  },
   components: {
     emerModal,
     searchInput,

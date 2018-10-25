@@ -49,10 +49,7 @@ import modal     from '~/components/modal.vue'
 export default {
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.group}`,
-      bodyAttrs: {
-        class: this.showingModal ? 'showing-modal' : ''
-      }
+      titleTemplate: `%s - ${this.$store.getters.group}`
     }
   },
   components: {
