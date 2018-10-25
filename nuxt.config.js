@@ -82,7 +82,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
-    '@nuxtjs/pwa',
+    '@nuxtjs/pwa'
   ],
   /*workbox: {
     dev: true,
@@ -122,10 +122,8 @@ module.exports = {
     reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
   },
   plugins: [
-    {
-      src: '~/plugins/leaflet/leaflet.js',
-      ssr: false
-    }
+    { src: '~/plugins/leaflet/leaflet.js', ssr: false },
+    { src: '~/plugins/ga.js', ssr: false }
   ],
   build: {
     vendors: ['babel-polyfill'],
