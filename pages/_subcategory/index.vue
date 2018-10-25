@@ -19,7 +19,7 @@
         <li v-if="groupProperName"
             v-for="groups in allDatas()"
             :key="groups.service_name"
-            @click="subGroupName(groups.service_name,subCat.service_code)">
+            @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-info', params:{'info':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
         </li>
       </ul>
@@ -117,7 +117,9 @@ export default {
       this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     subGroupName(name,code) {
-      return this.$store.commit('storeSubGroupName', name)
+      this.$store.commit('storeSubGroupName', name);
+      this.$store.commit('storeGroupCode', code);
+      this.$store.commit('storeRouteCode', code);
     },
     groupsAsLong(group) {
       return group

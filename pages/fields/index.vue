@@ -212,7 +212,7 @@ export default {
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`,
-        script: [
+      script: [
         { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
       ]
     }
