@@ -1,12 +1,12 @@
 <template>
   <div>
-    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+    <header class="location">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
 
-      <div class="search container" style="top: 50px" ref="lsHeight">
+      <div class="search container">
         <form action="" @submit.prevent>
           <div class="form-group">
 
@@ -37,7 +37,7 @@
       </div>
     </header>
 
-    <main style="top: 240px">
+    <main class="location">
       <div v-if="showGeoErrorHelp">
         <h3>Please report the issue location.</h3><br>
         <p>You may search for an address manually without using the Geolocation API.</p><br>
@@ -111,7 +111,7 @@
 </style>
 
 <script>
-import axios from 'axios'
+import axios     from 'axios'
 import headerNav from '~/components/nav.vue'
 
 let leaflet;
@@ -140,9 +140,6 @@ export default {
       chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
       firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
       safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
-      searchTop:        '',
-      locSearchHeight:  '',
-      paddingTop:       '',
       geoError:         false,
       loadingLocation:  false,
       loading:          false,
@@ -178,12 +175,9 @@ export default {
   mounted() {
     var self = this;
     self.geoError = false;
-    self.locationSearchHeight();
-    self.topHeight();
 
     if(self.hasLocationLat() == '') {
       self.loading = true;
-      self.searchPos();
 
       self.geoLocatePromise()
       .then(position => {
@@ -210,8 +204,6 @@ export default {
       self.location.long = this.$store.getters.locationLong;
       self.initMap();
     }
-
-
   },
   watch: {
     locationUpdate: function() {
@@ -248,16 +240,6 @@ export default {
       )
         return ''
       return this.$store.getters.locationAddress
-    },
-    searchPos() {
-      this.searchTop = `${this.topbarHeight}px`;
-    },
-    locationSearchHeight() {
-      this.locSearchHeight = this.$refs.lsHeight.clientHeight;
-      return this.$store.commit('storeLocSearchHeight', this.locSearchHeight)
-    },
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight + this.locSearchHeight + 20}px`;
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -428,15 +410,6 @@ export default {
       this.showResults;
       this.location.address_string;
       return this.geoError && this.loadingLocation == false && this.showResults == false && (this.location.address_string == null || this.location.address_string == '');
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
     }
   }
 }

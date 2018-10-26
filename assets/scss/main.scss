@@ -88,6 +88,10 @@ main {
   &.info-process {
     top: 190px;
   }
+
+  &.location {
+    top: 240px;
+  }
 }
 
 header {
@@ -111,6 +115,18 @@ header {
 
   &.info-process {
     height: 190px;
+  }
+
+  &.location {
+    height: 240px;
+
+    nav {
+      padding: 0;
+    }
+
+    .search {
+      top: 75px;
+    }
   }
 }
 
