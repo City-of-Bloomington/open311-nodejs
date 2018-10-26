@@ -84,6 +84,10 @@ main {
   &.subcategory {
     top: 155px;
   }
+
+  &.info-process {
+    top: 190px;
+  }
 }
 
 header {
@@ -103,6 +107,10 @@ header {
 
   &.subcategory {
     height: 155px;
+  }
+
+  &.info-process {
+    height: 190px;
   }
 }
 

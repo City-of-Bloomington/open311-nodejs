@@ -1,14 +1,13 @@
 <template>
   <div>
-    <!-- <header ref="topHeight" v-bind:style="{height: paddingTop}"> -->
-    <header ref="topHeight" style="height: 190px;">
+    <header class="info-process">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 190px;">
+    <main class="info-process">
       <p>To submit anonymously, leave these values empty.</p><br>
       <div class="form-group">
         <label for="first-name">First Name:</label>
@@ -70,7 +69,6 @@ export default {
   },
   data() {
     return {
-      paddingTop:    '',
       routeCode:     '',
       routeCodeData: '',
       allData:       [],
@@ -101,7 +99,6 @@ export default {
   },
   mounted() {
     if(this.$store.state.serviceInfos.service_group.service_code){
-      this.topHeight();
     } else if (this.$store.state.serviceInfos.service_group.service_code == '') {
       this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
@@ -109,22 +106,6 @@ export default {
       this.allDatas;
       this.routeDataGroup;
       this.routeDataSubGroup;
-      this.topHeight();
-
-      // axios.post(`${process.env.apiUrl}${process.env.servicesApi}`)
-      // .then(res => { this.allData = res.data })
-      // .then(res => {
-      //   this.allDatas;
-      //   this.routeDataGroup;
-      //   this.routeDataSubGroup;
-      //   // this.topHeight();
-      // })
-      // .then(res => {
-      //   this.topHeightPlus();
-      // })
-      // .catch(err => {
-      //   console.log(err);
-      // });
     }
   },
   methods: {
@@ -168,27 +149,11 @@ export default {
         return ''
       return this.$store.getters.email
     },
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
-    },
-    topHeightPlus() {
-      // look into this extra spacing on refactor
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight + 30}px`;
-    },
     storeCommitUserInfo() {
       return this.$store.commit('storePersonalInfo', this.userInfo)
     }
   },
   computed: {
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
-    },
     allInitGroupData() {
       return this.$store.getters.initGroupData
     },
