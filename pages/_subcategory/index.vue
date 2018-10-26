@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="subcategory" ref="topHeight">
+    <header class="subcategory">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
