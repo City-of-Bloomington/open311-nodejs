@@ -1,13 +1,13 @@
 <template>
   <div>
-    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+    <header class="info-process">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 190px;" class="thank-you">
+    <main class="info-process thank-you">
       <h2 v-html="thankYou"></h2><br>
       <h3 v-html="requestID"></h3><br>
       <p v-html="crmMessageLink"></p>
@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       crmLink:        `${process.env.crmBaseUrl}${process.env.crmTickets}`,
-      paddingTop:     '',
       serviceReqID:   '',
       navSubGroup:    true,
       stepActive: {
@@ -81,15 +80,11 @@ export default {
     }
   },
   mounted() {
-    this.topHeight();
     this.serviceID();
   },
   methods: {
     goHome() {
       this.$router.go({ path: '/' });
-    },
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
     },
     serviceID() {
       var resData = JSON.parse(this.responseData)[0];
@@ -114,15 +109,6 @@ export default {
         return `<strong>${this.firstName}</strong>, thanks for the report!`
       }
       return `Thanks for the report!`
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
     }
   }
 }

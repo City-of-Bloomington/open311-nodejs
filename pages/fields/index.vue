@@ -1,21 +1,15 @@
 <template>
   <div>
-    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+    <header class="info-process">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 190px;" ref="mainElm" class="fields">
+    <main class="info-process fields" ref="mainElm">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
-        <!-- <input
-          type="file"
-          accept="image/jpeg, image/jpg, image/png"
-          @change="uploadImage"
-          ref="fileInput"
-          multiple> -->
 
         <input
           type="file"
@@ -199,9 +193,9 @@
 </style>
 
 <script>
-import axios from 'axios'
+import axios     from 'axios'
 import headerNav from '~/components/nav.vue'
-import modal from '~/components/modal.vue'
+import modal     from '~/components/modal.vue'
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -228,7 +222,6 @@ export default {
       reCaptchaError:   false,
       reCaptchaSiteKey: process.env.reCaptchaSiteKey,
       percentCompleted: '',
-      paddingTop:       '',
       modalImage:       null,
       showBiggerImage:  false,
       formElements:     {},
@@ -263,17 +256,12 @@ export default {
       }
     }
   },
-  created() {},
   mounted() {
-    this.topHeight();
     axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
     .then(res => { this.formElements = res.data })
     .catch(err => { console.log(`Fields page error: ${err}`); });
   },
   methods: {
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
-    },
     dataURItoBlob(dataURI) {
       if(dataURI) {
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -532,15 +520,6 @@ export default {
         return true
       }
       return false
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
     }
   }
 }
