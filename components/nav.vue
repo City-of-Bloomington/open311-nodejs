@@ -2,7 +2,7 @@
   <div>
     <topBar />
 
-    <div class="progress-stepper" v-bind:style="{top}" ref="psHeight">
+    <div class="progress-stepper">
       <span class="title">Progress:</span>
       <div v-bind:class="{ active: stepActive.one, 'complete': stepComplete.one }">
         <svg v-if="stepComplete.one" version="1.1" id="check" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46px" height="37px" viewBox="0 0 46 37" enable-background="new 0 0 46 37" xml:space="preserve">
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <nav v-bind:style="{top: stepperHeight + 'px'}" ref="nHeight">
+    <nav>
       <div @click="navBackButton" class="nav-back" ref="navBack" v-if="!hideBackButton">
         <span>back</span>
       </div>
@@ -62,34 +62,17 @@ export default {
   },
   data() {
     return {
-      top:             '',
-      navHeight:       '',
-      stepperHeight:   '',
       showModal:       false,
       allData:         [],
       hideBackButton:  false
     }
   },
   mounted() {
-    this.nHeight();
-    this.psHeight();
-    this.navTopSpacing();
     this.confirmRoute();
   },
   methods: {
     navBackButton() {
       return this.$router.back();
-    },
-    navTopSpacing() {
-      this.top = `${this.topbarHeight}px`;
-    },
-    nHeight() {
-      this.navHeight = this.$refs.nHeight.clientHeight;
-      return this.$store.commit('storeNavHeight', this.navHeight);
-    },
-    psHeight() {
-      this.stepperHeight = this.$refs.psHeight.clientHeight;
-      return this.$store.commit('storeStepperHeight', this.stepperHeight);
     },
     confirmRoute() {
       if(this.$route.path == '/confirm') {
@@ -100,10 +83,6 @@ export default {
   computed: {
     group()   { return this.$store.getters.group },
     subGroup(){ return this.$store.getters.subGroup },
-    topbarHeight() { return this.$store.getters.topbarHeight }
-  },
-  updated() {
-    this.$emit('nHeight', this.navHeight);
   }
 }
 </script>

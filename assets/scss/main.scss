@@ -80,6 +80,10 @@ main {
   &.home {
     top: 125px;
   }
+
+  &.subcategory {
+    top: 155px;
+  }
 }
 
 header {
@@ -95,6 +99,10 @@ header {
 
   &.home {
     height: 125px;
+  }
+
+  &.subcategory {
+    height: 155px;
   }
 }
 

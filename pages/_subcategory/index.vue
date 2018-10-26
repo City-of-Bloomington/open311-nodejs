@@ -1,13 +1,13 @@
 <template>
   <div>
-    <header ref="topHeight" v-bind:style="{height: paddingTop}">
+    <header class="subcategory" ref="topHeight">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
     </header>
 
-    <main style="top: 155px;">
+    <main class="subcategory">
       <ul class="subcategories">
         <li v-if="!groupProperName"
             v-for="subCat in subGroupList"
@@ -62,7 +62,6 @@ export default {
       groupName:       '',
       groupRouteName:  '',
       groupProperName: '',
-      paddingTop:      '',
       showModal:       false,
       allData:         [],
       navSubGroup:     false,
@@ -85,8 +84,6 @@ export default {
     }
   },
   mounted() {
-    this.topHeight();
-
     if(this.group == ''){
       this.groupRouteName = this.groupsAsLong(this.$route.params.subcategory);
       this.allDatas();
@@ -113,9 +110,6 @@ export default {
     }
   },
   methods: {
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.stepperHeight + this.navHeight}px`;
-    },
     subGroupName(name,code) {
       this.$store.commit('storeSubGroupName', name);
       this.$store.commit('storeGroupCode', code);
@@ -154,15 +148,6 @@ export default {
         g => g.group == this.$store.state.serviceInfos.service_group.group
       );
       return allsubGroups
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    navHeight() {
-      return this.$store.getters.navHeight
-    },
-    stepperHeight() {
-      return this.$store.getters.stepperHeight
     },
     group() { return this.$store.getters.group }
   }
