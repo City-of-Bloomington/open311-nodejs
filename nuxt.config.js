@@ -56,10 +56,6 @@ module.exports = {
         href:     './favicon/favicon-16x16.png'
       },
       {
-        rel:      'manifest',
-        href:     './favicon/site.webmanifest'
-      },
-      {
         rel:      'mask-icon',
         href:     '/safari-pinned-tab.svg',
         color:    '#244698'

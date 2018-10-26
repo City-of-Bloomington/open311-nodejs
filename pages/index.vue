@@ -1,11 +1,11 @@
 <template>
   <div>
-    <header ref="top" style="height: 125px;">
+    <header class="home" ref="top">
       <topBar />
-      <search-input :data="allInitGroupData" field="service_name" v-bind:style="{top}"/>
+      <search-input :data="allInitGroupData" field="service_name"/>
     </header>
 
-    <main style="top: 125px;">
+    <main class="home">
       <div class="grid">
         <div v-for="group in groupCategories"
              :key="group"
@@ -45,17 +45,11 @@ export default {
   },
   data() {
     return {
-      paddingTop:   '',
-      top:          '',
       groups:       []
     }
   },
   created() {
     this.clearState();
-  },
-  mounted() {
-    this.topHeight();
-    this.searchPos();
   },
   methods: {
     clearState() {
@@ -64,12 +58,6 @@ export default {
       this.$store.commit('storeGroupCode', '');
       this.$store.commit('storeSubGroupName', '');
       this.$store.commit('storeFormInfo', '');
-    },
-    topHeight() {
-      this.paddingTop = `${this.topbarHeight + this.searchHeight}px`;
-    },
-    searchPos() {
-      this.top = `${this.topbarHeight}px`;
     },
     groupsAsCss(group) {
       return group
@@ -88,12 +76,6 @@ export default {
     },
     groupCategories() {
       return [...new Set(this.allInitGroupData.map(g => g.group))]
-    },
-    topbarHeight() {
-      return this.$store.getters.topbarHeight
-    },
-    searchHeight() {
-      return this.$store.getters.searchHeight
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="search homepage-search" ref="sHeight">
+  <div class="search homepage-search">
     <div class="form-group">
       <label>Search</label>
       <input type="text"
@@ -33,8 +33,7 @@ export default {
     return {
       input: '',
       focused: false,
-      showClearBtn: false,
-      searchHeight: ''
+      showClearBtn: false
     }
   },
   props: {
@@ -46,14 +45,7 @@ export default {
   created() {
     this.input = this.value || ''
   },
-  mounted() {
-    this.sHeight();
-  },
   methods: {
-    sHeight() {
-      this.searchHeight = this.$refs.sHeight.clientHeight;
-      return this.$store.commit('storeSearchHeight', this.searchHeight)
-    },
     complete(i) {
       this.select(this.data[i]);
       this.focused = false;
