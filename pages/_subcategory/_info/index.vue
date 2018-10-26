@@ -60,7 +60,6 @@ import headerNav from '~/components/nav.vue'
 
 export default {
   beforeRouteEnter (to, from, next) {
-    console.log(from);
     if(from.name !== 'subcategory')
       next(vm => {
         vm.backHome = true;
