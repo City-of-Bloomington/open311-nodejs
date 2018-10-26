@@ -2,6 +2,7 @@
   <div>
     <header class="subcategory">
       <headerNav
+        :back-home="backHome"
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
@@ -47,6 +48,13 @@ import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    if(from.name !== 'index')
+      next(vm => {
+        vm.backHome = true;
+      });
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.group}`
@@ -59,6 +67,7 @@ export default {
   },
   data() {
     return {
+      backHome:        false,
       groupName:       '',
       groupRouteName:  '',
       groupProperName: '',

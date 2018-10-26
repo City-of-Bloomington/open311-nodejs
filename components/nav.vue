@@ -56,7 +56,7 @@
 import topBar from './topBar.vue'
 
 export default {
-  props: ['stepActive','stepComplete','navSubGroup'],
+  props: ['stepActive','stepComplete','navSubGroup','backHome'],
   components: {
     topBar
   },
@@ -72,7 +72,9 @@ export default {
   },
   methods: {
     navBackButton() {
-      return this.$router.back();
+      if(!this.backHome)
+        return this.$router.back();
+      return this.$router.push('/');
     },
     confirmRoute() {
       if(this.$route.path == '/confirm') {

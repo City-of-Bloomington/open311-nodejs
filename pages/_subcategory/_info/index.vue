@@ -2,6 +2,7 @@
   <div>
     <header class="info-process">
       <headerNav
+        :back-home="backHome"
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
@@ -58,6 +59,14 @@ import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    console.log(from);
+    if(from.name !== 'subcategory')
+      next(vm => {
+        vm.backHome = true;
+      });
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`
@@ -69,6 +78,7 @@ export default {
   },
   data() {
     return {
+      backHome:      false,
       routeCode:     '',
       routeCodeData: '',
       allData:       [],
