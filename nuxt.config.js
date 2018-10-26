@@ -4,7 +4,7 @@ module.exports = {
     base:         '/open311-nodejs'
   },
   manifest: {
-    name:         'uReport',
+    name:         'uReport - City of Bloomington, Indiana',
     description:  'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
     theme_color:  '#1e59ae'
   },
@@ -78,7 +78,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
-    '@nuxtjs/pwa'
+    ['@nuxtjs/pwa',{ icon: false }]
   ],
   /*workbox: {
     dev: true,

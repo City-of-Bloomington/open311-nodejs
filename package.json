@@ -2,7 +2,7 @@
   "name": "ureport",
   "version": "1.0.0",
   "description": "uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.",
-  "author": "Adam Butcher <butcherad@bloomington.in.gov>",
+  "author": "City of Bloomington, Indiana <butcherad@bloomington.in.gov>",
   "private": true,
   "scripts": {
     "dev": "nodemon server.js",
