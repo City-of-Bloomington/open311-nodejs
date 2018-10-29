@@ -58,7 +58,6 @@ export default {
   },
   data() {
     return {
-      crmLink:        `${process.env.crmBaseUrl}${process.env.crmTickets}`,
       serviceReqID:   '',
       navSubGroup:    true,
       stepActive: {
@@ -92,6 +91,9 @@ export default {
     }
   },
   computed: {
+    crmLink() {
+      return process.env.NODE_ENV ? process.env.devCrmBaseUrl + process.env.crmTickets : process.env.crmBaseUrl + process.env.crmTickets
+    },
     crmMessageLink() {
       return `To view your request status, <a href='${this.crmLink}${this.serviceReqID}' target='_blank'>click here</a>.`
     },

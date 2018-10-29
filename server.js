@@ -1,14 +1,14 @@
 require('dotenv').config()
 const {
   Nuxt,
-  Builder }   = require('nuxt')
-const config  = require('./nuxt.config.js')
-const https   = require('https')
-const fs      = require('fs')
+  Builder }   = require('nuxt');
+const config  = require('./nuxt.config.js');
+const https   = require('https');
+const fs      = require('fs');
 const port    = process.env.LOCAL_PORT || 2222;
-const isProd  = (process.env.NODE_ENV === 'production')
+const isProd  = (process.env.NODE_ENV === 'production');
 
-config.dev = !isProd
+config.dev    = !isProd
 const nuxt    = new Nuxt(config)
 
 // Build only in dev mode with hot-reloading

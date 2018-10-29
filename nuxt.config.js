@@ -98,6 +98,7 @@ module.exports = {
     proxyHeaders:         true
   },
   env: {
+    devCrmBaseUrl:        process.env.DEV_CRM_BASE_URL,
     crmBaseUrl:           process.env.CRM_BASE_URL,
     crmTickets:           process.env.CRM_TICKETS,
     logoUrl:              process.env.LOGO_URL,
