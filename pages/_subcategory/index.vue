@@ -57,7 +57,10 @@ export default {
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.group}`
+      titleTemplate: `%s - ${this.$store.getters.group}`,
+      meta: [
+        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} uReport service request.` }
+      ]
     }
   },
   components: {

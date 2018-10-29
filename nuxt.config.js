@@ -15,8 +15,8 @@ module.exports = {
       { name:     'viewport',
         content:  'width=device-width, initial-scale=1'
       },
-      { hid:      'uReport',
-        name:     'uReport',
+      { hid:      'description',
+        name:     'description',
         content:  'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
       },
       {

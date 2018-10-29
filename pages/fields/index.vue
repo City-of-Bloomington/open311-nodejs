@@ -206,6 +206,9 @@ export default {
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`,
+      meta: [
+        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
+      ],
       script: [
         { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
       ]
