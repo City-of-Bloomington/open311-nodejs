@@ -51,6 +51,9 @@ export default {
   created() {
     this.clearState();
   },
+  mounted() {
+    console.log(process.env.NODE_ENV);
+  },
   methods: {
     clearState() {
       this.$store.commit('storeGroupName', '');
