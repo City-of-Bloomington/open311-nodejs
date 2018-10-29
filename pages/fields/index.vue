@@ -406,7 +406,7 @@ export default {
       ctx.drawImage(img, 0, 0, width, height);
 
       if(self.captures.length < 1) {
-        self.captures.push(canvas.toDataURL('image/jpeg'));
+        self.captures.push(canvas.toDataURL());
       } else {
         alert(self.singleImgMessage);
       }
