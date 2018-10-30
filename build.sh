@@ -1,7 +1,12 @@
 #!/bin/bash
+declare -a dependencies=(docker docker-compose)
+for i in "${dependencies[@]}"; do
+    command -v $i > /dev/null 2>&1 || { echo "$i is not installed" >&2; exit 1; }
+done
+
 #buildtime=$(date +%s)
 #echo "Current epoch time: $buildtime"
-echo "Please enter a tag (stable/dev/etc) or 'skip' to skip build and just push LATEST:" 
+echo "Please enter a tag (stable/dev/etc) or 'skip' to skip build and just push LATEST:"
 echo "You can also use version numbers for tags (0.0.1, etc)"
 read -p ":" buildtag
 
