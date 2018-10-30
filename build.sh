@@ -8,7 +8,6 @@ read -p ":" buildtag
 if [[ $buildtype != "skip" ]]
 then
     echo The image will also be tagged as LATEST.
-    eval $(egrep -v '^#' .env | xargs) npm run-script build
     docker-compose build
     docker tag open311-nodejs docker-repo.bloomington.in.gov/library/open311-nodejs:$buildtag
     #docker tag open311-nodejs docker-repo.bloomington.in.gov/library/open311-nodejs:latest
