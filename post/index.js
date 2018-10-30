@@ -5,7 +5,7 @@ var request            = require('request');
 const busboyBodyParser = require('busboy-body-parser');
 
 var secretKey = `${process.env.RECAPTCHA_SERVERKEY}`;
-let postURL = `${process.env.PROD_API_URL}${process.env.POST_API}`;
+let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 app.post('/', function (req, res, next) {
@@ -25,9 +25,8 @@ app.post('/', function (req, res, next) {
 
   request(verificationUrl, function(error, response, body) {
     body = JSON.parse(body);
-    if(body.success !== undefined && !body.success) {
+    if(!body.success) {
       return res.status(500).json({"responseCode" : 1, "responseDesc" : "Failed reCaptcha validation"});
-      return next();
     }
     return postForm();
   });
