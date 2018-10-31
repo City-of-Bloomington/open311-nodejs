@@ -21,7 +21,7 @@
       </div>
 
       <emerModal />
-      <p class="emergency">.: No Emergency Usage :.</p>
+      <p class="emergency">. :&nbsp;&nbsp;If Emergency, Call 911&nbsp;&nbsp;: .</p>
     </main>
   </div>
 </template>
