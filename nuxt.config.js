@@ -1,7 +1,7 @@
 require('dotenv').config()
 module.exports = {
   router: {
-    base:         '/open311-nodejs'
+    base:         process.env.BASE_URL
   },
   manifest: {
     name:         'uReport - City of Bloomington, Indiana',
@@ -39,25 +39,25 @@ module.exports = {
     link: [
       { rel:      'icon',
         type:     'image/x-icon',
-        href:     './favicon/favicon.ico'
+        href:     `${process.env.BASE_URL}/favicon/favicon.ico`
       },
       { rel:      'apple-touch-icon',
         sizes:    '180x180',
-        href:     './favicon/apple-touch-icon.png'
+        href:     `${process.env.BASE_URL}/favicon/apple-touch-icon.png`
       },
       { rel:      'icon',
         type:     'image/png',
         sizes:    '32x32',
-        href:     './favicon/favicon-32x32.png'
+        href:     `${process.env.BASE_URL}/favicon/favicon-32x32.png`
       },
       { rel:      'icon',
         type:     'image/png',
         sizes:    '16x16',
-        href:     './favicon/favicon-16x16.png'
+        href:     `${process.env.BASE_URL}/favicon/favicon-16x16.png`
       },
       {
         rel:      'mask-icon',
-        href:     '/safari-pinned-tab.svg',
+        href:     `${process.env.BASE_URL}/safari-pinned-tab.svg`,
         color:    '#244698'
       },
       { rel:      'stylesheet',
@@ -66,9 +66,6 @@ module.exports = {
     ]
   },
   serverMiddleware: ['~/post/index'],
-  router: {
-    base: process.env.NODE_ENV === 'dev' ? '/' : '/open311-nodejs/'
-  },
   loading: { color: '#FFFFFF' },
   css: [
     '@/assets/vendor/normalize/normalize.css',

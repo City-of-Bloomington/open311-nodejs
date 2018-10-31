@@ -318,7 +318,7 @@ export default {
       mymap.setView([this.location.lat,this.location.long], 20);
 
       var crosshairIcon = L.icon({
-        iconUrl:      './images/map-crosshair.png',
+        iconUrl:      `${process.env.baseUrl}/images/map-crosshair.png`,
         iconSize:     [71, 71],
         iconAnchor:   [35.5, 35.5],
       });
