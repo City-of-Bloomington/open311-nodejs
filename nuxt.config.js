@@ -107,7 +107,7 @@ module.exports = {
     postApi:              process.env.POST_API,
     attrsApi:             process.env.ATTRS_API,
     open311Key:           process.env.OPEN_311_KEY,
-    apiUrl:               process.env.PROD_API_URL,
+    apiUrl:               process.env.CRM_API_URL,
     postProxy:            process.env.POST_PROXY,
     masterAddUrl:         process.env.MASTER_ADD_URL,
     arcgisRevGeo:         process.env.ARCGIS_REV_GEO,

@@ -1,7 +1,7 @@
 version: "3"
 services:
   uReport:
-    build: 
+    build:
       context: .
       dockerfile: dockerfile
 
@@ -12,7 +12,6 @@ services:
     command: "start"
     networks:
       - "frontend"
-    env_file: .env
 
 networks:
   frontend:
