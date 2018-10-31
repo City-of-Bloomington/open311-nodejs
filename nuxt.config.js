@@ -5,7 +5,8 @@ module.exports = {
   },
   manifest: {
     name:         'uReport - City of Bloomington, Indiana',
-    description:  'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
+    short_name:   'uReport',
+    description:  'uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
     theme_color:  '#1e59ae'
   },
   head: {
@@ -17,7 +18,7 @@ module.exports = {
       },
       { hid:      'description',
         name:     'description',
-        content:  'uReport is a Vuejs webapp to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
+        content:  'uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
       },
       {
         name:     'apple-mobile-web-app-title',
@@ -37,29 +38,6 @@ module.exports = {
       }
     ],
     link: [
-      { rel:      'icon',
-        type:     'image/x-icon',
-        href:     `${process.env.BASE_URL}/favicon/favicon.ico`
-      },
-      { rel:      'apple-touch-icon',
-        sizes:    '180x180',
-        href:     `${process.env.BASE_URL}/favicon/apple-touch-icon.png`
-      },
-      { rel:      'icon',
-        type:     'image/png',
-        sizes:    '32x32',
-        href:     `${process.env.BASE_URL}/favicon/favicon-32x32.png`
-      },
-      { rel:      'icon',
-        type:     'image/png',
-        sizes:    '16x16',
-        href:     `${process.env.BASE_URL}/favicon/favicon-16x16.png`
-      },
-      {
-        rel:      'mask-icon',
-        href:     `${process.env.BASE_URL}/safari-pinned-tab.svg`,
-        color:    '#244698'
-      },
       { rel:      'stylesheet',
         href:     'https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600|Abel'
       }
@@ -75,7 +53,8 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
-    ['@nuxtjs/pwa',{ icon: false }]
+    ['@nuxtjs/pwa', { icon: true }
+    ]
   ],
   /*workbox: {
     dev: true,
