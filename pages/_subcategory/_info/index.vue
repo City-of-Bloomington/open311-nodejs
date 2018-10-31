@@ -114,6 +114,7 @@ export default {
     } else if (this.$store.state.serviceInfos.service_group.service_code == '') {
       this.routeCode = this.$route.params.info.substr(this.$route.params.info.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
+      this.$store.commit('storeGroupCode', this.routeCode);
 
       this.allDatas;
       this.routeDataGroup;
