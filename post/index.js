@@ -9,8 +9,8 @@ let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 app.post('/', function (req, res, next) {
-  console.log(secretKey);
-  console.log(req.body['g_recaptcha_response']);
+  // console.log(secretKey);
+  // console.log(req.body);
 
   var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
 

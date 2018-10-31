@@ -69,7 +69,7 @@
       <div class="form-group">
         <label for="default-description">Tell us a little about this issue</label>
         <textarea
-          v-model="defaultFields.description"
+          v-model="defaultDescription"
           id="default-description"
           name="default-description"
           wrap="hard">
@@ -221,41 +221,42 @@ export default {
   },
   data() {
     return {
-      navSubGroup:      true,
-      reCaptchaError:   false,
-      reCaptchaSiteKey: process.env.reCaptchaSiteKey,
-      percentCompleted: '',
-      modalImage:       null,
-      showBiggerImage:  false,
-      formElements:     {},
-      defaultFields:    {},
-      showVideoElm:     false,
-      mainElm:          '',
-      imgContext:       null,
-      imgCanvas:        null,
-      selectedImage:    null,
-      imgElement:       null,
-      imgOrientation:   '',
-      video:            {},
-      canvas:           {},
-      captures:         [],
-      response:         {},
-      singleImgMessage: 'Sorry, we only support a single image at the moment.',
+      navSubGroup:         true,
+      reCaptchaError:      false,
+      reCaptchaSiteKey:    process.env.reCaptchaSiteKey,
+      percentCompleted:    '',
+      modalImage:          null,
+      showBiggerImage:     false,
+      formElements:        {},
+      defaultDescription:  '',
+      defaultFields:       {},
+      showVideoElm:        false,
+      mainElm:             '',
+      imgContext:          null,
+      imgCanvas:           null,
+      selectedImage:       null,
+      imgElement:          null,
+      imgOrientation:      '',
+      video:               {},
+      canvas:              {},
+      captures:            [],
+      response:            {},
+      singleImgMessage:    'Sorry, we only support a single image at the moment.',
       stepActive: {
-        one:            false,
-        two:            false,
-        three:          false,
-        four:           false,
-        five:           true,
-        six:            false
+        one:               false,
+        two:               false,
+        three:             false,
+        four:              false,
+        five:              true,
+        six:               false
       },
       stepComplete: {
-        one:            true,
-        two:            true,
-        three:          true,
-        four:           true,
-        five:           false,
-        six:            false
+        one:               true,
+        two:               true,
+        three:             true,
+        four:              true,
+        five:              false,
+        six:               false
       }
     }
   },
@@ -421,8 +422,6 @@ export default {
         this.reCaptchaError = true;
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
-        // console.log('reCaptcha response :: ',grecaptcha.getResponse());
-
         this.$store.commit('storeFormInfo', this.defaultFields);
 
         var formData     = new FormData();
@@ -508,7 +507,7 @@ export default {
       return this.captures[0]
     },
     postDefaultDescription() {
-      return this.defaultFields.description
+      return this.defaultDescription
     },
     postServiceCode() {
       var sc = parseInt(this.$store.state.serviceInfos.service_group.service_code, 10)

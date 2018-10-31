@@ -53,8 +53,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
-    ['@nuxtjs/pwa', { icon: true }
-    ]
+    ['@nuxtjs/pwa', { icon: true }]
   ],
   /*workbox: {
     dev: true,
