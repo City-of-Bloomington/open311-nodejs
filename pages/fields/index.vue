@@ -13,7 +13,7 @@
 
         <input
           type="file"
-          accept="image/jpeg, image/jpg, image/png"
+          accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
           @change="updateCanvasImage"
           ref="fileInput"
           name="media">
