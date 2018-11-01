@@ -5,7 +5,11 @@
 
     <p slot="body">If this is an emergency, please immediately dial 911 for assistance.</p>
 
-    <button slot="footer" @click="emerModal">I Understand</button>
+    <button
+      slot="footer"
+      @click="emerModal"
+      tabindex="0"
+      autofocus>I Understand</button>
   </modal>
 </template>
 
@@ -13,6 +17,7 @@
 import modal from '~/components/modal.vue'
 
 export default {
+  components: { modal },
   head () {
     return {
       bodyAttrs: {
@@ -20,7 +25,6 @@ export default {
       }
     }
   },
-  components: { modal },
   methods: {
     emerModal() {
       this.$store.commit('seenNonEmerModal', true);
