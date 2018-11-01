@@ -122,29 +122,17 @@
 
     li {
       cursor: pointer;
-      border-bottom: 1px solid rgba(24,51,101,1);
-      // padding: 5px 10px;
-      color: rgba(24,51,101,1);
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      color: $biscay;
 
       &:last-of-type {
         border-bottom: none;
       }
 
-      span {
-        display: inline-block;
-        background-color: #1e59ad;
-        color: white;
-        margin: 10px 0 0 10px;
-        padding: 5px 10px;
-        border-radius: 4px;
-      }
-
-      > ul {
-        padding: 0;
-
-        li {
-          padding: 10px;
-        }
+      &:hover,
+      &:focus {
+        background: lighten(#ccc, 10%);
       }
     }
   }
