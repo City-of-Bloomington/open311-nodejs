@@ -10,19 +10,19 @@
 
     <main class="subcategory">
       <ul class="subcategories">
-        <li v-if="!groupProperName"
+        <li
             v-for="subCat in subGroupList"
             :key="subCat.service_name"
             @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-fields', params:{'fields':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
 
-        <li v-if="groupProperName"
+        <!-- <li v-if="groupProperName"
             v-for="groups in allDatas()"
             :key="groups.service_name"
             @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-fields', params:{'fields':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
-        </li>
+        </li> -->
       </ul>
 
       <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
@@ -59,7 +59,10 @@ export default {
     return {
       titleTemplate: `%s - ${this.$store.getters.group}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} uReport service request.` }
+        { hid:     'description',
+          name:    'description',
+          content: `Submit a ${this.$store.getters.group} uReport service request.`
+        }
       ]
     }
   },
@@ -92,33 +95,50 @@ export default {
         four:          false,
         five:          false,
         six:           false
+      },
+      routeNames: {
+        cs:           'cleanup-and-sanitation',
+        csProper:     'Cleanup & Sanitation',
+        spt:          'streets-parking-and-traffic',
+        sptProper:    'Streets, Parking & Traffic',
+        pr:           'parks-and-recreation',
+        prProper:     'Parks & Recreation',
+        h:            'hazards',
+        hProper:      'Hazards',
+        wsu:          'water-and-sewage-utility',
+        wsuProper:    'Water & Sewage Utility',
+        m:            'miscellaneous',
+        mProper:      'Miscellaneous'
       }
     }
   },
   mounted() {
     if(this.group == ''){
-      this.groupRouteName = this.groupsAsLong(this.$route.params.subcategory);
-      this.allDatas();
-      this.formatGroupName();
+      this.groupRouteName = this.$route.params.subcategory;
 
-      if(this.groupRouteName == 'cleanupsanitation') {
-        this.groupProperName = 'Cleanup & Sanitation';
-      } else if (this.groupRouteName == 'streetsparkingtraffic') {
-        this.groupProperName = 'Streets, Parking & Traffic';
-      } else if (this.groupRouteName == 'parksrecreation') {
-        this.groupProperName = 'Parks & Recreation';
-      } else if (this.groupRouteName == 'hazards') {
-        this.groupProperName = 'Hazards';
-      } else if (this.groupRouteName == 'watersewageutility') {
-        this.groupProperName = 'Water, Sewage & Utility';
-      }  else if (this.groupRouteName == 'miscellaneous') {
-        this.groupProperName = 'Miscellaneous';
-      } else {
-        router.push({ path: '/' })
-        // this.groupProperName = 'Unknown';
-      };
-
-      this.group = this.$store.commit('storeGroupName', this.groupProperName)
+      switch (this.groupRouteName) {
+        case this.routeNames.cs:
+          this.groupProperName = this.routeNames.csProper
+          break;
+        case this.routeNames.spt:
+          this.groupProperName = this.routeNames.sptProper
+          break;
+        case this.routeNames.pr:
+          this.groupProperName = this.routeNames.prProper
+          break;
+        case this.routeNames.h:
+          this.groupProperName = this.routeNames.hProper
+          break;
+        case this.routeNames.wsu:
+          this.groupProperName = this.routeNames.wsuProper
+          break;
+        case this.routeNames.m:
+          this.groupProperName = this.routeNames.mProper
+          break;
+        default:
+          this.$router.push({ path: '/' });
+      }
+      this.$store.commit('storeGroupName', this.groupProperName)
     }
   },
   methods: {
@@ -126,34 +146,11 @@ export default {
       this.$store.commit('storeSubGroupName', name);
       this.$store.commit('storeGroupCode', code);
       this.$store.commit('storeRouteCode', code);
-    },
-    groupsAsLong(group) {
-      return group
-      .replace(/\s+/g, '')
-      .replace(/,/g, '')
-      .replace(/&/g, '')
-      .replace(/\-/g, '')
-      .replace(/and/g, '')
-      .toLowerCase();
-    },
-    allDatas() {
-      const allRoutesubGroups = this.allInitGroupData.filter(
-        g => this.groupsAsLong(g.group) == this.groupRouteName
-      );
-      return allRoutesubGroups;
-    },
-    formatGroupName() {
-      var paramName = this.$route.params.subcategory;
-
-      console.log(paramName);
     }
   },
   computed: {
     allInitGroupData() {
       return this.$store.getters.initGroupData
-    },
-    routePath() {
-      return this.groupsAsLong(this.$route.path)
     },
     subGroupList() {
       const allsubGroups = this.allInitGroupData.filter(
@@ -161,7 +158,9 @@ export default {
       );
       return allsubGroups
     },
-    group() { return this.$store.getters.group }
+    group() {
+      return this.$store.getters.group
+    }
   }
 }
 </script>
