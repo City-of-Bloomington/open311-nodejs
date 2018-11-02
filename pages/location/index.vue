@@ -12,15 +12,25 @@
 
             <div v-if="loading">
               <h3 v-if="!geoError" style="position: absolute; margin: 0 0 0 40px; font-size: 20px; line-height: 33px;">Finding your location.</h3>
+
               <h3 v-if="geoError" style="position: absolute; margin: 0 0 0 45px; font-size: 20px; line-height: 33px;">Can't find your location.</h3>
+
               <div class="loader-wrapper" v-if="!geoError">
                 <div class="bar"></div>
               </div>
             </div>
 
             <label for="location">Location:</label>
+            <!-- <input v-bind:value="location.address_string"
+                   v-on:input="location.address_string = $event.target.value"
+                   type="text"
+                   id="location"
+                   ref="location-input"
+                   autocomplete="off"
+                   > -->
             <input v-model="location.address_string"
                    v-on:keyup.enter="searchAddressString"
+                   v-on:keyup.delete="clearSearch"
                    type="text"
                    id="location"
                    ref="location-input"
@@ -71,8 +81,13 @@
               @click="addressResult(address)">
               {{address.streetAddress}}
           </li>
-          <h4 v-show="addressResults.length == 0 && !loadingLocation">No results</h4>
+          <h4 v-show="(addressResults.length == 0 || addressResults.length == '') && !loadingLocation">No results</h4>
         </ul>
+      </div>
+
+      <div v-if="(location.address_string == '') && (!loading) && (!showGeoErrorHelp)">
+        <h3>A service request requires an address in order to proceed.</h3><br>
+        <p>Please search for an address or use the Geolocation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.619 20.619" id="geo-loc-text-icon"><title>location-icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><g id="location-icon"><circle cx="10.309" cy="10.309" r="8.149" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="10.309" cy="10.309" r="3.963" fill="#fff"/><line x1="10.309" y1="18.459" x2="10.309" y2="20.619" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="10.309" x2="10.309" y2="2.16" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="2.16" y1="10.309" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="20.619" y1="10.309" x2="18.459" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/></g></g></g></svg> icon in the search to determine your location.</p><br>
       </div>
 
       <div id="map-element" ref="mapElement"></div>
@@ -89,6 +104,19 @@
 </template>
 
 <style type="text/css">
+
+  #geo-loc-text-icon {
+    display: inline-block;
+    top: 8px;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+
   .leaflet-control-attribution {
     display: none;
   }
