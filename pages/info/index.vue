@@ -197,7 +197,6 @@ export default {
         this.reCaptchaError = true;
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
-        alert('clicked');
         this.$store.commit('storePersonalInfo', this.userInfo)
         // this.$store.commit('storeFormInfo', this.defaultFields);
 
