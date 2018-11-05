@@ -93,14 +93,13 @@ module.exports = {
     reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
   },
   plugins: [
-    { src: '~/plugins/leaflet/leaflet.js', ssr: false },
     { src: '~/plugins/ga.js', ssr: false }
   ],
   build: {
     vendors: ['babel-polyfill'],
 
-    extend (config, { isDev, isClient }) {
-      if (isDev && isClient) {
+    extend (config, { isDev }) {
+      if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
