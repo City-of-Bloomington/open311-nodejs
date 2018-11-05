@@ -98,7 +98,7 @@ module.exports = {
   build: {
     vendors: ['babel-polyfill'],
 
-    extend (config, { isDev }) {
+    extend (config, { isDev, isClient }) {
       if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
