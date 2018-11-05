@@ -74,20 +74,23 @@
       </div>
 
       <div class="search-results" ref="results" v-if="showResults">
-        <h3 v-if="addressResults">Search Results:</h3>
+        <h3 v-if="addressResults">
+          Search Results:
+          <span v-if="addressResults.length >= 1">{{addressResults.length}} results</span>
+          <span v-if="((addressResults.length == 0 || addressResults.length == '') && !loadingLocation) || (this.location.address_string == '')">No results</span>
+        </h3>
         <ul class="address-results">
           <li v-for="address in addressResults"
               :key="address.streetAddress"
               @click="addressResult(address)">
               {{address.streetAddress}}
           </li>
-          <h4 v-show="(addressResults.length == 0 || addressResults.length == '') && !loadingLocation">No results</h4>
         </ul>
       </div>
 
       <div v-if="(location.address_string == '') && (!loading) && (!showGeoErrorHelp)">
         <h3>A service request requires an address in order to proceed.</h3><br>
-        <p>Please search for an address or use the Geolocation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.619 20.619" id="geo-loc-text-icon"><title>location-icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><g id="location-icon"><circle cx="10.309" cy="10.309" r="8.149" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="10.309" cy="10.309" r="3.963" fill="#fff"/><line x1="10.309" y1="18.459" x2="10.309" y2="20.619" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="10.309" x2="10.309" y2="2.16" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="2.16" y1="10.309" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="20.619" y1="10.309" x2="18.459" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/></g></g></g></svg> icon in the search to determine your location.</p><br>
+        <p>Please search for an address or use the Geolocation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.619 20.619" id="geo-loc-text-icon"><title>location-icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><g id="location-icon"><circle cx="10.309" cy="10.309" r="8.149" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="10.309" cy="10.309" r="3.963" fill="#fff"/><line x1="10.309" y1="18.459" x2="10.309" y2="20.619" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="10.309" x2="10.309" y2="2.16" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="2.16" y1="10.309" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="20.619" y1="10.309" x2="18.459" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/></g></g></g></svg> icon in the search input to determine your location.</p><br>
       </div>
 
       <div id="map-element" ref="mapElement"></div>
