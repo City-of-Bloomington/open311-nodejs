@@ -30,7 +30,9 @@ const Store = () => {
           lat:                 '',
           long:                ''
         },
-        service_fields:        {},
+        default_image:         '',
+        service_attrs:         {},
+        default_description:   '',
         service_response:      {}
       }
     },
@@ -56,8 +58,14 @@ const Store = () => {
       storePersonalInfo(state, payload) {
         state.serviceInfos.personal_info = payload
       },
-      storeFormInfo(state, payload) {
-        state.serviceInfos.service_fields = payload
+      storeDefaultDescription(state, payload) {
+        state.serviceInfos.default_description = payload
+      },
+      storeDefaultImage(state, payload) {
+        state.serviceInfos.default_image = payload
+      },
+      storeServiceAtts(state, payload) {
+        state.serviceInfos.service_attrs = payload
       },
       storeLocationInfo(state, payload) {
         state.serviceInfos.location_info = payload
@@ -88,26 +96,29 @@ const Store = () => {
       }
     },
     getters: {
-      seenNonEmerModal: state => state.seen_non_emer_modal,
-      initGroupData:    state => state.initGroupData,
-      group:            state => state.serviceInfos.service_group.group,
-      subGroup:         state => state.serviceInfos.service_group.service_name,
-      subGroupCode:     state => state.serviceInfos.service_group.service_code,
-      routeCode:        state => state.serviceInfos.service_group.route_code,
-      response:         state => state.serviceInfos.service_response,
-      firstName:        state => state.serviceInfos.personal_info.first_name,
-      lastName:         state => state.serviceInfos.personal_info.last_name,
-      phone:            state => state.serviceInfos.personal_info.phone,
-      email:            state => state.serviceInfos.personal_info.email,
-      locationAddress:  state => state.serviceInfos.location_info.address_string,
-      locationLat:      state => state.serviceInfos.location_info.lat,
-      locationLong:     state => state.serviceInfos.location_info.long,
-      requestID:        state => state.serviceInfos.service_response.service_request_id,
-      topbarHeight:     state => state.topbar_height,
-      searchHeight:     state => state.search_height,
-      navHeight:        state => state.nav_height,
-      stepperHeight:    state => state.stepper_height,
-      locSearchHeight:  state => state.loc_search_height
+      seenNonEmerModal:   state => state.seen_non_emer_modal,
+      initGroupData:      state => state.initGroupData,
+      group:              state => state.serviceInfos.service_group.group,
+      subGroup:           state => state.serviceInfos.service_group.service_name,
+      subGroupCode:       state => state.serviceInfos.service_group.service_code,
+      routeCode:          state => state.serviceInfos.service_group.route_code,
+      response:           state => state.serviceInfos.service_response,
+      defaultDescription: state => state.serviceInfos.default_description,
+      defaultImage:       state => state.serviceInfos.default_image,
+      serviceAttrs:       state => state.serviceInfos.service_attrs,
+      firstName:          state => state.serviceInfos.personal_info.first_name,
+      lastName:           state => state.serviceInfos.personal_info.last_name,
+      phone:              state => state.serviceInfos.personal_info.phone,
+      email:              state => state.serviceInfos.personal_info.email,
+      locationAddress:    state => state.serviceInfos.location_info.address_string,
+      locationLat:        state => state.serviceInfos.location_info.lat,
+      locationLong:       state => state.serviceInfos.location_info.long,
+      requestID:          state => state.serviceInfos.service_response.service_request_id,
+      topbarHeight:       state => state.topbar_height,
+      searchHeight:       state => state.search_height,
+      navHeight:          state => state.nav_height,
+      stepperHeight:      state => state.stepper_height,
+      locSearchHeight:    state => state.loc_search_height
     }
   })
 }

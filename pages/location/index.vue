@@ -95,7 +95,7 @@
       <footer>
         <nuxt-link
           v-if="showNextButton"
-          to="/fields"
+          to="/info"
           class="button next-button"
           @click.native="storeCommitLocationInfo">Next</nuxt-link>
       </footer>

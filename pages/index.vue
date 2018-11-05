@@ -57,7 +57,9 @@ export default {
       this.$store.commit('storeRouteCode', '');
       this.$store.commit('storeGroupCode', '');
       this.$store.commit('storeSubGroupName', '');
-      this.$store.commit('storeFormInfo', '');
+      this.$store.commit('storeDefaultImage', '');
+      this.$store.commit('storeDefaultDescription', '');
+      this.$store.commit('storeServiceAtts', '');
     },
     groupsAsCss(group) {
       return group
