@@ -9,9 +9,6 @@ let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 app.post('/', function (req, res, next) {
-  // console.log(secretKey);
-  console.log(req.body);
-
   var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
 
   if(
@@ -32,18 +29,9 @@ app.post('/', function (req, res, next) {
   });
 
   function postForm() {
-    var formData = {
-      'api_key': process.env.OPEN_311_KEY,
-      'service_code': req.body['service_code'],
-      'lat': req.body['lat'],
-      'long': req.body['long'],
-      'address_string': req.body['address_string'],
-      'email': req.body['email'],
-      'first_name': req.body['first_name'],
-      'last_name': req.body['last_name'],
-      'phone': req.body['phone'],
-      'description': req.body['description']
-    }
+    const formData = req.body;
+    formData.api_key = process.env.OPEN_311_KEY;
+    delete formData['g_recaptcha_response'];
 
     if (req.files.media) {
       formData.media = {

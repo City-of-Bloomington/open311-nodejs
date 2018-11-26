@@ -198,7 +198,6 @@ export default {
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
         this.$store.commit('storePersonalInfo', this.userInfo)
-        // this.$store.commit('storeFormInfo', this.defaultFields);
 
         var formData       = new FormData();
         var dataURL        = this.postMedia;
@@ -229,13 +228,14 @@ export default {
           }
         }
 
+        // for (var pair of formData.entries()) {
+        //   console.log(pair[0]+ ', ' + pair[1]);
+        // }
+
         this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
 
         axios.post(`${process.env.postProxy}`, formData, config)
         .then(response => {
-          // for (var pair of formData.entries()) {
-          //   console.log(pair[0]+ ', ' + pair[1]);
-          // }
           this.$store.commit('storeResponseInfo', response);
         })
         .then(response => {
