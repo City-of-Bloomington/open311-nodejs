@@ -93,7 +93,8 @@ module.exports = {
     reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
   },
   plugins: [
-    { src: '~/plugins/ga.js', ssr: false }
+    { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/design-system' }
   ],
   build: {
     vendors: ['babel-polyfill'],
