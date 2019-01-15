@@ -85,7 +85,7 @@
             <input
               v-model="serviceAttrs[item.code]"
               type="text"
-              :id="item.name"
+              :id="item.key"
               :name="item.name" />
           </div>
 
@@ -94,7 +94,7 @@
             <input
               type="number"
               v-model="serviceAttrs[item.code]"
-              :id="item.name"
+              :id="item.key"
               :name="item.name" />
           </div>
 
@@ -103,15 +103,15 @@
             <input
               type="datetime-local"
               v-model="serviceAttrs[item.code]"
-              :id="item.name"
+              :id="item.key"
               :name="item.name" />
           </div>
 
           <div v-else-if="item.datatype === 'text'">
-            <label :for="item.description">{{ item.description }}</label>
+            <label :for="item.code">{{ item.description }}</label>
             <textarea
               v-model="serviceAttrs[item.code]"
-              :id="item.name"
+              :id="item.code"
               :name="item.name"
               wrap="hard"></textarea>
           </div>
@@ -122,7 +122,7 @@
               <input
                 type="radio"
                 v-model="serviceAttrs[item.code]"
-                :id="item.code"
+                :id="value.key"
                 :value="value.key"
                 :name="item.code" />
               <label :for="value.key">{{ value.name }}</label>
@@ -131,7 +131,7 @@
 
           <div v-else-if="item.datatype === 'multivaluelist'">
             <label :for="item.description">{{ item.description }}</label>
-            <select :id="item.key" v-model="serviceAttrs[item.code]">
+            <select :id="item.description" v-model="serviceAttrs[item.code]">
               <option
                 v-for="item in item.values"
                 :value="item.key"
