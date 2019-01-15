@@ -3,9 +3,15 @@
   margin: 0 0 20px 0;
 
   .singlevaluelist {
+    padding: 10px 0 0 0;
+
+    legend {
+      margin: 0 0 10px 0;
+    }
+
     div {
-      display: inline-block;
-      margin: 0 20px 0 0;
+      display: block;
+      margin: 0 0 5px 0;
 
       &:last-of-type {
         margin: 0;

@@ -117,8 +117,8 @@
           </div>
 
           <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-            <legend>{{ item.description }}</legend>
-            <div v-for="value in item.values" :key="value.code" :item="item">
+            <legend>{{ item.description }}:</legend>
+            <div v-for="value in item.values" :key="value.code">
               <input
                 type="radio"
                 v-model="serviceAttrs[item.code]"
