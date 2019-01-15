@@ -53,7 +53,10 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
-    ['@nuxtjs/pwa', { icon: true }]
+    ['@nuxtjs/pwa', {
+      icon: true,
+      sizes: [16, 120, 144, 152, 192, 384, 512],
+    }]
   ],
   /*workbox: {
     dev: true,
@@ -93,8 +96,7 @@ module.exports = {
     reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
   },
   plugins: [
-    { src: '~/plugins/ga.js', ssr: false },
-    { src: '~/plugins/design-system' }
+    { src: '~/plugins/ga.js', ssr: false }
   ],
   build: {
     vendors: ['babel-polyfill'],

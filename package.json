@@ -18,7 +18,6 @@
     "@nuxtjs/pwa": "^2.6.0",
     "axios-debug": "0.0.4",
     "busboy-body-parser": "^0.3.2",
-    "cob-design-system": "git+https://github.com/City-of-Bloomington/factory-number-one.git#vue",
     "dotenv": "^6.1.0",
     "exif-js": "^2.3.0",
     "file-system": "^2.2.2",
