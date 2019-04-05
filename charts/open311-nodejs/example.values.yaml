@@ -1,0 +1,81 @@
+# Default values for open311-nodejs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: <your-docker-repo>/open311-nodejs
+  tag: <tag here>
+  pullPolicy: IfNotPresent
+
+# any values entered under environment will be automatically added to the ConfigMap upon template rendering
+environment: 
+
+# General networking/logging settings
+  PORT: "3000"
+  LOCAL_PORT: "3000"
+  HOST: "0.0.0.0"
+  NODE_ENV: "production"
+  NPM_CONFIG_LOGLEVEL: "info"
+
+# URLs for various external services
+  BASE_URL: "/ureport"
+  BROWSER_BASE_URL: "/ureport"
+  MAPBOX_URL: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+  OSM_URL: "https://nominatim.openstreetmap.org/reverse?format=jsonv2"
+
+  # requires a running instance of https://github.com/City-of-Bloomington/uReport
+  CRM_API_URL: "https://<your-site>/crm/open311/v2/"
+  CRM_BASE_URL: "https://<your-site>/crm/"
+  CRM_TICKETS: "tickets/view?ticket_id="
+
+  #requires a running instance of https://github.com/City-of-Bloomington/master_address
+  MASTER_ADD_URL: "https://<your-site>/master_address/?format=json&queryType=address&query="
+
+  ARCGIS_REV_GEO: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location="
+  LOGO_URL: "https://<your-site>/"
+
+# API endpoints
+  SERVICES_API: "services.json"
+  POST_API: "requests.json"
+  POST_PROXY: "/ureport/post"
+  ATTRS_API: "services/"
+
+# API keys/IDs
+  MAPBOX_KEY: ""
+  MAPBOX_ID: "mapbox.streets"
+  OPEN_311_KEY: ""
+  RECAPTCHA_SITEKEY: ""
+  RECAPTCHA_SERVERKEY: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  
+  # only uncomment if you want static assignment from your LB
+  # we use MetalLB, so you may have to adjust the service type to fit your needs
+  #loadBalancerIP: "x.x.x.x" 
+  
+  port: 3000
+
+# adjust the hostnames below to your needs
+ingress:
+  enabled: true
+  annotations: {}
+  path: /ureport
+  hosts:
+    - kube.local
+  tls:
+    - secretName: cert-wildcard
+      hosts:
+        - kube.local
+
+hostname: "kube.local"
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
