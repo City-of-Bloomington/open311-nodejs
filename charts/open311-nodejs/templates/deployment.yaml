@@ -26,7 +26,7 @@ spec:
           args: ["start"]
           envFrom:
           - configMapRef:
-              name: {{ include "open311-nodejs.name" . }}-{{ .Release.Name }}
+              name: {{ include "open311-nodejs.fullname" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
