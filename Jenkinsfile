@@ -22,15 +22,7 @@ def helmDeploy(Map args) {
 }
 
 node {
-    
-    // Setup the Docker Registry (Docker Hub) + Credentials 
-    registry_url = "https://docker-repo.bloomington.in.gov/cob" // Docker Repo
-    docker_creds_id = "9617fef9-766f-4374-9304-43ca4ef33834" // name of the Jenkins Credentials ID
 
-    pwd = pwd()
-    chart_dir = "${pwd}/charts/${config.app.name}"
-    chart_values = "/opt/helm/${config.app.name}-test.values.yaml"
-        
     stage ('Checking out GitHub Repo'){
         checkout scm
         sh "git rev-parse --short HEAD > /tmp/_commitrev"
@@ -39,6 +31,15 @@ node {
         def inputFile = readFile('JenkinsConfig.json')
         def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
     }
+
+        
+    // Setup the Docker Registry (Docker Hub) + Credentials 
+    registry_url = "https://docker-repo.bloomington.in.gov/cob" // Docker Repo
+    docker_creds_id = "9617fef9-766f-4374-9304-43ca4ef33834" // name of the Jenkins Credentials ID
+
+    pwd = pwd()
+    chart_dir = "${pwd}/charts/${config.app.name}"
+    chart_values = "/opt/helm/${config.app.name}-test.values.yaml"
 
     stage ('Building container'){
         docker.withRegistry("${registry_url}", "${docker_creds_id}") {
