@@ -23,30 +23,30 @@ def helmDeploy(Map args) {
 
 node {
     
+    def inputFile = readFile('JenkinsConfig.json')
+    def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+
     // Setup the Docker Registry (Docker Hub) + Credentials 
     registry_url = "https://docker-repo.bloomington.in.gov/cob" // Docker Repo
     docker_creds_id = "9617fef9-766f-4374-9304-43ca4ef33834" // name of the Jenkins Credentials ID
 
     pwd = pwd()
-    chart_dir = "${pwd}/charts/open311-nodejs"
-    chart_values = "/opt/helm/open311-nodejs-dev.values.yaml"
+    chart_dir = "${pwd}/charts/${config.app.name}"
+    chart_values = "/opt/helm/${config.app.name}-test.values.yaml"
         
     stage ('Checking out GitHub Repo'){
-    checkout scm
-    //git 'https://github.com/City-of-Bloomington/open311-nodejs'
-    sh "git rev-parse --short HEAD > /tmp/timetrack_commitrev"
-    build_tag = readFile '/tmp/timetrack_commitrev' 
-    build_tag = build_tag.trim() // stops issues with newlines on end of commit tag
+        checkout scm
+        sh "git rev-parse --short HEAD > /tmp/_commitrev"
+        build_tag = readFile '/tmp/_commitrev' 
+        build_tag = build_tag.trim() // stops issues with newlines on end of commit tag
     }
 
-    stage ('Building open311-nodejs container'){
+    stage ('Building container'){
         docker.withRegistry("${registry_url}", "${docker_creds_id}") {
         
             // Set up the container to build 
-            maintainer_name = "Seth Tierney"
-            container_name = "cob/open311-nodejs"
-            app_name = "open311-nodejs"
-            
+            maintainer_name = "${config.app.maintainer}"
+            container_name = "cob/${config.app.name}"
 
             stage "Building"
             echo "Building with docker.build(${maintainer_name}/${container_name}:${build_tag})"
@@ -55,33 +55,31 @@ node {
             container.push()
         }
     }
-    
+
     stage ('helm test') {
         
-    // run helm chart linter
-      helmLint(chart_dir)
+        // run helm chart linter
+        helmLint(chart_dir)
 
-    // run dry-run helm chart installation
-      helmDeploy(
+        // run dry-run helm chart installation
+        helmDeploy(
         dry_run       : true,
-        name          : "open311-nodejs-dryrun",
-        replicas      : "1",
-        cpu           : "1",
-        memory        : "1024M"
-       )
-
+        name          : config.app.name,
+        replicas      : config.app.replicas,
+        cpu           : config.app.cpu,
+        memory        : config.app.memory
+        )
     }
-    
-    stage ('helm deploy') {
-      
-      // Deploy using Helm chart
-      helmDeploy(
-        dry_run       : false,
-        name          : "open311-nodejs-jenkins",
-        replicas      : "1",
-        cpu           : "1",
-        memory        : "1024M"
-      )
 
+    stage ('helm deploy') {
+        
+        // Deploy using Helm chart
+        helmDeploy(
+        dry_run       : false,
+        name          : config.app.name,
+        replicas      : config.app.replicas,
+        cpu           : config.app.cpu,
+        memory        : config.app.memory
+        )
     }
 }
