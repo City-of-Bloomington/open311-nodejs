@@ -1,5 +1,4 @@
 DOCKER := $(shell command -v docker 2> /dev/null)
-COMPOSE := $(shell command -v docker-compose 2> /dev/null)
 
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
@@ -10,13 +9,10 @@ dependencies:
 ifndef DOCKER
 	$(error "Docker is not installed")
 endif
-ifndef COMPOSE
-	$(error "Docker Compose is not installed")
-endif
 
 build: dependencies
-	docker-compose build
+	docker build -t cob/open311-nodejs
 
 push:
-	docker tag open311-nodejs docker-repo.bloomington.in.gov/library/open311-nodejs:${VERSION}-${COMMIT}
-	docker push docker-repo.bloomington.in.gov/library/open311-nodejs:${VERSION}-${COMMIT}
+	docker tag open311-nodejs docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
+	docker push docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
