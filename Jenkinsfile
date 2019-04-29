@@ -28,11 +28,13 @@ node {
         sh "git rev-parse --short HEAD > /tmp/_commitrev"
         build_tag = readFile '/tmp/_commitrev' 
         build_tag = build_tag.trim() // stops issues with newlines on end of commit tag
-        def inputFile = readFile('JenkinsConfig.json')
-        def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+
     }
 
-        
+    // load config file fully after checkout
+    def inputFile = readFile('JenkinsConfig.json')
+    def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)   
+
     // Setup the Docker Registry (Docker Hub) + Credentials 
     registry_url = "https://docker-repo.bloomington.in.gov/cob" // Docker Repo
     docker_creds_id = "9617fef9-766f-4374-9304-43ca4ef33834" // name of the Jenkins Credentials ID
