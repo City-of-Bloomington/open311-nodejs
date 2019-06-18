@@ -23,10 +23,8 @@ if (config.dev) {
 
 function listen() {
   const options = {
-    // you'll need to generate these,
-    // & I used a sym link to reference
     key: fs.readFileSync('certs/server.key', 'utf8'),
-    cert: fs.readFileSync('certs/server.crt', 'utf8')
+    cert: fs.readFileSync('certs/wildcard.bloomington.in.gov-fullChain.crt', 'utf8')
   };
 
   https.createServer(options, nuxt.render)
