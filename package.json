@@ -1,6 +1,6 @@
 {
   "name": "ureport",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.",
   "author": "Adam Butcher - City of Bloomington, Indiana <butcherad@bloomington.in.gov>",
   "private": true,
