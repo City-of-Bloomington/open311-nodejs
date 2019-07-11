@@ -10,7 +10,7 @@ image:
   pullPolicy: IfNotPresent
 
 # any values entered under environment will be automatically added to the ConfigMap upon template rendering
-environment: 
+environment:
 
 # General networking/logging settings
   PORT: "3000"
@@ -31,7 +31,7 @@ environment:
   CRM_TICKETS: "tickets/view?ticket_id="
 
   #requires a running instance of https://github.com/City-of-Bloomington/master_address
-  MASTER_ADD_URL: "https://<your-site>/master_address/?format=json&queryType=address&query="
+  MASTER_ADD_URL: "https://<your-site>/master_address/addresses?format=json&address="
 
   ARCGIS_REV_GEO: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location="
   LOGO_URL: "https://<your-site>/"
@@ -54,11 +54,11 @@ fullnameOverride: ""
 
 service:
   type: ClusterIP
-  
+
   # only uncomment if you want static assignment from your LB
   # we use MetalLB, so you may have to adjust the service type to fit your needs
-  #loadBalancerIP: "x.x.x.x" 
-  
+  #loadBalancerIP: "x.x.x.x"
+
   port: 3000
 
 # adjust the hostnames below to your needs

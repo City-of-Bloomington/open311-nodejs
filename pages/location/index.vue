@@ -405,17 +405,15 @@ export default {
     searchAddressString() {
       var self = this;
       self.loadingLocation = true;
-      console.log('loading search results');
       if(self.location.address_string != '') {
         axios.get(`${process.env.masterAddUrl}${this.location.address_string}`)
         .then(response => {
           self.showResults = true;
           self.loadingLocation = false;
           self.search_results = response.data;
-          console.log(self.search_results)
         })
         .catch(error => {
-          alert(`SAS :: Error happened: ${error}`);
+          alert(`Error via Master Address API: ${error}`);
         })
       }
     }
