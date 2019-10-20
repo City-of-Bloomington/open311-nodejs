@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="info-process">
+    <header class="info">
       <headerNav
         :back-home="backHome"
         :nav-sub-group="navSubGroup"
@@ -8,7 +8,7 @@
         :step-complete="stepComplete" />
     </header>
 
-    <main class="info-process fields" ref="mainElm">
+    <main class="info fields" ref="mainElm">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
 

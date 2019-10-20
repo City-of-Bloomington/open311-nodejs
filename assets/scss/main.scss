@@ -86,8 +86,9 @@ main {
     top: 155px;
   }
 
-  &.info-process {
-    top: 190px;
+  &.info {
+    top: 180px;
+    z-index: 10000;
   }
 
   &.location {
@@ -114,8 +115,8 @@ header {
     height: 155px;
   }
 
-  &.info-process {
-    height: 190px;
+  &.info {
+    height: 105px;
   }
 
   &.location {
@@ -367,7 +368,7 @@ and (max-device-width : 480px) {
       top: 140px;
     }
 
-    &.info-process {
+    &.info {
       top: 175px;
     }
 
@@ -410,7 +411,7 @@ and (max-device-width : 480px) {
       }
     }
 
-    &.info-process {
+    &.info {
       height: 165px;
 
       nav {

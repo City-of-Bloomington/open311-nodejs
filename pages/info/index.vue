@@ -112,18 +112,18 @@ export default {
         email:            this.hasEmail()
       },
       stepActive: {
+        one:              true,
+        two:              false,
+        three:            false,
+        four:             false,
+        five:             false,
+        six:              false
+      },
+      stepComplete: {
         one:              false,
         two:              false,
         three:            false,
         four:             false,
-        five:             true,
-        six:              false
-      },
-      stepComplete: {
-        one:              true,
-        two:              true,
-        three:            true,
-        four:             true,
         five:             false,
         six:              false
       }

@@ -7,6 +7,7 @@ const Store = () => {
       seen_non_emer_modal:     false,
       seenAlertOne:            false,
       seenAlertTwo:            false,
+      submissionMethodType:    '',
       topbar_height:           '',
       search_height:           '',
       nav_height:              '',
@@ -23,8 +24,8 @@ const Store = () => {
         personal_info: {
           first_name:          '',
           last_name:           '',
+          email:               '',
           phone:               '',
-          email:               ''
         },
         location_info: {
           loading:             '',
@@ -48,6 +49,9 @@ const Store = () => {
       storeSeenNonEmerModal(state, payload){
         state.seen_non_emer_modal = payload
       },
+      storeSubmissionMethodType(state, payload) {
+        state.submissionMethodType = payload
+      },
       storeInitGroupData(state, payload) {
         state.initGroupData = payload
       },
@@ -63,8 +67,17 @@ const Store = () => {
       storeSubGroupName(state, payload) {
         state.serviceInfos.service_group.service_name = payload
       },
-      storePersonalInfo(state, payload) {
-        state.serviceInfos.personal_info = payload
+      storePersonalInfoFirst(state, payload) {
+        state.serviceInfos.personal_info.first_name = payload
+      },
+      storePersonalInfoLast(state, payload) {
+        state.serviceInfos.personal_info.last_name = payload
+      },
+      storePersonalInfoEmail(state, payload) {
+        state.serviceInfos.personal_info.email = payload
+      },
+      storePersonalInfoPhone(state, payload) {
+        state.serviceInfos.personal_info.phone = payload
       },
       storeDefaultDescription(state, payload) {
         state.serviceInfos.default_description = payload
@@ -107,6 +120,7 @@ const Store = () => {
       seenNonEmerModal:   state => state.seen_non_emer_modal,
       seenAlertOne:       state => state.seenAlertOne,
       seenAlertTwo:       state => state.seenAlertTwo,
+      submissionMethodType: state => state.submissionMethodType,
       initGroupData:      state => state.initGroupData,
       group:              state => state.serviceInfos.service_group.group,
       subGroup:           state => state.serviceInfos.service_group.service_name,
@@ -116,6 +130,7 @@ const Store = () => {
       defaultDescription: state => state.serviceInfos.default_description,
       defaultImage:       state => state.serviceInfos.default_image,
       serviceAttrs:       state => state.serviceInfos.service_attrs,
+      personalInfo:       state => state.serviceInfos.personal_info,
       firstName:          state => state.serviceInfos.personal_info.first_name,
       lastName:           state => state.serviceInfos.personal_info.last_name,
       phone:              state => state.serviceInfos.personal_info.phone,
