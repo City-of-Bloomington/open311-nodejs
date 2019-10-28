@@ -43,11 +43,15 @@
     </div>
 
     <nav>
-      <div @click="navBackButton" class="nav-back" ref="navBack" v-if="!hideBackButton">
+      <div
+        @click="navBackButton"
+        class="nav-back"
+        ref="navBack"
+        v-if="backHome">
         <span>back</span>
       </div>
       <h1 v-html="group"></h1>
-      <h2 v-html="subGroup" v-if="navSubGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
+      <h2 v-html="subGroup" v-if="navSubGroup" v-bind:style="[backHome ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
     </nav>
   </div>
 </template>
@@ -64,7 +68,6 @@ export default {
     return {
       showModal:       false,
       allData:         [],
-      hideBackButton:  false
     }
   },
   mounted() {
@@ -78,7 +81,7 @@ export default {
     },
     confirmRoute() {
       if(this.$route.path == '/confirm') {
-        this.hideBackButton = true;
+        this.backHome = true;
       }
     }
   },

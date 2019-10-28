@@ -23,10 +23,12 @@
     "file-system": "^2.2.2",
     "form-data": "^2.3.3",
     "leaflet": "^1.5.1",
+    "lodash.debounce": "^4.0.8",
     "nodemon": "^1.19.4",
     "nuxt": "^2.7.1",
     "request": "^2.88.0",
-    "vue-clickaway": "^2.2.2"
+    "vue-clickaway": "^2.2.2",
+    "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

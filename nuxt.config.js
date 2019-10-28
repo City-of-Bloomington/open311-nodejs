@@ -93,10 +93,12 @@ module.exports = {
     mapBoxUrl:            process.env.MAPBOX_URL,
     mapBoxKey:            process.env.MAPBOX_KEY,
     mapBoxId:             process.env.MAPBOX_ID,
-    reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
+    reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY,
+    googleApiKey:         process.env.GOOGLE_API_KEY,
   },
   plugins: [
-    { src: '~/plugins/ga.js', ssr: false }
+    { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/google-maps', ssr: false}
   ],
   build: {
     vendors: ['babel-polyfill'],

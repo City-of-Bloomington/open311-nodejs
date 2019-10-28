@@ -5,15 +5,16 @@
       <template
         v-if="!seenAlertOne && !seenAlertTwo">
         <h4 slot="header">Non-Emergency Use Only:</h4>
-        <p slot="body">This system is <strong>not for reporting emergencies or imminent safety hazards</strong>.</p>
+        <p slot="body">uReport is <strong>not for reporting emergencies</strong>.</p>
 
-        <p slot="body">If this is an <strong>emergency, please immediately dial 911</strong> for assistance.</p>
+        <p slot="body">If this is an <strong>emergency, please immediately dial 911</strong>.</p>
 
         <button
           slot="footer"
           @click="alertOne()"
           tabindex="0"
-          autofocus>I Understand
+          autofocus>
+          I Understand, this is not an emergency
         </button>
       </template>
 
@@ -63,12 +64,11 @@
               </label>
             </div>
 
-            <p v-if="submissionMethodTypeVal == 'no'">Your <strong>submission will be anonymous</strong> and you will <strong>not be contacted back</strong>.</p>
+            <p v-if="submissionMethodTypeVal == 'no'"> While you are not required to include any personal information, note that reports are public.</p>
 
             <template
               v-if="submissionMethodTypeVal == 'yes'">
-              <p>
-                Provided information <strong>will be public</strong> and <strong>used to contact you</strong>.
+              <p>Provided <strong>first &amp; last</strong> name will be public. <strong>Phone &amp; email</strong> are private and used to contact you.
               </p>
               <div class="form-group">
                 <label for="first-name">First Name:</label>
@@ -118,13 +118,17 @@
           tabindex="0"
           autofocus>
           <template v-if="submissionMethodTypeVal == 'no'">
-            Continue Anonymously
+            Continue, Anonymously
           </template>
 
           <template v-else-if="submissionMethodTypeVal == 'yes'">
-            Continue<template v-if="first_name"> as, {{first_name}}</template>
+            Continue<template v-if="first_name">, &amp; report as {{first_name}}</template>
           </template>
         </button>
+      </template>
+
+      <template>
+
       </template>
     </template>
   </modal>
@@ -135,7 +139,7 @@
 
   .modal-mask {
     .modal-wrapper .modal-container .modal-body {
-      max-height: 500px;
+      max-height: 550px;
     }
 
     .form-group {
@@ -166,7 +170,7 @@
 
       label {
         border-radius: 3px;
-        padding: 8px 12px;
+        padding: 2px 10px;
         background: $fern;
         color: white !important;
         font-weight: 600;
