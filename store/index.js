@@ -5,6 +5,8 @@ const Store = () => {
   return new Vuex.Store({
     state: {
       seen_non_emer_modal:     false,
+      seen_pub_record_modal:   false,
+      seen_modal:              false,
       topbar_height:           '',
       search_height:           '',
       nav_height:              '',
@@ -39,6 +41,12 @@ const Store = () => {
     mutations: {
       seenNonEmerModal(state, payload){
         state.seen_non_emer_modal = payload
+      },
+      seenPubRecordModal(state, payload) {
+        state.seen_pub_record_modal = payload
+      },
+      seenModal(state, payload) {
+        state.seen_modal = payload
       },
       storeInitGroupData(state, payload) {
         state.initGroupData = payload
@@ -97,6 +105,8 @@ const Store = () => {
     },
     getters: {
       seenNonEmerModal:   state => state.seen_non_emer_modal,
+      seenPubRecordModal: state => state.seen_pub_record_modal,
+      seenModal:          state => state.seen_modal,
       initGroupData:      state => state.initGroupData,
       group:              state => state.serviceInfos.service_group.group,
       subGroup:           state => state.serviceInfos.service_group.service_name,

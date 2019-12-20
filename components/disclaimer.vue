@@ -11,6 +11,7 @@
 
     <main>
       <h2>Please Note:</h2>
+      <p>The information you provide in a report is retained as public record.</p>
       <p><strong><i>This system is not for reporting emergencies or imminent safety hazards.</i></strong></p>
 
       <p>If this is an emergency, please immediately dial <strong>911</strong> for assistance.</p>

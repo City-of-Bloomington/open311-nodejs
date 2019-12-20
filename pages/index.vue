@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import axios       from 'axios'
-import emerModal   from '~/components/emerModal.vue'
-import searchInput from '~/components/searchInput.vue'
-import topBar      from '~/components/topBar.vue'
+import axios        from 'axios'
+import emerModal    from '~/components/emerModal.vue'
+import searchInput  from '~/components/searchInput.vue'
+import topBar       from '~/components/topBar.vue'
 
 export default {
   head () {
