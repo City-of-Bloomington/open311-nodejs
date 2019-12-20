@@ -1,5 +1,6 @@
 require('dotenv').config()
 module.exports = {
+  dev: (process.env.NODE_ENV !== 'production'),
   router: {
     base:         process.env.BASE_URL
   },

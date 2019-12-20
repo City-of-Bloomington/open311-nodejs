@@ -1,15 +1,26 @@
-require('dotenv').config()
+require('dotenv').config();
+
 const {
   Nuxt,
-  Builder }   = require('nuxt');
-const config  = require('./nuxt.config.js');
-const https   = require('https');
-const fs      = require('fs');
-const port    = process.env.LOCAL_PORT || 2222;
-const isProd  = (process.env.NODE_ENV === 'production');
+  Builder }       = require('nuxt'),
+  config          = require('./nuxt.config.js'),
+  pkg             = require('./package'),
+  https           = require('https'),
+  fs              = require('fs'),
+  nuxt            = new Nuxt(config),
+  options = {
+                  key: fs.readFileSync('certs/server.key', 'utf8'),
+                  cert: fs.readFileSync('certs/wildcard.bloomington.in.gov-fullChain.crt', 'utf8')
+  },
+  port            = process.env.LOCAL_PORT || 2222,
+  isProd          = (process.env.NODE_ENV === 'production'),
+  envMsg          = config.dev ? 'Development' : 'Production',
+  dividerStars    = `★\xa0\xa0`,
+  starRepeatCount = 22,
+  devUrl          = `https://dhcp-cityhall-xxx-xxx.bloomington.in.gov`,
+  dividerMsg      = `🛠️\xa0\xa0⛓️\xa0\xa0👩‍💻\xa0🔮\xa0👨‍💻\xa0⛓️\xa0\xa0🛠️`;
 
-config.dev    = !isProd
-const nuxt    = new Nuxt(config)
+config.dev    = !isProd;
 
 // Build only in dev mode with hot-reloading
 if (config.dev) {
@@ -22,17 +33,17 @@ if (config.dev) {
 } else { listen() }
 
 function listen() {
-  const options = {
-    key: fs.readFileSync('certs/server.key', 'utf8'),
-    cert: fs.readFileSync('certs/wildcard.bloomington.in.gov-fullChain.crt', 'utf8')
-  };
-
-  https.createServer(options, nuxt.render)
+  https
+  .createServer(options, nuxt.render)
   .listen(port);
 
-  console.log(`City of Bloomington\n`
-            + `/ * * * * * * * * * * * * * * * /\n`
-            + `uReport Vuejs client\n`
-            + `/ * * * * * * * * * * * * * * * /\n`
-            + `https://localhost:${port}`);
+  console.log(`\n\n${dividerMsg}\n`
+            + `${dividerStars.repeat(starRepeatCount)}\n`
+            + `App:  ${pkg.prettyName}\n`
+            + `Env:  ${envMsg}\n`
+            + `Who:  ${pkg.company}\n`
+            + `Repo: ${pkg.repository.url}\n`
+            + `Url:  ${devUrl}:${port}`
+            + `\n${dividerStars.repeat(starRepeatCount)}\n`
+            + `${dividerMsg}\n\n`);
 }

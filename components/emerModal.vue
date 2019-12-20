@@ -15,7 +15,7 @@
 
     <template v-if="seenEmerModal && !seenPubRecordModal">
       <h4 slot="header">Public Information</h4>
-      <p slot="body">The information you provide in a report is retained as public record.</p>
+      <p slot="body">The information you provide is retained as public record.</p>
 
       <button
         slot="footer"
