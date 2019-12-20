@@ -1,4 +1,4 @@
-FROM node:10-slim
+FROM node:12.5-slim
 
 # sort of a hack to make docker cache dependencies based on the state of
 # package.json - will only run npm install again if package.json changes
