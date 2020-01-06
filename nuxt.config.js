@@ -78,6 +78,7 @@ module.exports = {
   },
   env: {
     crmBaseUrl:           process.env.CRM_BASE_URL,
+    crmLink:              process.env.CRM_BASE_URL + process.env.CRM_TICKETS,
     crmTickets:           process.env.CRM_TICKETS,
     logoUrl:              process.env.LOGO_URL,
     baseUrl:              process.env.BASE_URL,
