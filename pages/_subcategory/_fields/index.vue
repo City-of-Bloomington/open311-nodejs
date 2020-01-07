@@ -155,10 +155,11 @@
 </style>
 
 <script>
-import axios     from 'axios'
-import emerModal from '~/components/emerModal.vue'
-import headerNav from '~/components/nav.vue'
-import modal     from '~/components/modal.vue'
+import axios          from 'axios'
+import emerModal      from '~/components/emerModal.vue'
+import headerNav      from '~/components/nav.vue'
+import modal          from '~/components/modal.vue'
+import { mapFields }  from 'vuex-map-fields';
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -170,9 +171,9 @@ export default {
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.subGroup}`,
+      titleTemplate: `%s - ${this.service_name}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
+        { hid: 'description', name: 'description', content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
       ]
     }
   },
@@ -225,7 +226,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$store.state.serviceInfos.service_group.service_code == '') {
+    if(this.service_code == '') {
       this.routeCode = this.$route.params.fields.substr(this.$route.params.fields.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
       this.$store.commit('storeGroupCode', this.routeCode);
@@ -379,8 +380,15 @@ export default {
 
   },
   computed: {
+    ...mapFields([
+      'initGroupData',
+      'subGroup',
+      'serviceInfos.service_group.service_name',
+      'serviceInfos.service_group.service_code',
+      'serviceInfos.service_group.group',
+    ]),
     allInitGroupData() {
-      return this.$store.getters.initGroupData
+      return this.initGroupData
     },
     allDatas() {
       const allRoutesubGroups = this.allInitGroupData.filter(
@@ -397,10 +405,10 @@ export default {
       return this.allDatas.service_name;
     },
     showSubGroupName() {
-      return this.$store.state.serviceInfos.service_group.service_name
+      return this.service_name
     },
     showServiceCode() {
-      return parseInt(this.$store.state.serviceInfos.service_group.service_code, 10)
+      return parseInt(this.service_code, 10)
     },
     formFields() {
       return this.formElements.attributes
@@ -413,7 +421,7 @@ export default {
       return false
     },
     showGroupName() {
-      return this.$store.state.serviceInfos.service_group.group
+      return this.group
     }
   }
 }

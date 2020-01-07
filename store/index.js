@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 
+import { getField, updateField } from 'vuex-map-fields';
+
 export const defaultState = () => ({
   seen_modal:         false,
   topbar_height:      '',
@@ -95,6 +97,7 @@ export const mutations = {
 }
 
 export const actions = {
+  updateField,
   resetBaseState({ commit }) {
     commit('RESET_BASE_STATE')
   },
@@ -105,6 +108,7 @@ export const actions = {
 }
 
 export const getters = {
+  getField,
   seenModal:          state => state.seen_modal,
   initGroupData:      state => state.initGroupData,
   group:              state => state.serviceInfos.service_group.group,
