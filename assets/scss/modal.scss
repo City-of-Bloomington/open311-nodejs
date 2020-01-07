@@ -41,7 +41,7 @@ body.showing-modal {
       border-top-right-radius: 2px;
 
       h4 {
-        margin-top: 0;
+        margin: 0; 
         color: white;
       }
     }
@@ -52,6 +52,10 @@ body.showing-modal {
       font-size: 16px;
       max-height: 275px;
       overflow: auto;
+
+      h4 {
+        margin: 0 0 5px 0;
+      }
 
       p {
         margin-bottom: 10px;

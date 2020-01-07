@@ -72,7 +72,9 @@ body {
 // }
 
 main {
+  // background-color: blue;
   position: relative;
+  overflow-y: scroll;
   display: block;
   width: 520px;
   margin: 0 auto;
@@ -80,18 +82,22 @@ main {
 
   &.home {
     top: 125px;
+    height: calc(100vh - 200px);
   }
 
   &.subcategory {
     top: 155px;
+    height: calc(100vh - 220px);
   }
 
   &.info-process {
     top: 190px;
+    height: calc(100vh - 250px);
   }
 
   &.location {
     top: 240px;
+    height: calc(100vh - 210px);
   }
 }
 

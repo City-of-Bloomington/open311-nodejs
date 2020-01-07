@@ -28,7 +28,7 @@
 
       <h2>Tickets</h2>
       <p>Tickets may be viewed at:<br>
-      <strong><a :href="crmLink" target="_blank" title="View uRport CRM tickets">{{ crmLink }}</a></strong></p>
+      <strong><a :href="crmUrl" target="_blank" title="View uRport CRM tickets">{{ crmUrl }}</a></strong></p>
     </main>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
   props: ['showDisclaimer'],
   data() {
     return {
-      crmLink:  process.env.crmBaseUrl,
+      crmUrl:  process.env.crmBaseUrl,
     }
   },
   methods: {
