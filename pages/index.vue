@@ -27,10 +27,11 @@
 </template>
 
 <script>
-import axios        from 'axios'
-import emerModal    from '~/components/emerModal.vue'
-import searchInput  from '~/components/searchInput.vue'
-import topBar       from '~/components/topBar.vue'
+import axios          from 'axios'
+import emerModal      from '~/components/emerModal.vue'
+import searchInput    from '~/components/searchInput.vue'
+import topBar         from '~/components/topBar.vue'
+import { mapFields }  from 'vuex-map-fields'
 
 export default {
   head () {
@@ -73,11 +74,11 @@ export default {
     }
   },
   computed: {
-    allInitGroupData() {
-      return this.$store.getters.initGroupData
-    },
+    ...mapFields([
+      'initGroupData',
+    ]),
     groupCategories() {
-      return [...new Set(this.allInitGroupData.map(g => g.group))]
+      return [...new Set(this.initGroupData.map(g => g.group))]
     }
   }
 }

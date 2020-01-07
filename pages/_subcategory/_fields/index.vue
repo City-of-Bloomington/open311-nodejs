@@ -159,7 +159,7 @@ import axios          from 'axios'
 import emerModal      from '~/components/emerModal.vue'
 import headerNav      from '~/components/nav.vue'
 import modal          from '~/components/modal.vue'
-import { mapFields }  from 'vuex-map-fields';
+import { mapFields }  from 'vuex-map-fields'
 
 export default {
   beforeRouteEnter (to, from, next) {
