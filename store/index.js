@@ -32,7 +32,7 @@ export const defaultState = () => ({
     },
     default_image:    '',
     service_attrs:    {},
-    default_description: '',
+    default_description: 'test4321',
     service_response: {}
   }
 });

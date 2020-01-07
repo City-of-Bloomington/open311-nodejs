@@ -2,7 +2,9 @@
   <div>
     <header class="home" ref="top">
       <topBar />
-      <search-input :data="allInitGroupData" field="service_name"/>
+      <search-input
+        :data="initGroupData"
+        field="service_name" />
     </header>
 
     <main class="home">

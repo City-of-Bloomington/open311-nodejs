@@ -38,7 +38,7 @@
       <div class="form-group">
         <label for="default-description">Describe this issue:</label>
         <textarea
-          v-model="defaultDescription"
+          v-model="default_description"
           id="default-description"
           name="default-description"
           wrap="hard">
@@ -369,7 +369,7 @@ export default {
     },
     storeFormInfo() {
       this.$store.commit('storeServiceAtts', this.serviceAttrs);
-      this.$store.commit('storeDefaultDescription', this.defaultDescription);
+      this.$store.commit('storeDefaultDescription', this.default_description);
 
       // var dataURL      = this.postMedia;
       // console.log(dataURL);
@@ -381,17 +381,15 @@ export default {
   },
   computed: {
     ...mapFields([
-      'initGroupData',
       'subGroup',
+      'initGroupData',
+      'serviceInfos.default_description',
       'serviceInfos.service_group.service_name',
       'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.group',
     ]),
-    allInitGroupData() {
-      return this.initGroupData
-    },
     allDatas() {
-      const allRoutesubGroups = this.allInitGroupData.filter(
+      const allRoutesubGroups = this.initGroupData.filter(
         g => g.service_code == this.routeCode
       );
       return allRoutesubGroups[0];
