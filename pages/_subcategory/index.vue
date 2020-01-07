@@ -10,22 +10,17 @@
 
     <main class="subcategory">
       <ul class="subcategories">
-        <li
-            v-for="subCat in subGroupList"
+        <li v-for="subCat in subGroupList"
             :key="subCat.service_name"
             @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-fields', params:{'fields':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
-
-        <!-- <li v-if="groupProperName"
-            v-for="groups in allDatas()"
-            :key="groups.service_name"
-            @click="subGroupName(subCat.service_name,subCat.service_code)">
-            <nuxt-link :to="{name:'subcategory-fields', params:{'fields':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
-        </li> -->
       </ul>
 
-      <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
+      <button
+        class="text-btn"
+        @click="showModal = true">- Can't Find It? -</button>
+
       <modal v-if="showModal">
         <h4 slot="header">uReport: Can't Find It</h4>
         <p slot="body">Can't find what you are looking for?</p>
@@ -46,6 +41,7 @@ import axios     from 'axios'
 import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
+import { mapFields }  from 'vuex-map-fields'
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -149,17 +145,14 @@ export default {
     }
   },
   computed: {
-    allInitGroupData() {
-      return this.$store.getters.initGroupData
-    },
+    ...mapFields([
+      'initGroupData',
+      'serviceInfos.service_group.group',
+    ]),
     subGroupList() {
-      const allsubGroups = this.allInitGroupData.filter(
-        g => g.group == this.$store.state.serviceInfos.service_group.group
-      );
+      const allsubGroups = this.initGroupData
+      .filter(g => g.group == this.group);
       return allsubGroups
-    },
-    group() {
-      return this.$store.getters.group
     }
   }
 }
