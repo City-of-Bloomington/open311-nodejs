@@ -11,44 +11,21 @@
     <main class="info-process fields" ref="mainElm">
       <h2>General information:</h2>
       <div class="form-group camera-wrapper">
-
-        <input
-          type="file"
-          accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
-          @change="updateCanvasImage"
-          ref="fileInput"
-          name="media">
-
-
-        <!-- <div class="video-wrapper" v-show="showVideoElm"> -->
-        <div class="video-wrapper" v-show="false">
-          <video
-            ref="video"
-            id="video"
-            autoplay
-            playsinline>
-          </video>
+        
+        <div style="display: flex;">
+          <label for="media">Include Image:
+          <input
+            type="file"
+            accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
+            @change="updateCanvasImage"
+            ref="fileInput"
+            name="media"></label>
 
           <button
-            v-on:click="capture()"
-            class="button take"
-            alt="Take photo"
-            title="Take photo"
-            >
-            <span>Take Photo</span>
-          </button>
-
-          <button
-            v-on:click="closeCamera()"
-            class="button close"
-            alt="Close camera"
-            title="Close camera">Close Camera</button>
+            @click="$refs.fileInput.click()" 
+            v-if="captures.length < 1"
+            class="image-input">Include Photo</button>
         </div>
-
-        <canvas ref="canvas" id="canvas" width="640" height="480" v-show="false"></canvas>
-
-        <!-- <canvas ref="imgCanvas" id="img-canvas" width="640" height="480" v-show="true"></canvas> -->
-        <canvas id="imageCanvas" ref="imageCanvas" v-show="false"></canvas>
 
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
@@ -56,19 +33,10 @@
             <button type="button" class="button" @click="removeImage(c)">remove</button>
           </li>
         </ul>
-
-        <button @click="$refs.fileInput.click()" v-if="captures.length < 1" class="image-input">Include Photo</button>
-
-        <button
-          v-show="false"
-          v-on:click="openCamera()"
-          class="button open"
-          alt="Open camera"
-          title="Open camera">Open Camera</button>
       </div>
 
       <div class="form-group">
-        <label for="default-description">Tell us a little about this issue</label>
+        <label for="default-description">Describe this issue:</label>
         <textarea
           v-model="defaultDescription"
           id="default-description"
@@ -78,7 +46,7 @@
       </div>
 
       <div v-if="hasFormAttributes">
-        <h2>{{ showSubGroupName }} specific information:</h2>
+        <h2>{{ showSubGroupName }} information:</h2>
         <div class="form-group" v-for="item in formFields" :key="item.code">
           <div v-if="item.datatype === 'string'">
             <label :for="item.key">{{ item.description }}</label>
@@ -142,14 +110,12 @@
         </div>
       </div>
 
-      <!-- <p v-if="reCaptchaError">Error - Please validate the reCaptcha below.</p>
-      <div class="g-recaptcha" :data-sitekey="reCaptchaSiteKey"></div> -->
-
       <footer>
-        <!-- <button class="button next-button" @click="submitPost()">Submit</button> -->
-        <nuxt-link to="/location"
-                   class="button next-button"
-                   @click.native="storeFormInfo">Next</nuxt-link>
+        <nuxt-link
+          to="/location"
+          class="button next-button"
+          @click.native="storeFormInfo">Next
+        </nuxt-link>
       </footer>
 
       <emerModal />
@@ -158,8 +124,13 @@
 </template>
 
 <style lang="scss">
-
   main {
+    h2 {
+      font-weight: 600;
+      letter-spacing: .25px;
+      margin: 0 0 5px 0;
+    }
+
     .fields {
       h2 {
         border-bottom: 1px solid rgba(225,225,225,0.2);
@@ -181,16 +152,6 @@
       }
     }
   }
-
-  // .modal-header {
-  //   display: none;
-  // }
-
-  // .modal-body {
-  //   img {
-  //     max-width: 100%;
-  //   }
-  // }
 </style>
 
 <script>
@@ -200,11 +161,6 @@ import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
 
 export default {
-  // beforeRouteEnter (to, from, next) {
-  //   if(from.path == '/')
-  //     next('/');
-  //   next();
-  // },
   beforeRouteEnter (to, from, next) {
     if(from.name !== 'subcategory')
       next(vm => {
