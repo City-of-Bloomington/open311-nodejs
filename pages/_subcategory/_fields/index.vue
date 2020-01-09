@@ -9,9 +9,12 @@
     </header>
 
     <main class="info-process fields" ref="mainElm">
+
+      {{ service_attrs }}
+
       <h2>General information:</h2>
-      <div class="form-group camera-wrapper">
-        
+
+      <div class="form-group camera-wrapper">  
         <div style="display: flex;">
           <label for="media">Include Image:
           <input
@@ -47,11 +50,11 @@
 
       <div v-if="hasFormAttributes">
         <h2>{{ showSubGroupName }} information:</h2>
-        <div class="form-group" v-for="item in formFields" :key="item.code">
+        <div class="form-group" v-for="item, i in service_attrs" :key="item.code">
           <div v-if="item.datatype === 'string'">
             <label :for="item.key">{{ item.description }}</label>
             <input
-              v-model="serviceAttrs[item.code]"
+              v-model="localServiceAttrs[item.code]"
               type="text"
               :id="item.key"
               :name="item.name" />
@@ -61,7 +64,7 @@
             <label :for="item.key">{{ item.description }}</label>
             <input
               type="number"
-              v-model="serviceAttrs[item.code]"
+              v-model="localServiceAttrs[item.code]"
               :id="item.key"
               :name="item.name" />
           </div>
@@ -70,15 +73,20 @@
             <label :for="item.key">{{ item.description }}</label>
             <input
               type="datetime-local"
-              v-model="serviceAttrs[item.code]"
+              v-model="localServiceAttrs[item.code]"
               :id="item.key"
               :name="item.name" />
           </div>
 
           <div v-else-if="item.datatype === 'text'">
             <label :for="item.code">{{ item.description }}</label>
+            <!-- <textarea
+              :value="service_attrs[item.code]"
+              @input="updateField(item, $event.target.value)"
+              :id="item.code"
+              :name="item.name"
+              wrap="hard"></textarea> -->
             <textarea
-              v-model="serviceAttrs[item.code]"
               :id="item.code"
               :name="item.name"
               wrap="hard"></textarea>
@@ -89,7 +97,7 @@
             <div v-for="value in item.values" :key="value.code">
               <input
                 type="radio"
-                v-model="serviceAttrs[item.code]"
+                @input="updateField(item.code, $event.target.value)"
                 :id="value.key"
                 :value="value.key"
                 :name="item.code" />
@@ -99,7 +107,9 @@
 
           <div v-else-if="item.datatype === 'multivaluelist'">
             <label :for="item.description">{{ item.description }}</label>
-            <select :id="item.description" v-model="serviceAttrs[item.code]">
+            <select
+              :id="item.description"
+              v-model="localServiceAttrs[item.code]">
               <option
                 v-for="item in item.values"
                 :value="item.key"
@@ -159,12 +169,24 @@ import axios          from 'axios'
 import emerModal      from '~/components/emerModal.vue'
 import headerNav      from '~/components/nav.vue'
 import modal          from '~/components/modal.vue'
+import {mapGetters, mapState} from 'vuex'
 import { mapFields }  from 'vuex-map-fields'
 
 export default {
+  // beforeRouteLeave (to, from, next) {
+  //   next(vm => {
+  //     console.log('dispatch attrs')
+  //     vm.$store.dispatch('setServiceAttrs', vm.localServiceAttrs);    
+  //   });
+    
+  //   next();
+  // },
   beforeRouteEnter (to, from, next) {
     if(from.name !== 'subcategory')
       next(vm => {
+        // console.log(vm.localServiceAttrs);
+
+        // vm.localServiceAttrs = vm.serviceAttrs;
         vm.backHome = true;
       });
     next();
@@ -185,6 +207,7 @@ export default {
   },
   data() {
     return {
+      localServiceAttrs:   {},
       backHome:            false,
       routeCode:           '',
       routeCodeData:       '',
@@ -194,7 +217,7 @@ export default {
       modalImage:          null,
       formElements:        {},
       defaultDescription:  '',
-      serviceAttrs:        {},
+      // serviceAttrs:        {},
       showVideoElm:        false,
       mainElm:             '',
       imgContext:          null,
@@ -225,7 +248,19 @@ export default {
       }
     }
   },
+  watch: {
+    localServiceAttrs: {
+      handler: function (val, oldVal) { 
+        console.log(val);
+        // this.$store.dispatch('setServiceAttrs', val);
+      },
+      deep: true
+      
+      // this.$store.commit('storeServiceAtts', this.localServiceAttrs);
+    }
+  },
   mounted() {
+    
     if(this.service_code == '') {
       this.routeCode = this.$route.params.fields.substr(this.$route.params.fields.lastIndexOf('/') + 1);
       this.$store.commit('storeRouteCode', this.routeCode);
@@ -237,7 +272,17 @@ export default {
     }
 
     axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
-    .then(res => { this.formElements = res.data })
+    .then((res) => { 
+      this.formElements = res.data;
+
+      let radical = res.data.attributes.map((e, i) => {
+        let plusAnswer = {...e, answer_value: ''}
+        return plusAnswer
+      });
+
+      this.$store.dispatch('setServiceAttrs', radical);
+      console.log('here')
+    })
     .catch(err => { console.log(`Fields page error: ${err}`); });
   },
   methods: {
@@ -368,7 +413,7 @@ export default {
       // this.exifData();
     },
     storeFormInfo() {
-      this.$store.commit('storeServiceAtts', this.serviceAttrs);
+      this.$store.commit('storeServiceAtts', this.localServiceAttrs);
       this.$store.commit('storeDefaultDescription', this.default_description);
 
       // var dataURL      = this.postMedia;
@@ -377,17 +422,34 @@ export default {
       // console.log(blob);
       this.$store.commit('storeDefaultImage', this.captures[0]);
     },
-
+    updateField(c, v) {
+      this.$store.dispatch('setServiceAttrs', {[c]: v});
+    }
   },
   computed: {
     ...mapFields([
+      'testing',
       'subGroup',
       'initGroupData',
+      'serviceInfos.service_attrs',
       'serviceInfos.default_description',
       'serviceInfos.service_group.service_name',
       'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.group',
     ]),
+    ...mapGetters(['serviceAttrs']),
+    // localServiceAttrs: {
+    //   get () {
+    //     console.log('ran getter', this.serviceAttrs)
+    //     return this.serviceAttrs
+    //   },
+    //   set (value) {
+    //     let updatedObjVal = this.$set(this.localServiceAttrs, 'newId', res[0])
+    //     console.log('ran setter', value)
+    //     // this.$store.commit('storeServiceAtts', this.localServiceAttrs[value]);
+    //     this.$store.commit('setServiceAttrs', this.localServiceAttrs);
+    //   }
+    // },
     allDatas() {
       const allRoutesubGroups = this.initGroupData.filter(
         g => g.service_code == this.routeCode

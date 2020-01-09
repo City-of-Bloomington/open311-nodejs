@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import { getField, updateField } from 'vuex-map-fields';
 
+// export const strict = false;
+
 export const defaultState = () => ({
   seen_modal:         false,
   topbar_height:      '',
@@ -32,7 +34,7 @@ export const defaultState = () => ({
     },
     default_image:    '',
     service_attrs:    {},
-    default_description: 'test4321',
+    default_description: '',
     service_response: {}
   }
 });
@@ -40,6 +42,7 @@ export const defaultState = () => ({
 const state = () => defaultState();
 
 export const mutations = {
+  updateField,
   RESET_BASE_STATE(state) {
     Object.assign(state, defaultState())
   },
@@ -97,9 +100,11 @@ export const mutations = {
 }
 
 export const actions = {
-  updateField,
   resetBaseState({ commit }) {
     commit('RESET_BASE_STATE')
+  },
+  setServiceAttrs(context, payload) {
+    context.commit('storeServiceAtts', payload)
   },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
@@ -116,7 +121,6 @@ export const getters = {
   subGroupCode:       state => state.serviceInfos.service_group.service_code,
   routeCode:          state => state.serviceInfos.service_group.route_code,
   response:           state => state.serviceInfos.service_response,
-  defaultDescription: state => state.serviceInfos.default_description,
   defaultImage:       state => state.serviceInfos.default_image,
   serviceAttrs:       state => state.serviceInfos.service_attrs,
   firstName:          state => state.serviceInfos.personal_info.first_name,
