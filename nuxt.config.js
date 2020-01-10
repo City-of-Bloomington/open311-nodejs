@@ -98,7 +98,7 @@ module.exports = {
   },
   plugins: [
     { src: '~/plugins/ga.js',        ssr: false },
-    // { src: '~/plugins/localStorage', ssr: false },
+    { src: '~/plugins/localStorage', ssr: false },
   ],
   build: {
     vendors: ['babel-polyfill'],

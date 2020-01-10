@@ -195,34 +195,35 @@ export default {
     }
   },
   mounted() {
-    var self = this;
-    self.geoError = false;
+    let vm      = this;
+    vm.geoError = false;
 
-    if(self.hasLocationLat() == '') {
-      self.loading = true;
+    if(vm.hasLocationLat() == '') {
+      vm.loading = true;
 
-      self.geoLocatePromise()
+      vm.geoLocatePromise()
       .then(position => {
         if(position.coords) {
-          self.lat = position.coords.latitude;
-          self.long = position.coords.longitude;
+          vm.lat  = position.coords.latitude;
+          vm.long = position.coords.longitude;
         } else {
           console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
       })
       .then(function(){
-        self.initMap();
+        vm.initMap();
       })
       .catch(function(){
-        self.geoError = true;
-        self.loading = false;
+        vm.geoError = true;
+        vm.loading  = false;
+        vm.lat      = vm.cityHallLat;
+        vm.long     = vm.cityHallLong;
+        vm.initMap();
+
         console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-        self.lat = self.cityHallLat;
-        self.long = self.cityHallLong;
-        self.initMap();
       });
     } else {
-      self.initMap();
+      vm.initMap();
     }
   },
   watch: {
@@ -274,8 +275,8 @@ export default {
       }
     },
     getCurrentPosition() {
-      // var self = this;
       this.loading = true;
+
       if(this.address_string != '')
         this.address_string = ''
       this.geoLocatePromise()
@@ -294,7 +295,7 @@ export default {
       })
       .catch( error => {
         console.log(error);
-        var errMsg = null;
+        let errMsg = null;
         switch(error.code) {
           case error.PERMISSION_DENIED:
               errMsg = "User denied the request for Geolocation.";
@@ -362,33 +363,31 @@ export default {
     updateMap(lat,long) {
       this.mymap.setView([lat,long]);
       this.$refs.mapElement.style.display = "block";
-      // this.mymap.invalidateSize();
     },
     clearSearch() {
-      this.loading = false;
-      this.lat = '';
-      this.long = '';
+      this.loading        = false;
+      this.lat            = '';
+      this.long           = '';
       this.search_results = '';
       this.address_string = '';
       this.$refs.mapElement.style.display = "none";
     },
     addressResult(address) {
-      console.dir(JSON.stringify(address));
-      this.lat = address.latitude;
-      this.long = address.longitude;
+      this.lat            = address.latitude;
+      this.long           = address.longitude;
       this.address_string = address.streetAddress;
+      this.showResults    = false;
       this.updateMap(this.lat, this.long);
-      this.showResults = false;
     },
     searchAddressString() {
-      var self = this;
-      self.loadingLocation = true;
-      if(self.address_string != '') {
+      this.loadingLocation = true;
+
+      if(this.address_string != '') {
         axios.get(`${process.env.masterAddUrl}${this.address_string}`)
         .then(response => {
-          self.showResults = true;
-          self.loadingLocation = false;
-          self.search_results = response.data;
+          this.showResults      = true;
+          this.loadingLocation  = false;
+          this.search_results   = response.data;
         })
         .catch(error => {
           alert(`Error via Master Address API: ${error}`);
@@ -402,11 +401,6 @@ export default {
       'serviceInfos.location_info.lat',
       'serviceInfos.location_info.long',
     ]),
-    // locationUpdate() {
-    //   let { lat, long, address_string } = this.location
-    //   console.log(this.location);
-    //   return location
-    // },
     addressResults() {
       return this.search_results
     },
