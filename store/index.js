@@ -27,7 +27,6 @@ export const defaultState = () => ({
       email:          ''
     },
     location_info: {
-      loading:        '',
       address_string: '',
       lat:            '',
       long:           ''
@@ -79,6 +78,15 @@ export const mutations = {
   storeLocationInfo(state, payload) {
     state.serviceInfos.location_info = payload
   },
+  storeLocationLat(state, payload) {
+    state.serviceInfos.location_info.lat = payload
+  },
+  storeLocationLong(state, payload) {
+    state.serviceInfos.location_info.long = payload
+  },
+  storeLocationLoading(state, payload) {
+    state.serviceInfos.location_info.loading = payload
+  },
   storeResponseInfo(state, payload) {
     state.serviceInfos.service_response = payload
   },
@@ -105,6 +113,12 @@ export const actions = {
   },
   setServiceAttrs(context, payload) {
     context.commit('storeServiceAtts', payload)
+  },
+  setLocationLat(context, payload) {
+    context.commit('storeLocationLat', payload)
+  },
+  setLocationLong(context, payload) {
+    context.commit('storeLocationLong', payload)
   },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)

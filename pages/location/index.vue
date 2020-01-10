@@ -21,14 +21,7 @@
             </div>
 
             <label for="location">Location:</label>
-            <!-- <input v-bind:value="location.address_string"
-                   v-on:input="location.address_string = $event.target.value"
-                   type="text"
-                   id="location"
-                   ref="location-input"
-                   autocomplete="off"
-                   > -->
-            <input v-model="location.address_string"
+            <input v-model="address_string"
                    v-on:keyup.enter="searchAddressString"
                    v-on:keyup.delete="clearSearch"
                    type="text"
@@ -77,7 +70,7 @@
         <h3 v-if="addressResults">
           Search Results:
           <span v-if="addressResults.length >= 1">{{addressResults.length}} results</span>
-          <span v-if="((addressResults.length == 0 || addressResults.length == '') && !loadingLocation) || (this.location.address_string == '')">No results</span>
+          <span v-if="((addressResults.length == 0 || addressResults.length == '') && !loadingLocation) || (address_string == '')">No results</span>
         </h3>
         <ul class="address-results">
           <li v-for="address in addressResults"
@@ -88,7 +81,7 @@
         </ul>
       </div>
 
-      <div v-if="(location.address_string == '') && (!loading) && (!showGeoErrorHelp)">
+      <div v-if="(address_string == '') && (!loading) && (!showGeoErrorHelp)">
         <h3>A service request requires an address in order to proceed.</h3><br>
         <p>Please search for an address or use the Geolocation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.619 20.619" id="geo-loc-text-icon"><title>location-icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><g id="location-icon"><circle cx="10.309" cy="10.309" r="8.149" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="10.309" cy="10.309" r="3.963" fill="#fff"/><line x1="10.309" y1="18.459" x2="10.309" y2="20.619" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="10.309" x2="10.309" y2="2.16" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="2.16" y1="10.309" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="20.619" y1="10.309" x2="18.459" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/></g></g></g></svg> icon in the search input to determine your location.</p><br>
       </div>
@@ -99,8 +92,7 @@
         <nuxt-link
           v-if="showNextButton"
           to="/info"
-          class="button next-button"
-          @click.native="storeCommitLocationInfo">Next</nuxt-link>
+          class="button next-button">Next</nuxt-link>
       </footer>
     </main>
   </div>
@@ -142,8 +134,9 @@
 </style>
 
 <script>
-import axios     from 'axios'
-import headerNav from '~/components/nav.vue'
+import axios          from 'axios'
+import headerNav      from '~/components/nav.vue'
+import { mapFields }  from 'vuex-map-fields'
 
 let leaflet;
 if (process.browser) {
@@ -177,11 +170,6 @@ export default {
       geoError:         false,
       loadingLocation:  false,
       loading:          false,
-      location: {
-        lat:            this.hasLocationLat(),
-        long:           this.hasLocationLong(),
-        address_string: this.hasLocationAddress()
-      },
       showMap:          true,
       map:              null,
       search_results:   null,
@@ -216,8 +204,8 @@ export default {
       self.geoLocatePromise()
       .then(position => {
         if(position.coords) {
-          self.location.lat = position.coords.latitude;
-          self.location.long = position.coords.longitude;
+          self.lat = position.coords.latitude;
+          self.long = position.coords.longitude;
         } else {
           console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
@@ -229,51 +217,49 @@ export default {
         self.geoError = true;
         self.loading = false;
         console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-        self.location.lat = self.cityHallLat;
-        self.location.long = self.cityHallLong;
+        self.lat = self.cityHallLat;
+        self.long = self.cityHallLong;
         self.initMap();
       });
     } else {
-      self.location.lat = this.$store.getters.locationLat;
-      self.location.long = this.$store.getters.locationLong;
       self.initMap();
     }
   },
   watch: {
-    locationUpdate: function() {
-      this.updateAddressString(this.location.lat,this.location.long);
+    lat: function() {
+      this.updateAddressString(this.lat, this.long);
     }
   },
   methods: {
     hasLocationLat(){
       if(
-        !this.$store.getters.locationLat ||
-        this.$store.getters.locationLat == '' ||
-        this.$store.getters.locationLat == null ||
-        this.$store.getters.locationLat == undefined
+        !this.lat ||
+        this.lat == '' ||
+        this.lat == null ||
+        this.lat == undefined
       )
         return ''
-      return this.$store.getters.locationLat
+      return this.lat
     },
     hasLocationLong(){
       if(
-        !this.$store.getters.locationLong ||
-        this.$store.getters.locationLong == '' ||
-        this.$store.getters.locationLong == null ||
-        this.$store.getters.locationLong == undefined
+        !this.long ||
+        this.long == '' ||
+        this.long == null ||
+        this.long == undefined
       )
         return ''
-      return this.$store.getters.locationLong
+      return this.long
     },
     hasLocationAddress(){
       if(
-        !this.$store.getters.locationAddress ||
-        this.$store.getters.locationAddress == '' ||
-        this.$store.getters.locationAddress == null ||
-        this.$store.getters.locationAddress == undefined
+        !this.address_string ||
+        this.address_string == '' ||
+        this.address_string == null ||
+        this.address_string == undefined
       )
         return ''
-      return this.$store.getters.locationAddress
+      return this.address_string
     },
     geoLocatePromise() {
       if (navigator.geolocation) {
@@ -288,19 +274,19 @@ export default {
       }
     },
     getCurrentPosition() {
-      var self = this;
-      self.loading = true;
-      if(self.location.address_string != '')
-        self.location.address_string = ''
-      self.geoLocatePromise()
+      // var self = this;
+      this.loading = true;
+      if(this.address_string != '')
+        this.address_string = ''
+      this.geoLocatePromise()
       .then(position => {
         if(position.coords) {
-          self.location.lat = position.coords.latitude;
-          self.location.long = position.coords.longitude;
-          self.updateMap(self.location.lat,self.location.long);
+          this.lat = position.coords.latitude;
+          this.long = position.coords.longitude;
+          this.updateMap(this.lat, this.long);
           console.log(`Original -- latitude: `
-                      + `${self.location.lat} | `
-                      + `longitude: ${self.location.long}`
+                      + `${this.lat} | `
+                      + `longitude: ${this.long}`
           );
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
@@ -326,35 +312,31 @@ export default {
         console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       })
     },
-    updateAddressString(lat,long){
-      // does this return x/y backwards?!
+    updateAddressString(lat, long){
       axios.get(`${process.env.arcgisRevGeo}${long},${lat}`)
       .then(response => {
         this.loading = false;
-        this.location.address_string = response.data.address.Match_addr;
-        this.updateMap(this.location.lat,this.location.long);
-        // console.log(`updateAddressString() :: `, response.data.address.Match_addr);
+        this.address_string = response.data.address.Match_addr;
+        this.updateMap(lat, long);
+        this.$store.dispatch('setLocationLat', lat)
+        this.$store.dispatch('setLocationLong', long)
       })
       .catch(error => {this.loading = false; });
     },
-    storeCommitLocationInfo() {
-      return this.$store.commit('storeLocationInfo', this.location)
-    },
     initMap() {
-      var self = this;
+      let self    = this,
+          mymap   = L.map('map-element');
+      this.mymap  = mymap;
 
-      var mymap = L.map('map-element');
-      this.mymap = mymap;
+      mymap.setView([this.lat, this.long], 20);
 
-      mymap.setView([this.location.lat,this.location.long], 20);
-
-      var crosshairIcon = L.icon({
+      let crosshairIcon = L.icon({
         iconUrl:      `${process.env.baseUrl}/images/map-crosshair.png`,
         iconSize:     [71, 71],
         iconAnchor:   [35.5, 35.5],
       });
 
-      var crosshair = new L.marker(mymap.getCenter(),{
+      let crosshair = new L.marker(mymap.getCenter(),{
         icon:       crosshairIcon,
         clickable:  false
       }).addTo(mymap);
@@ -364,12 +346,8 @@ export default {
       });
 
       mymap.on('moveend', function(ev) {
-        self.location.lat = mymap.getCenter().lat;
-        self.location.long = mymap.getCenter().lng;
-        // console.log(`Updated  -- latitude: `
-        //           + `${self.location.lat} | `
-        //           + `longitude: ${self.location.long}`
-        // );
+        self.lat = mymap.getCenter().lat;
+        self.long = mymap.getCenter().lng;
       });
 
       L.tileLayer(process.env.mapBoxUrl,{
@@ -388,25 +366,25 @@ export default {
     },
     clearSearch() {
       this.loading = false;
-      this.location.lat = '';
-      this.location.long = '';
+      this.lat = '';
+      this.long = '';
       this.search_results = '';
-      this.location.address_string = '';
+      this.address_string = '';
       this.$refs.mapElement.style.display = "none";
     },
     addressResult(address) {
       console.dir(JSON.stringify(address));
-      this.location.lat = address.latitude;
-      this.location.long = address.longitude;
-      this.location.address_string = address.streetAddress;
-      this.updateMap(this.location.lat,this.location.long);
+      this.lat = address.latitude;
+      this.long = address.longitude;
+      this.address_string = address.streetAddress;
+      this.updateMap(this.lat, this.long);
       this.showResults = false;
     },
     searchAddressString() {
       var self = this;
       self.loadingLocation = true;
-      if(self.location.address_string != '') {
-        axios.get(`${process.env.masterAddUrl}${this.location.address_string}`)
+      if(self.address_string != '') {
+        axios.get(`${process.env.masterAddUrl}${this.address_string}`)
         .then(response => {
           self.showResults = true;
           self.loadingLocation = false;
@@ -419,29 +397,32 @@ export default {
     }
   },
   computed: {
-    locationUpdate() {
-      let { lat, long, address_string } = this.location
-      return location
-    },
+    ...mapFields([
+      'serviceInfos.location_info.address_string',
+      'serviceInfos.location_info.lat',
+      'serviceInfos.location_info.long',
+    ]),
+    // locationUpdate() {
+    //   let { lat, long, address_string } = this.location
+    //   console.log(this.location);
+    //   return location
+    // },
     addressResults() {
       return this.search_results
     },
     showNextButton() {
-      this.location.address_string;
-      this.location.lat;
-      this.location.long;
+      this.address_string;
+      this.lat;
+      this.long;
       this.loading;
-      // this.geoError;
-      return this.loading == false && (this.location.address_string != null || this.location.address_string != '') && this.location.lat != '' && this.location.long != '';
-
-      // return (this.location.address_string != null || this.location.address_string != "");
+      return this.loading == false && (this.address_string != null || this.address_string != '') && this.lat != '' && this.long != '';
     },
     showGeoErrorHelp() {
       this.geoError;
       this.loadingLocation;
       this.showResults;
-      this.location.address_string;
-      return this.geoError && this.loadingLocation == false && this.showResults == false && (this.location.address_string == null || this.location.address_string == '');
+      this.address_string;
+      return this.geoError && this.loadingLocation == false && this.showResults == false && (this.address_string == null || this.address_string == '');
     }
   }
 }

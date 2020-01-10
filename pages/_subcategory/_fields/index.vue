@@ -87,6 +87,7 @@
               :name="item.name"
               wrap="hard"></textarea> -->
             <textarea
+              v-model="localServiceAttrs[item.code]"
               :id="item.code"
               :name="item.name"
               wrap="hard"></textarea>
@@ -97,7 +98,7 @@
             <div v-for="value in item.values" :key="value.code">
               <input
                 type="radio"
-                @input="updateField(item.code, $event.target.value)"
+                v-model="localServiceAttrs[item.code]"
                 :id="value.key"
                 :value="value.key"
                 :name="item.code" />
