@@ -33,9 +33,11 @@ export const defaultState = () => ({
     },
     default_image:    '',
     service_attrs:    {},
+    pre_service_attrs: [],
     default_description: '',
-    service_response: {}
-  }
+    service_response: {},
+  },
+  
 });
 
 const state = () => defaultState();
@@ -75,6 +77,9 @@ export const mutations = {
   storeServiceAtts(state, payload) {
     state.serviceInfos.service_attrs = payload
   },
+  storePreServiceAtts(state, payload) {
+    state.serviceInfos.pre_service_attrs = payload
+  },
   storeLocationInfo(state, payload) {
     state.serviceInfos.location_info = payload
   },
@@ -113,6 +118,9 @@ export const actions = {
   },
   setServiceAttrs(context, payload) {
     context.commit('storeServiceAtts', payload)
+  },
+  setPreServiceAttrs(context, payload) {
+    context.commit('storePreServiceAtts', payload)
   },
   setLocationLat(context, payload) {
     context.commit('storeLocationLat', payload)

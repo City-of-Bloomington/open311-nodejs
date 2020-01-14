@@ -9,9 +9,6 @@
     </header>
 
     <main class="info-process fields" ref="mainElm">
-
-      {{ service_attrs }}
-
       <h2>General information:</h2>
 
       <div class="form-group camera-wrapper">  
@@ -48,7 +45,7 @@
         </textarea>
       </div>
 
-      <div v-if="hasFormAttributes">
+      <!-- <div v-if="hasFormAttributes">
         <h2>{{ showSubGroupName }} information:</h2>
         <div class="form-group" v-for="item, i in service_attrs" :key="item.code">
           <div v-if="item.datatype === 'string'">
@@ -80,14 +77,81 @@
 
           <div v-else-if="item.datatype === 'text'">
             <label :for="item.code">{{ item.description }}</label>
-            <!-- <textarea
-              :value="service_attrs[item.code]"
-              @input="updateField(item, $event.target.value)"
-              :id="item.code"
-              :name="item.name"
-              wrap="hard"></textarea> -->
             <textarea
               v-model="localServiceAttrs[item.code]"
+              :id="item.code"
+              :name="item.name"
+              wrap="hard"></textarea>
+          </div>
+
+          <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
+            <legend>{{ item.description }}:</legend>
+            <div v-for="value in item.values" :key="value.code">
+              <input
+                type="radio"
+                v-model="localServiceAttrs[item.code]"
+                :id="value.key"
+                :value="value.key"
+                :name="item.code" />
+              <label :for="value.key">{{ value.name }}</label>
+            </div>
+          </div>
+
+          <div v-else-if="item.datatype === 'multivaluelist'">
+            <label :for="item.description">{{ item.description }}</label>
+            <select
+              :id="item.description"
+              v-model="localServiceAttrs[item.code]">
+              <option
+                v-for="item in item.values"
+                :value="item.key"
+                :key="item.name">{{ item.name }}
+            </option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+
+      <div v-if="hasFormAttributes">
+        <h2>{{ showSubGroupName }} information:</h2>
+        <div class="form-group"
+             v-for="item, i in pre_service_attrs"
+             :key="item.code">
+
+          {{ i }} - {{ item }}<br>- -<br>
+          {{ item.code }}<br>- - -<br>
+
+          <div v-if="item.datatype === 'string'">
+            <label :for="item.key">{{ item.description }}</label>
+            <input
+              v-model="localServiceAttrs[item.code]"
+              type="text"
+              :id="item.key"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'number'">
+            <label :for="item.key">{{ item.description }}</label>
+            <input
+              type="number"
+              v-model="localServiceAttrs[item.code]"
+              :id="item.key"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'datetime'">
+            <label :for="item.key">{{ item.description }}</label>
+            <input
+              type="datetime-local"
+              v-model="localServiceAttrs[item.code]"
+              :id="item.key"
+              :name="item.name" />
+          </div>
+
+          <div v-else-if="item.datatype === 'text'">
+            <label :for="item.code">{{ item.description }}</label>
+            <textarea
+              v-model="item.answer_value"
               :id="item.code"
               :name="item.name"
               wrap="hard"></textarea>
@@ -166,37 +230,28 @@
 </style>
 
 <script>
-import axios          from 'axios'
-import emerModal      from '~/components/emerModal.vue'
-import headerNav      from '~/components/nav.vue'
-import modal          from '~/components/modal.vue'
-import {mapGetters, mapState} from 'vuex'
-import { mapFields }  from 'vuex-map-fields'
+import axios                  from 'axios'
+import emerModal              from '~/components/emerModal.vue'
+import headerNav              from '~/components/nav.vue'
+import modal                  from '~/components/modal.vue'
+import { mapGetters,
+         mapState }           from 'vuex'
+import { mapFields,
+         mapMultiRowFields }  from 'vuex-map-fields'
 
 export default {
-  // beforeRouteLeave (to, from, next) {
-  //   next(vm => {
-  //     console.log('dispatch attrs')
-  //     vm.$store.dispatch('setServiceAttrs', vm.localServiceAttrs);    
-  //   });
-    
-  //   next();
-  // },
   beforeRouteEnter (to, from, next) {
     if(from.name !== 'subcategory')
-      next(vm => {
-        // console.log(vm.localServiceAttrs);
-
-        // vm.localServiceAttrs = vm.serviceAttrs;
-        vm.backHome = true;
-      });
+      next(vm => { vm.backHome = true; });
     next();
   },
   head () {
     return {
       titleTemplate: `%s - ${this.service_name}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
+        { hid: 'description',
+          name: 'description',
+          content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
       ]
     }
   },
@@ -281,8 +336,7 @@ export default {
         return plusAnswer
       });
 
-      this.$store.dispatch('setServiceAttrs', radical);
-      console.log('here')
+      this.$store.dispatch('setPreServiceAttrs', radical);
     })
     .catch(err => { console.log(`Fields page error: ${err}`); });
   },
@@ -428,29 +482,19 @@ export default {
     }
   },
   computed: {
+    // ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
     ...mapFields([
       'testing',
       'subGroup',
       'initGroupData',
       'serviceInfos.service_attrs',
+      'serviceInfos.pre_service_attrs',
       'serviceInfos.default_description',
       'serviceInfos.service_group.service_name',
       'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.group',
     ]),
     ...mapGetters(['serviceAttrs']),
-    // localServiceAttrs: {
-    //   get () {
-    //     console.log('ran getter', this.serviceAttrs)
-    //     return this.serviceAttrs
-    //   },
-    //   set (value) {
-    //     let updatedObjVal = this.$set(this.localServiceAttrs, 'newId', res[0])
-    //     console.log('ran setter', value)
-    //     // this.$store.commit('storeServiceAtts', this.localServiceAttrs[value]);
-    //     this.$store.commit('setServiceAttrs', this.localServiceAttrs);
-    //   }
-    // },
     allDatas() {
       const allRoutesubGroups = this.initGroupData.filter(
         g => g.service_code == this.routeCode
