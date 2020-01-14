@@ -27,6 +27,11 @@
             class="image-input">Include Photo</button>
         </div>
 
+        <canvas
+          v-show="false"
+          id="imageCanvas"
+          ref="imageCanvas"></canvas>
+
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
             <img :src="c" />
