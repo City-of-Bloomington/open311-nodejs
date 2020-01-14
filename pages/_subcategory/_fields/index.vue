@@ -112,19 +112,19 @@
         </div>
       </div> -->
 
-      <div v-if="hasFormAttributes">
+
+      <div v-if="pre_service_attrs.length">
         <h2>{{ showSubGroupName }} information:</h2>
         <div class="form-group"
              v-for="item, i in pre_service_attrs"
              :key="item.code">
 
-          {{ i }} - {{ item }}<br>- -<br>
-          {{ item.code }}<br>- - -<br>
+          {{ i }} - {{ item.code }}<br>- - -<br>
 
           <div v-if="item.datatype === 'string'">
             <label :for="item.key">{{ item.description }}</label>
             <input
-              v-model="localServiceAttrs[item.code]"
+              v-model="item.answer_value"
               type="text"
               :id="item.key"
               :name="item.name" />
@@ -134,7 +134,7 @@
             <label :for="item.key">{{ item.description }}</label>
             <input
               type="number"
-              v-model="localServiceAttrs[item.code]"
+              v-model="item.answer_value"
               :id="item.key"
               :name="item.name" />
           </div>
@@ -143,7 +143,7 @@
             <label :for="item.key">{{ item.description }}</label>
             <input
               type="datetime-local"
-              v-model="localServiceAttrs[item.code]"
+              v-model="item.answer_value"
               :id="item.key"
               :name="item.name" />
           </div>
@@ -162,7 +162,7 @@
             <div v-for="value in item.values" :key="value.code">
               <input
                 type="radio"
-                v-model="localServiceAttrs[item.code]"
+                v-model="item.answer_value"
                 :id="value.key"
                 :value="value.key"
                 :name="item.code" />
@@ -174,7 +174,7 @@
             <label :for="item.description">{{ item.description }}</label>
             <select
               :id="item.description"
-              v-model="localServiceAttrs[item.code]">
+              v-model="item.answer_value">
               <option
                 v-for="item in item.values"
                 :value="item.key"
@@ -327,18 +327,23 @@ export default {
       this.routeDataSubGroup;
     }
 
-    axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
-    .then((res) => { 
-      this.formElements = res.data;
+    if(!this.pre_service_attrs.length) {
+      console.log('no pre_service_attrs')
+      console.log(this.pre_service_attrs);
 
-      let radical = res.data.attributes.map((e, i) => {
-        let plusAnswer = {...e, answer_value: ''}
-        return plusAnswer
-      });
+      axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
+      .then((res) => { 
+        this.formElements = res.data;
 
-      this.$store.dispatch('setPreServiceAttrs', radical);
-    })
-    .catch(err => { console.log(`Fields page error: ${err}`); });
+        let radical = res.data.attributes.map((e, i) => {
+          let plusAnswer = {...e, answer_value: ''}
+          return plusAnswer
+        });
+
+        this.$store.dispatch('setPreServiceAttrs', radical);
+      })
+      .catch(err => { console.log(`Fields page error: ${err}`); });
+    }
   },
   methods: {
     capture() {
@@ -482,13 +487,13 @@ export default {
     }
   },
   computed: {
-    // ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
+    ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
     ...mapFields([
       'testing',
       'subGroup',
       'initGroupData',
       'serviceInfos.service_attrs',
-      'serviceInfos.pre_service_attrs',
+      // 'serviceInfos.pre_service_attrs',
       'serviceInfos.default_description',
       'serviceInfos.service_group.service_name',
       'serviceInfos.service_group.service_code',
