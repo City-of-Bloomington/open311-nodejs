@@ -123,6 +123,15 @@ export const actions = {
   setGroupName(context, payload) {
     context.commit('storeGroupName', payload)
   },
+  setSubGroupName(context, payload) {
+    context.commit('storeSubGroupName', payload)
+  },
+  setGroupCode(context, payload) {
+    context.commit('storeGroupCode', payload)
+  },
+  setRouteCode(context, payload) {
+    context.commit('storeRouteCode', payload)
+  },
   setFromServiceCode(context, payload) {
     context.commit('storeFromServiceCode', payload)
   },

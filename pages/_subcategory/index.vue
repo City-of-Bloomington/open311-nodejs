@@ -41,7 +41,8 @@ import axios     from 'axios'
 import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
-import { mapFields }  from 'vuex-map-fields'
+import { 
+  mapFields }    from 'vuex-map-fields'
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -51,11 +52,11 @@ export default {
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.group}`,
+      titleTemplate: `%s - ${this.group}`,
       meta: [
         { hid:     'description',
           name:    'description',
-          content: `Submit a ${this.$store.getters.group} uReport service request.`
+          content: `Submit a ${this.group} uReport service request.`
         }
       ]
     }
@@ -68,11 +69,7 @@ export default {
   data() {
     return {
       backHome:        false,
-      groupName:       '',
-      groupRouteName:  '',
-      groupProperName: '',
       showModal:       false,
-      allData:         [],
       navSubGroup:     false,
       stepActive: {
         one:           false,
@@ -132,21 +129,18 @@ export default {
         default:
           this.$router.push({ path: '/' });
       }
-      this.$store.commit('storeGroupName', this.groupProperName)
+      this.$store.dispatch('setGroupName', this.groupProperName)
     }
   },
   methods: {
-    subGroupName(name,code) {
-      
-      console.log('service_code', this.service_code)
-      console.log('code', code)
+    subGroupName(name, code) {
+      let newCode = this.service_code != code || 
+         this.service_code == '';
 
-      if(this.service_code != code || 
-         this.service_code == '') {
-
-        this.$store.commit('storeSubGroupName', name);
-        this.$store.commit('storeGroupCode', code);
-        this.$store.commit('storeRouteCode', code);
+      if(newCode) {
+        this.$store.dispatch('setSubGroupName', name);
+        this.$store.dispatch('setGroupCode',    code);
+        this.$store.dispatch('setRouteCode',    code);
 
         this.getServiceAttrs(code)
         .then((res) => {
@@ -156,11 +150,8 @@ export default {
           });
 
           this.$store.dispatch('setPreServiceAttrs', data);
-          console.log('dispatched setPreServiceAttrs')
         })
         .catch(err => { console.log(`get fields err - ${err}`); });
-      } else {
-        console.log("same")
       }
     }
   },
