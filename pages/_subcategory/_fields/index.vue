@@ -403,7 +403,7 @@ export default {
       ctx.drawImage(img, 0, 0, width, height);
 
       if(self.captures.length < 1) {
-        self.captures.push(canvas.toDataURL());
+        self.captures.push(canvas.toDataURL('image/jpeg',0.7));
       } else { alert(self.singleImgMessage) }
     },
     storeFormInfo() {
