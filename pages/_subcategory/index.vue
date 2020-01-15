@@ -46,9 +46,7 @@ import { mapFields }  from 'vuex-map-fields'
 export default {
   beforeRouteEnter (to, from, next) {
     if(from.name !== 'index')
-      next(vm => {
-        vm.backHome = true;
-      });
+      next(vm => { vm.backHome = true; });
     next();
   },
   head () {
@@ -142,12 +140,36 @@ export default {
       this.$store.commit('storeSubGroupName', name);
       this.$store.commit('storeGroupCode', code);
       this.$store.commit('storeRouteCode', code);
+
+      console.log('service_code', this.service_code)
+      console.log('code', code)
+
+      if(this.service_code != code || 
+         this.service_code == '') {
+        axios.post(`${process.env.apiUrl}${process.env.attrsApi}${code}.json`)
+        .then((res) => {
+          let data = res.data.attributes.map((e, i) => {
+            let dataReady = {...e, answer_value: ''}
+            return dataReady
+          });
+
+          this.$store.dispatch('setPreServiceAttrs', data);
+          console.log('dispatched setPreServiceAttrs')
+        })
+        .catch(err => { console.log(`get fields err - ${err}`); });
+      } else {
+        console.log("same")
+      }
+
+      
     }
   },
   computed: {
     ...mapFields([
       'initGroupData',
+      'fromServiceCode',
       'serviceInfos.service_group.group',
+      'serviceInfos.service_group.service_code',
     ]),
     subGroupList() {
       const allsubGroups = this.initGroupData

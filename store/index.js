@@ -13,6 +13,7 @@ export const defaultState = () => ({
   stepper_height:     '',
   loc_search_height:  '',
   initGroupData:      {},
+  fromServiceCode:    '',
   serviceInfos: {
     service_group: {
       group:          '',
@@ -52,6 +53,9 @@ export const mutations = {
   },
   storeInitGroupData(state, payload) {
     state.initGroupData = payload
+  },
+  storeFromServiceCode(state, payload) {
+    state.fromServiceCode = payload
   },
   storeGroupName(state, payload) {
     state.serviceInfos.service_group.group = payload
@@ -115,6 +119,9 @@ export const mutations = {
 export const actions = {
   resetBaseState({ commit }) {
     commit('RESET_BASE_STATE')
+  },
+  setFromServiceCode(context, payload) {
+    context.commit('storeFromServiceCode', payload)
   },
   setServiceAttrs(context, payload) {
     context.commit('storeServiceAtts', payload)

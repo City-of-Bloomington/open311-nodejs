@@ -32,6 +32,9 @@
           id="imageCanvas"
           ref="imageCanvas"></canvas>
 
+          {{ default_image }}
+          {{ captures[0] }}
+
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
             <img :src="c" />
@@ -49,74 +52,6 @@
           wrap="hard">
         </textarea>
       </div>
-
-      <!-- <div v-if="hasFormAttributes">
-        <h2>{{ showSubGroupName }} information:</h2>
-        <div class="form-group" v-for="item, i in service_attrs" :key="item.code">
-          <div v-if="item.datatype === 'string'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              v-model="localServiceAttrs[item.code]"
-              type="text"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'number'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="number"
-              v-model="localServiceAttrs[item.code]"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'datetime'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="datetime-local"
-              v-model="localServiceAttrs[item.code]"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'text'">
-            <label :for="item.code">{{ item.description }}</label>
-            <textarea
-              v-model="localServiceAttrs[item.code]"
-              :id="item.code"
-              :name="item.name"
-              wrap="hard"></textarea>
-          </div>
-
-          <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-            <legend>{{ item.description }}:</legend>
-            <div v-for="value in item.values" :key="value.code">
-              <input
-                type="radio"
-                v-model="localServiceAttrs[item.code]"
-                :id="value.key"
-                :value="value.key"
-                :name="item.code" />
-              <label :for="value.key">{{ value.name }}</label>
-            </div>
-          </div>
-
-          <div v-else-if="item.datatype === 'multivaluelist'">
-            <label :for="item.description">{{ item.description }}</label>
-            <select
-              :id="item.description"
-              v-model="localServiceAttrs[item.code]">
-              <option
-                v-for="item in item.values"
-                :value="item.key"
-                :key="item.name">{{ item.name }}
-            </option>
-            </select>
-          </div>
-        </div>
-      </div> -->
-
 
       <div v-if="pre_service_attrs.length">
         <h2>{{ showSubGroupName }} information:</h2>
@@ -184,7 +119,7 @@
                 v-for="item in item.values"
                 :value="item.key"
                 :key="item.name">{{ item.name }}
-            </option>
+              </option>
             </select>
           </div>
         </div>
@@ -246,8 +181,15 @@ import { mapFields,
 
 export default {
   beforeRouteEnter (to, from, next) {
+    console.log('to');
+    console.log(to);
+    
+    console.log('from');
+    console.log(from);
+
     if(from.name !== 'subcategory')
       next(vm => { vm.backHome = true; });
+    
     next();
   },
   head () {
@@ -268,7 +210,6 @@ export default {
   },
   data() {
     return {
-      localServiceAttrs:   {},
       backHome:            false,
       routeCode:           '',
       routeCodeData:       '',
@@ -309,17 +250,15 @@ export default {
       }
     }
   },
-  watch: {
-    localServiceAttrs: {
-      handler: function (val, oldVal) { 
-        console.log(val);
-        // this.$store.dispatch('setServiceAttrs', val);
-      },
-      deep: true
-      
-      // this.$store.commit('storeServiceAtts', this.localServiceAttrs);
-    }
-  },
+  // watch: {
+  //   localServiceAttrs: {
+  //     handler: function (val, oldVal) { 
+  //       console.log(val);
+  //       // this.$store.dispatch('setServiceAttrs', val);
+  //     },
+  //     deep: true      
+  //   }
+  // },
   mounted() {
     
     if(this.service_code == '') {
@@ -332,23 +271,26 @@ export default {
       this.routeDataSubGroup;
     }
 
-    if(!this.pre_service_attrs.length) {
-      console.log('no pre_service_attrs')
-      console.log(this.pre_service_attrs);
+    // console.log(this.pre_service_attrs);
+    // console.log(this.pre_service_attrs.length);
 
-      axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
-      .then((res) => { 
-        this.formElements = res.data;
+    // if(!this.pre_service_attrs.length) {
+    //   console.log('no pre_service_attrs')
+      
 
-        let radical = res.data.attributes.map((e, i) => {
-          let plusAnswer = {...e, answer_value: ''}
-          return plusAnswer
-        });
+    //   axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
+    //   .then((res) => { 
+    //     this.formElements = res.data;
 
-        this.$store.dispatch('setPreServiceAttrs', radical);
-      })
-      .catch(err => { console.log(`Fields page error: ${err}`); });
-    }
+    //     let radical = res.data.attributes.map((e, i) => {
+    //       let plusAnswer = {...e, answer_value: ''}
+    //       return plusAnswer
+    //     });
+
+    //     this.$store.dispatch('setPreServiceAttrs', radical);
+    //   })
+    //   .catch(err => { console.log(`Fields page error: ${err}`); });
+    // }
   },
   methods: {
     capture() {
@@ -430,12 +372,9 @@ export default {
             canvas.width = img.height;
             canvas.height = img.width;
           }
-        } else {
-          // console.log('this here 1');
-        }
+        } else {}
       } else {
         if (height > max_height) {
-          // console.log('this here 2');
           img.height *= max_height / img.width;
           img.width   = max_width;
 
@@ -449,13 +388,6 @@ export default {
         canvas.width = width;
         canvas.height = height;
       }
-
-      // console.log('img width ::', img.width);
-      // console.log('img height ::', img.height);
-      // console.log('var width ::', width);
-      // console.log('var height ::', height);
-      // console.log('canvas width ::', canvas.width);
-      // console.log('canvas height ::', canvas.height);
 
       switch (self.imgOrientation) {
         case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
@@ -472,37 +404,24 @@ export default {
 
       if(self.captures.length < 1) {
         self.captures.push(canvas.toDataURL());
-      } else {
-        alert(self.singleImgMessage);
-      }
-      // this.exifData();
+      } else { alert(self.singleImgMessage) }
     },
     storeFormInfo() {
-      this.$store.commit('storeServiceAtts', this.localServiceAttrs);
-      this.$store.commit('storeDefaultDescription', this.default_description);
-
-      // var dataURL      = this.postMedia;
-      // console.log(dataURL);
-      // var blob         = this.dataURItoBlob(dataURL);
-      // console.log(blob);
       this.$store.commit('storeDefaultImage', this.captures[0]);
     },
-    updateField(c, v) {
-      this.$store.dispatch('setServiceAttrs', {[c]: v});
-    }
   },
   computed: {
     ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
     ...mapFields([
-      'testing',
+      'fromServiceCode',
       'subGroup',
       'initGroupData',
       'serviceInfos.service_attrs',
-      // 'serviceInfos.pre_service_attrs',
+      'serviceInfos.default_image',
       'serviceInfos.default_description',
-      'serviceInfos.service_group.service_name',
-      'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.group',
+      'serviceInfos.service_group.service_code',
+      'serviceInfos.service_group.service_name',
     ]),
     ...mapGetters(['serviceAttrs']),
     allDatas() {
