@@ -120,6 +120,9 @@ export const actions = {
   resetBaseState({ commit }) {
     commit('RESET_BASE_STATE')
   },
+  setGroupName(context, payload) {
+    context.commit('storeGroupName', payload)
+  },
   setFromServiceCode(context, payload) {
     context.commit('storeFromServiceCode', payload)
   },

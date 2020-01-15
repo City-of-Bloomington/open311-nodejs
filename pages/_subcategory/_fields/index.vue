@@ -32,9 +32,6 @@
           id="imageCanvas"
           ref="imageCanvas"></canvas>
 
-          {{ default_image }}
-          {{ captures[0] }}
-
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
             <img :src="c" />
@@ -190,6 +187,25 @@ export default {
     if(from.name !== 'subcategory')
       next(vm => { vm.backHome = true; });
     
+    next(vm => {
+      if(from.path == '/') {
+        let routeID = to.params.fields;
+
+        console.log('running getServiceAttrs from fields')
+        vm.getServiceAttrs(routeID)
+        .then((res) => {
+          let data = res.attributes.map((e, i) => {
+            let dataReady = {...e, answer_value: ''}
+            return dataReady
+          });
+
+          vm.$store.dispatch('setPreServiceAttrs', data);
+          console.log('dispatched setPreServiceAttrs')
+        })
+        .catch(err => { console.log(`get fields err - ${err}`); });
+      }
+    });
+
     next();
   },
   head () {
@@ -219,7 +235,6 @@ export default {
       modalImage:          null,
       formElements:        {},
       defaultDescription:  '',
-      // serviceAttrs:        {},
       showVideoElm:        false,
       mainElm:             '',
       imgContext:          null,
@@ -250,15 +265,6 @@ export default {
       }
     }
   },
-  // watch: {
-  //   localServiceAttrs: {
-  //     handler: function (val, oldVal) { 
-  //       console.log(val);
-  //       // this.$store.dispatch('setServiceAttrs', val);
-  //     },
-  //     deep: true      
-  //   }
-  // },
   mounted() {
     
     if(this.service_code == '') {
@@ -293,42 +299,11 @@ export default {
     // }
   },
   methods: {
-    capture() {
-      this.canvas = this.$refs.canvas;
-      var context = this.canvas.getContext("2d")
-      context.drawImage(this.video, 0, 0, 640, 480);
-      if(this.captures.length < 1) {
-        this.captures.push(canvas.toDataURL("image/png"));
-      } else {
-        alert(this.singleImgMessage);
-      }
-    },
-    openCamera() {
-      this.showVideoElm = true;
-      this.video = this.$refs.video;
-      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment"}})
-        .then(stream => {
-          // NOTE: WKWebview has not yet implemented getUserMedia -_-,,,
-          this.video.srcObject = stream;
-          this.video.play();
-        })
-        .catch(error => { alert(error); });
-      }
-    },
-    closeCamera() {
-      this.showVideoElm = false;
-      return video.srcObject && video.srcObject.getTracks().map(t => t.stop());
-    },
     removeImage(c){
       this.captures.splice(this.captures.indexOf(c), 1);
       this.$refs.fileInput.value = '';
     },
     updateCanvasImage(e) {
-      // var imageLoad = require('blueimp-load-image-npm');
-      // let loadImage = require('blueimp-load-image');
-      // const EXIF = require('exif-js');
-
       var self = this;
       var reader, files = e.target.files;
       var reader = new FileReader();
@@ -423,7 +398,6 @@ export default {
       'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.service_name',
     ]),
-    ...mapGetters(['serviceAttrs']),
     allDatas() {
       const allRoutesubGroups = this.initGroupData.filter(
         g => g.service_code == this.routeCode

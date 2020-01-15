@@ -9,13 +9,17 @@
 
     <main class="home">
       <div class="grid">
-        <div v-for="group in groupCategories"
-             :key="group"
-             @click="groupName(group)">
+        <div
+          v-for="group, i in groupCategories"
+          :key="group"
+          @click="groupName(group)">
 
-          <nuxt-link :to="{name:'subcategory', params:{subcategory:groupsAsCss(`${group}`)}}"
-                     v-bind:class="groupsAsCss(`${group}`)"
-                     class="item">
+          <nuxt-link
+            :to="{
+              name:   'subcategory',
+              params: { subcategory: groupsAsCss(`${group}`) }
+            }"
+            :class="['item', groupsAsCss(`${group}`)]">
             <div class="icon"></div>
             <h3>{{ group }}</h3>
           </nuxt-link>
@@ -46,24 +50,8 @@ export default {
     searchInput,
     topBar
   },
-  data() {
-    return {
-      groups:       []
-    }
-  },
-  created() {
-    this.clearState();
-  },
+  data() { return {} },
   methods: {
-    clearState() {
-      this.$store.commit('storeGroupName', '');
-      this.$store.commit('storeRouteCode', '');
-      this.$store.commit('storeGroupCode', '');
-      this.$store.commit('storeSubGroupName', '');
-      this.$store.commit('storeDefaultImage', '');
-      this.$store.commit('storeDefaultDescription', '');
-      this.$store.commit('storeServiceAtts', '');
-    },
     groupsAsCss(group) {
       return group
       .replace(/\s+/g, '-')
@@ -72,7 +60,7 @@ export default {
       .toLowerCase();
     },
     groupName(name) {
-      return this.$store.commit('storeGroupName', name)
+      return this.$store.dispatch('setGroupName', name)
     }
   },
   computed: {

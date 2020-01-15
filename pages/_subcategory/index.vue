@@ -137,18 +137,20 @@ export default {
   },
   methods: {
     subGroupName(name,code) {
-      this.$store.commit('storeSubGroupName', name);
-      this.$store.commit('storeGroupCode', code);
-      this.$store.commit('storeRouteCode', code);
-
+      
       console.log('service_code', this.service_code)
       console.log('code', code)
 
       if(this.service_code != code || 
          this.service_code == '') {
-        axios.post(`${process.env.apiUrl}${process.env.attrsApi}${code}.json`)
+
+        this.$store.commit('storeSubGroupName', name);
+        this.$store.commit('storeGroupCode', code);
+        this.$store.commit('storeRouteCode', code);
+
+        this.getServiceAttrs(code)
         .then((res) => {
-          let data = res.data.attributes.map((e, i) => {
+          let data = res.attributes.map((e, i) => {
             let dataReady = {...e, answer_value: ''}
             return dataReady
           });
@@ -160,8 +162,6 @@ export default {
       } else {
         console.log("same")
       }
-
-      
     }
   },
   computed: {

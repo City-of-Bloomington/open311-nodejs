@@ -99,6 +99,7 @@ module.exports = {
   plugins: [
     { src: '~/plugins/ga.js',        ssr: false },
     { src: '~/plugins/localStorage', ssr: false },
+    { src: '~/plugins/api-methods' }
   ],
   build: {
     vendors: ['babel-polyfill'],
