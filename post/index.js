@@ -43,13 +43,15 @@ app.post('/', function (req, res, next) {
       }
     }
 
-    request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
-      if (err) {
-        return console.error('upload failed:', err);
-      }
-      console.log('Upload successful!  Server responded with:', body);
-      res.json({ body })
-    });
+    console.log("jus'fine ;)")
+
+    // request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
+    //   if (err) {
+    //     return console.error('upload failed:', err);
+    //   }
+    //   console.log('Upload successful!  Server responded with:', body);
+    //   res.json({ body })
+    // });
   }
   return false;
 })

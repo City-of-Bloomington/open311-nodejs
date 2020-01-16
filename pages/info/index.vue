@@ -165,14 +165,14 @@ export default {
         if(blob != undefined)
           formData.append("media",              blob)
 
-        Object.keys(this.service_attrs).map((key) => {
-          return formData.append(`attribute[${key}]`,`${this.service_attrs[key]}`);
+        Object.values(this.pre_service_attrs).map((key) => {
+          return formData.append(`attribute[${key.code}]`, `${key.answer_value}`)
         }).join('&');
 
         let config = {
-          onUploadProgress: function (progressEvent) {
+          onUploadProgress: (progressEvent) => {
             this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            console.log('Percent Completed:' + this.percentCompleted);
+            console.log(`Percent Completed: ${this.percentCompleted}`);
           }
         }
 
@@ -180,7 +180,17 @@ export default {
           console.log(pair[0]+ ', ' + pair[1]);
         }
 
-        this.$refs.mainElm.innerHTML = 'Hold tight!<br><br>Almost finished processing your service request.';
+        let processingHTML = `
+          <div>
+            <p>Please hold tight while we process your request.</p>
+          </div>
+        `;
+
+        this.$refs.mainElm.innerHTML = processingHTML;
+
+        this.formSubmitHandOff(formData, config)
+        .then(res  => { console.log(res) })
+        .catch(err => { console.log(err) });
 
         // axios.post(`${process.env.postProxy}`, formData, config)
         // .then(response => {
@@ -199,6 +209,7 @@ export default {
   computed: {
     ...mapFields([
       'serviceInfos.service_group.service_code',
+      'serviceInfos.pre_service_attrs',
       'serviceInfos.service_attrs',
       'serviceInfos.location_info.lat',
       'serviceInfos.location_info.long',

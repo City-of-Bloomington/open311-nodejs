@@ -178,12 +178,6 @@ import { mapFields,
 
 export default {
   beforeRouteEnter (to, from, next) {
-    console.log('to');
-    console.log(to);
-    
-    console.log('from');
-    console.log(from);
-
     if(from.name !== 'subcategory')
       next(vm => { vm.backHome = true; });
     
@@ -266,37 +260,18 @@ export default {
     }
   },
   mounted() {
-    
-    if(this.service_code == '') {
-      this.routeCode = this.$route.params.fields.substr(this.$route.params.fields.lastIndexOf('/') + 1);
-      this.$store.commit('storeRouteCode', this.routeCode);
-      this.$store.commit('storeGroupCode', this.routeCode);
+    let noServiceCode = this.service_code == '';
 
+    if(noServiceCode) {
+      this.routeCode = this.$route.params.fields.substr(this.$route.params.fields.lastIndexOf('/') + 1);
+
+      this.$store.dispatch('setGroupCode', this.routeCode);
+      this.$store.dispatch('setRouteCode', this.routeCode);
+      
       this.allDatas;
       this.routeDataGroup;
       this.routeDataSubGroup;
     }
-
-    // console.log(this.pre_service_attrs);
-    // console.log(this.pre_service_attrs.length);
-
-    // if(!this.pre_service_attrs.length) {
-    //   console.log('no pre_service_attrs')
-      
-
-    //   axios.post(`${process.env.apiUrl}${process.env.attrsApi}${this.showServiceCode}.json`)
-    //   .then((res) => { 
-    //     this.formElements = res.data;
-
-    //     let radical = res.data.attributes.map((e, i) => {
-    //       let plusAnswer = {...e, answer_value: ''}
-    //       return plusAnswer
-    //     });
-
-    //     this.$store.dispatch('setPreServiceAttrs', radical);
-    //   })
-    //   .catch(err => { console.log(`Fields page error: ${err}`); });
-    // }
   },
   methods: {
     removeImage(c){
