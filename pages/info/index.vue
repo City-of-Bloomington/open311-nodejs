@@ -191,18 +191,6 @@ export default {
         this.formSubmitHandOff(formData, config)
         .then(res  => { console.log(res) })
         .catch(err => { console.log(err) });
-
-        // axios.post(`${process.env.postProxy}`, formData, config)
-        // .then(response => {
-        //   this.$store.commit('storeResponseInfo', response);
-        // })
-        // .then(response => {
-        //   this.$router.push({ path: 'confirm' })
-        // })
-        // .catch(error => {
-        //   this.reCaptchaError = true;
-        //   console.log(`%c .: SS :: ${JSON.stringify(error.response.data.responseDesc)} :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-        // });
       }
     }
   },

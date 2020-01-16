@@ -134,10 +134,10 @@ export default {
   },
   methods: {
     subGroupName(name, code) {
-      let newCode = this.service_code != code || 
-         this.service_code == '';
-
+      let newCode = this.service_code != code || this.service_code == '';
+      
       if(newCode) {
+        console.log('made it')
         this.$store.dispatch('setSubGroupName', name);
         this.$store.dispatch('setGroupCode',    code);
         this.$store.dispatch('setRouteCode',    code);

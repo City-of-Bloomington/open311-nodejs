@@ -56,8 +56,6 @@
              v-for="item, i in pre_service_attrs"
              :key="item.code">
 
-          {{ i }} - {{ item.code }}<br>- - -<br>
-
           <div v-if="item.datatype === 'string'">
             <label :for="item.key">{{ item.description }}</label>
             <input
@@ -182,7 +180,9 @@ export default {
       next(vm => { vm.backHome = true; });
     
     next(vm => {
-      if(from.path == '/') {
+      let routeEqualsStoreCode = vm.service_code == to.params.fields;
+
+      if(from.path == '/' && !routeEqualsStoreCode) {
         let routeID = to.params.fields;
 
         console.log('running getServiceAttrs from fields')

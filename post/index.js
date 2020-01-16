@@ -1,15 +1,15 @@
 require('dotenv').config();
-var express            = require("express");
-var app                = express();
-var request            = require('request');
-const busboyBodyParser = require('busboy-body-parser');
-
-var secretKey = `${process.env.RECAPTCHA_SERVERKEY}`;
-let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
+const express           = require("express"),
+      app               = express(),
+      request           = require('request'),
+      busboyBodyParser  = require('busboy-body-parser'),
+      secretKey         = `${process.env.RECAPTCHA_SERVERKEY}`,
+      postURL           = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 app.post('/', function (req, res, next) {
-  var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
+  let formData        = req.body,
+      verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
 
   if(
     req.body['g_recaptcha_response'] === undefined ||
@@ -20,7 +20,7 @@ app.post('/', function (req, res, next) {
     return next();
   }
 
-  request(verificationUrl, function(error, response, body) {
+  request(verificationUrl, (error, response, body) => {
     body = JSON.parse(body);
     if(!body.success) {
       return res.status(500).json({"responseCode" : 1, "responseDesc" : "Failed reCaptcha validation"});
@@ -28,8 +28,7 @@ app.post('/', function (req, res, next) {
     return postForm();
   });
 
-  function postForm() {
-    const formData = req.body;
+  postForm = () => {
     formData.api_key = process.env.OPEN_311_KEY;
     delete formData['g_recaptcha_response'];
 
@@ -37,7 +36,7 @@ app.post('/', function (req, res, next) {
       formData.media = {
         value: req.files.media.data,
         options: {
-          filename: req.files.media.data + '-' + Date.now(),
+          filename:    `${req.files.media.data-Date.now()}`,
           contentType: req.files.media.mimetype
         }
       }
@@ -45,13 +44,13 @@ app.post('/', function (req, res, next) {
 
     console.log("jus'fine ;)")
 
-    // request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
-    //   if (err) {
-    //     return console.error('upload failed:', err);
-    //   }
-    //   console.log('Upload successful!  Server responded with:', body);
-    //   res.json({ body })
-    // });
+    request.post({url: postURL, formData: formData}, optionalCallback(err, httpResponse, body) => {
+      if (err) {
+        return console.error('upload failed:', err);
+      }
+      console.log('Upload successful! Server responded with:', body);
+      res.json({ body })
+    });
   }
   return false;
 })
