@@ -35,9 +35,9 @@ Vue.mixin({
      * @return      { Promise <Object> } Resolves to an Object containing
      *              any additional service questions
      */
-    formSubmitHandOff(data, config){
+    formSubmitHandOff(formData, config){
       return new Promise((resolve, reject) => {
-        axios.post(`${process.env.postProxy}`, data, config)
+        axios.post(`${process.env.postProxy}`, formData, config)
         .then(response => {
           this.$store.commit('storeResponseInfo', response);
         })

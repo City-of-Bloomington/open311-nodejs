@@ -35,7 +35,10 @@
         <ul v-if="captures.length">
           <li v-for="c in captures" :key="c">
             <img :src="c" />
-            <button type="button" class="button" @click="removeImage(c)">remove</button>
+            <button
+              type="button"
+              class="button"
+              @click="removeImage(c)">remove</button>
           </li>
         </ul>
       </div>
@@ -176,9 +179,6 @@ import { mapFields,
 
 export default {
   beforeRouteEnter (to, from, next) {
-    if(from.name !== 'subcategory')
-      next(vm => { vm.backHome = true; });
-    
     next(vm => {
       let routeEqualsStoreCode = vm.service_code == to.params.fields;
 
@@ -198,6 +198,12 @@ export default {
         })
         .catch(err => { console.log(`get fields err - ${err}`); });
       }
+
+      if(vm.default_image)
+        vm.captures.push(vm.default_image);
+
+      if(from.name !== 'subcategory')
+        vm.backHome = true;
     });
 
     next();
@@ -275,17 +281,19 @@ export default {
   },
   methods: {
     removeImage(c){
+      this.$store.dispatch('setDefaultImage', '');
       this.captures.splice(this.captures.indexOf(c), 1);
       this.$refs.fileInput.value = '';
     },
     updateCanvasImage(e) {
-      var self = this;
-      var reader, files = e.target.files;
-      var reader = new FileReader();
+      let self    = this,
+          files   = e.target.files,
+          reader  = new FileReader();
+
       reader.onload = (e) => {
-        // console.log(e);
-        var img = new Image();
-        img.onload = function() {
+        let img = new Image();
+
+        img.onload = () => {
           self.drawCanvasImage(img);
         }
         img.src = e.target.result;
@@ -293,10 +301,10 @@ export default {
       reader.readAsDataURL(files[0]);
     },
     drawCanvasImage(img) {
-      var self = this;
-      var canvas = self.$refs.imageCanvas;
-
       const EXIF = require('exif-js');
+
+      let self   = this,
+          canvas = self.$refs.imageCanvas;
 
       EXIF.getData(img, function() {
         self.imgOrientation = this.exifdata.Orientation;
@@ -304,35 +312,36 @@ export default {
         // console.log(this.exifdata);
       });
 
-      var max_width  = 1000;
-      var max_height = 1000;
-      var width      = img.width;
-      var height     = img.height;
-      var ctx = canvas.getContext("2d");
+      let max_width  = 1000,
+          max_height = 1000,
+          width      = img.width,
+          height     = img.height,
+          ctx        = canvas.getContext("2d");
 
-      if (4 < self.imgOrientation && self.imgOrientation < 9) {
+      if (4 < self.imgOrientation && 
+          self.imgOrientation < 9) {
         if (width > height) {
           if (width > max_width) {
-            img.height *= max_width / img.width;
-            img.width   = max_width;
+            img.height    *= max_width / img.width;
+            img.width     = max_width;
 
-            height  = img.height;
-            width   = img.width;
+            height        = img.height;
+            width         = img.width;
 
-            canvas.width = img.height;
+            canvas.width  = img.height;
             canvas.height = img.width;
           }
-        } else {}
+        }
       } else {
         if (height > max_height) {
-          img.height *= max_height / img.width;
-          img.width   = max_width;
+          img.height      *= max_height / img.width;
+          img.width       = max_width;
 
-          height  = img.height;
-          width   = img.width;
+          height          = img.height;
+          width           = img.width;
 
-          canvas.width = img.height;
-          canvas.height = img.width;
+          canvas.width    = img.height;
+          canvas.height   = img.width;
         }
 
         canvas.width = width;
@@ -340,20 +349,21 @@ export default {
       }
 
       switch (self.imgOrientation) {
-        case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
-        case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
-        case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
-        case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-        case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
-        case 7: ctx.transform(0, -1, -1, 0, height, width); break;
-        case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+        case 2: ctx.transform(-1, 0,  0,  1, width,   0);      break;
+        case 3: ctx.transform(-1, 0,  0, -1, width,   height); break;
+        case 4: ctx.transform(1,  0,  0, -1, 0,       height); break;
+        case 5: ctx.transform(0,  1,  1,  0, 0,       0);      break;
+        case 6: ctx.transform(0,  1, -1,  0, height,  0);      break;
+        case 7: ctx.transform(0, -1, -1,  0, height,  width);  break;
+        case 8: ctx.transform(0, -1,  1,  0, 0,       width);  break;
         default: break;
       }
 
       ctx.drawImage(img, 0, 0, width, height);
 
       if(self.captures.length < 1) {
-        self.captures.push(canvas.toDataURL('image/jpeg',0.7));
+        self.captures.push(canvas.toDataURL('image/jpeg', 0.7));
+        this.$store.commit('storeDefaultImage', this.captures[0]);
       } else { alert(self.singleImgMessage) }
     },
     storeFormInfo() {

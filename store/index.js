@@ -147,6 +147,9 @@ export const actions = {
   setLocationLong(context, payload) {
     context.commit('storeLocationLong', payload)
   },
+  setDefaultImage(context, payload) {
+    context.commit('storeDefaultImage', payload)
+  },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
     commit('storeInitGroupData', data)
@@ -176,7 +179,7 @@ export const getters = {
   searchHeight:       state => state.search_height,
   navHeight:          state => state.nav_height,
   stepperHeight:      state => state.stepper_height,
-  locSearchHeight:     state => state.loc_search_height
+  locSearchHeight:    state => state.loc_search_height
 }
 
 export default {
