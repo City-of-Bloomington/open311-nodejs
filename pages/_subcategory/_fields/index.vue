@@ -97,14 +97,15 @@
 
           <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
             <legend>{{ item.description }}:</legend>
-            <div v-for="value in item.values" :key="value.code">
-              <input
-                type="radio"
-                v-model="item.answer_value"
-                :id="value.key"
-                :value="value.key"
-                :name="item.code" />
-              <label :for="value.key">{{ value.name }}</label>
+            <div v-for="value, i in item.values" :key="item.code">
+              <label :for="value.key">
+                <input
+                  type="radio"
+                  v-model="item.answer_value"
+                  :id="item.code"
+                  :value="value.key"
+                  :name="item.code" />
+                  {{ value.name }}</label>
             </div>
           </div>
 
@@ -181,8 +182,11 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       let routeEqualsStoreCode = vm.service_code == to.params.fields;
+      
+      console.log(routeEqualsStoreCode);
+      console.log(from.path);
 
-      if(from.path == '/' && !routeEqualsStoreCode) {
+      if(from.path == '/' || !routeEqualsStoreCode) {
         let routeID = to.params.fields;
 
         console.log('running getServiceAttrs from fields')
