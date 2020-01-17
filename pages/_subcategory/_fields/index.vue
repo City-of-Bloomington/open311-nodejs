@@ -54,7 +54,7 @@
       </div>
 
       <div v-if="pre_service_attrs.length">
-        <h2>{{ showSubGroupName }} information:</h2>
+        <h2>{{ service_name }} information:</h2>
         <div class="form-group"
              v-for="item, i in pre_service_attrs"
              :key="item.code">
@@ -398,25 +398,6 @@ export default {
       this.$store.commit('storeSubGroupName', this.allDatas.service_name);
       return this.allDatas.service_name;
     },
-    showSubGroupName() {
-      return this.service_name
-    },
-    showServiceCode() {
-      return parseInt(this.service_code, 10)
-    },
-    formFields() {
-      return this.formElements.attributes
-    },
-    hasFormAttributes() {
-      var array = this.formElements.attributes
-      if (Array.isArray(array) && array.length) {
-        return true
-      }
-      return false
-    },
-    showGroupName() {
-      return this.group
-    }
   }
 }
 </script>
