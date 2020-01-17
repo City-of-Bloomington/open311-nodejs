@@ -98,11 +98,11 @@
           <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
             <legend>{{ item.description }}:</legend>
             <div v-for="value, i in item.values">
-              <label :for="value.key">
+              <label :for="`${item.code}-${value.name}`">
                 <input
                   type="radio"
                   v-model="item.answer_value"
-                  :id="item.code"
+                  :id="`${item.code}-${value.name}`"
                   :value="value.key"
                   :name="item.code" />
                   {{ value.name }}</label>
