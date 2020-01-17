@@ -311,8 +311,6 @@ export default {
 
       EXIF.getData(img, function() {
         self.imgOrientation = this.exifdata.Orientation;
-        // console.log(self.imgOrientation);
-        // console.log(this.exifdata);
       });
 
       let max_width  = 1000,

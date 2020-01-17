@@ -142,8 +142,7 @@ export default {
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
         let formData        = new FormData(),
-            defaultImg      = this.default_image,
-            blob            = this.dataURItoBlob(defaultImg),
+            blob            = this.dataURItoBlob(this.default_image),
             captchaReponse  = grecaptcha.getResponse();
 
         formData.append("g_recaptcha_response", captchaReponse)
@@ -171,9 +170,9 @@ export default {
           }
         }
 
-        for (var pair of formData.entries()) {
-          console.log(pair[0]+ ', ' + pair[1]);
-        }
+        // for (var pair of formData.entries()) {
+        //   console.log(pair[0]+ ', ' + pair[1]);
+        // }
 
         let processingHTML = `
           <div>
