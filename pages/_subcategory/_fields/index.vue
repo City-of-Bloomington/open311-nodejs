@@ -97,7 +97,7 @@
 
           <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
             <legend>{{ item.description }}:</legend>
-            <div v-for="value, i in item.values" :key="item.code">
+            <div v-for="value, i in item.values">
               <label :for="value.key">
                 <input
                   type="radio"
@@ -181,12 +181,11 @@ import { mapFields,
 export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      let routeEqualsStoreCode = vm.service_code == to.params.fields;
-      
-      console.log(routeEqualsStoreCode);
-      console.log(from.path);
+      let routeEqualsStoreCode = vm.service_code == to.params.fields,
+          emptyServiceAttrs    = !vm.pre_service_attrs.length,
+          runGetServiceAttrs   = from.path == '/' && emptyServiceAttrs;
 
-      if(from.path == '/' || !routeEqualsStoreCode) {
+      if(runGetServiceAttrs) {
         let routeID = to.params.fields;
 
         console.log('running getServiceAttrs from fields')
