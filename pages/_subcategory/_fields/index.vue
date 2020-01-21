@@ -185,9 +185,16 @@ export default {
           emptyServiceAttrs    = !vm.pre_service_attrs.length,
           runGetServiceAttrs   = from.path == '/' && emptyServiceAttrs;
 
+      let serviceObj = vm.initGroupData.filter((e, i ) => {
+        if(e.service_code == to.params.fields)
+          return e
+      });
+
       if(runGetServiceAttrs || !routeEqualsStoreCode) {
-        vm.$store.dispatch('setGroupCode', to.params.fields);
-        vm.$store.dispatch('setRouteCode', to.params.fields);
+        vm.$store.dispatch('setGroupName',    serviceObj[0].group);
+        vm.$store.dispatch('setSubGroupName', serviceObj[0].service_name);
+        vm.$store.dispatch('setGroupCode',    to.params.fields);
+        vm.$store.dispatch('setRouteCode',    to.params.fields);
 
         let routeID = to.params.fields;
 
