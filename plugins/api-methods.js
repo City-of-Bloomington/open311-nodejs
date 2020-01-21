@@ -9,7 +9,7 @@ Vue.mixin({
      * An HTTP GET request promise returning service question
      * attributes given a service category ID.
      *
-     * @promise     getUser
+     * @promise     getServiceAttrs
      * @param       { Number } code - service category id
      * @resolve     { Object }
      * @reject      { Error }
@@ -28,7 +28,7 @@ Vue.mixin({
      * to Vuex for Express submission.
      *
      * @promise     formSubmitHandOff
-     * @param       { Object } data
+     * @param       { Object } formData
      * @param       { Object } config - optional
      * @resolve     { Object }
      * @reject      { Error }
