@@ -185,7 +185,10 @@ export default {
           emptyServiceAttrs    = !vm.pre_service_attrs.length,
           runGetServiceAttrs   = from.path == '/' && emptyServiceAttrs;
 
-      if(runGetServiceAttrs) {
+      if(runGetServiceAttrs || !routeEqualsStoreCode) {
+        vm.$store.dispatch('setGroupCode', to.params.fields);
+        vm.$store.dispatch('setRouteCode', to.params.fields);
+
         let routeID = to.params.fields;
 
         console.log('running getServiceAttrs from fields')
