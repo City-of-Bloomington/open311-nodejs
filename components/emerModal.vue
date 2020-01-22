@@ -21,7 +21,7 @@
   </modal>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 hr {
   background-color: silver;
   height: 1px;
