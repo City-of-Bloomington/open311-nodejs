@@ -43,3 +43,59 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.top-bar {
+  z-index: 100000;
+  position: fixed;
+  top: 0;
+  background: white;
+  border-bottom: 2px solid darken(white, 20%);
+  width: 100%;
+  padding: 10px 0;
+  color: $biscay;
+  font-size: 18px;
+
+  .container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 520px;
+    width: 100%;
+
+    a {
+      &:first-of-type {
+        display: block;
+        width: 30px;
+        height: 30px;
+        margin: 0 10px 0 0;
+      }
+
+      &:last-of-type {
+        cursor: pointer;
+        margin-left: auto;
+
+        svg {
+          display: block;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  @media only screen
+  and (min-device-width : 320px)
+  and (max-device-width : 480px) {
+    .container {
+      width: calc(100% - 40px);
+
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+}
+</style>

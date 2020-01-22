@@ -140,6 +140,7 @@
 <style lang="scss">
   main {
     h2 {
+      color: white;
       font-weight: 600;
       letter-spacing: .25px;
       margin: 0 0 5px 0;

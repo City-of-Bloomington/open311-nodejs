@@ -5,7 +5,7 @@
   .singlevaluelist {
     display: flex;
     flex-wrap: wrap;
-    padding: 10px 0 0 0;
+    padding: 0;
 
     legend {
       width: 100%;
@@ -23,15 +23,16 @@
   }
 
   legend {
-    // border-bottom: 1px solid rgba(225,225,225,0.2);
-    padding: 0;
-    margin: 0;
+    color: white;
+    font-size: 16px;
+    margin: 0 0 10px 0;
   }
 
   label {
     display: block;
     color: white;
-    margin: 0 0 5px 0;
+    font-size: 16px;
+    margin: 0 0 10px 0;
   }
 
   select {
@@ -46,6 +47,7 @@
 
   input:not([type=radio]):not([type=checkbox]),
   textarea {
+    font-size: 16px;
     border: none;
     display: block;
     width: 100%;
