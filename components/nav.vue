@@ -43,14 +43,64 @@
     </div>
 
     <nav>
-      <div @click="navBackButton" class="nav-back" ref="navBack" v-if="!hideBackButton">
-        <span>back</span>
-      </div>
       <h1 v-html="group"></h1>
-      <h2 v-html="subGroup" v-if="navSubGroup" v-bind:style="[hideBackButton ? {'margin': '0'} : {'margin': '0 0 0 46px'}]"></h2>
+      <h2 v-if="navSubGroup">
+        {{ subGroup | truncate(30) }}
+      </h2>
     </nav>
   </div>
 </template>
+
+<style lang="scss">
+nav {
+  background: red;
+  position: relative;
+  top: 62px;
+  padding: 0 0 20px 0;
+  display: flex;
+  flex-flow: wrap;
+  margin: 0 auto;
+  max-width: 520px;
+
+  h1 {
+    color: white;
+    display: inline-block;
+    line-height: 30px;
+    width: auto;
+  }
+
+  h2 {
+    color: white;
+    font-size: 18px;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    &:after {
+      position: absolute;
+      content: '';
+      // bottom: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 1px;
+      margin: 0 0 0 15px;
+      background-color: white;
+    }
+  }
+
+  @media only screen
+  and (min-device-width : 320px)
+  and (max-device-width : 480px) {
+    width: calc(100% - 40px);
+
+    h1 {
+      font-size: 22px;
+    }
+  }
+}
+</style>
 
 <script>
 import topBar from './topBar.vue'
@@ -69,6 +119,16 @@ export default {
   },
   mounted() {
     this.confirmRoute();
+  },
+  filters: {
+    truncate(string, value) {
+      if(string.length >= value) {
+        return string.substring(0, value) + ' ...';
+      } else {
+        return string
+      }
+        
+    }
   },
   methods: {
     navBackButton() {
