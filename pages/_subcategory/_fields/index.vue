@@ -180,15 +180,26 @@ import { mapFields,
 
 export default {
   beforeRouteEnter (to, from, next) {
+
     next(vm => {
       let routeEqualsStoreCode = vm.service_code == to.params.fields,
           emptyServiceAttrs    = !vm.pre_service_attrs.length,
           runGetServiceAttrs   = from.path == '/' && emptyServiceAttrs;
-
+      
       let serviceObj = vm.initGroupData.filter((e, i ) => {
         if(e.service_code == to.params.fields)
           return e
       });
+      
+      if(!routeEqualsStoreCode) {
+        vm.$router.push({
+          name:  'subcategory-fields',
+          params: {
+            subcategory: vm.stringToDashed(serviceObj[0].group),
+            fields: to.params.fields
+          }
+        });
+      }
 
       if(runGetServiceAttrs || !routeEqualsStoreCode) {
         vm.$store.dispatch('setGroupName',    serviceObj[0].group);
@@ -197,8 +208,7 @@ export default {
         vm.$store.dispatch('setRouteCode',    to.params.fields);
 
         let routeID = to.params.fields;
-
-        console.log('running getServiceAttrs from fields')
+        
         vm.getServiceAttrs(routeID)
         .then((res) => {
           let data = res.attributes.map((e, i) => {
@@ -207,7 +217,6 @@ export default {
           });
 
           vm.$store.dispatch('setPreServiceAttrs', data);
-          console.log('dispatched setPreServiceAttrs')
         })
         .catch(err => { console.log(`get fields err - ${err}`); });
       }

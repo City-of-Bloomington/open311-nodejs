@@ -17,9 +17,9 @@
           <nuxt-link
             :to="{
               name:   'subcategory',
-              params: { subcategory: groupsAsCss(`${group}`) }
+              params: { subcategory: stringToDashed(`${group}`) }
             }"
-            :class="['item', groupsAsCss(`${group}`)]">
+            :class="['item', stringToDashed(`${group}`)]">
             <div class="icon"></div>
             <h3>{{ group }}</h3>
           </nuxt-link>
@@ -52,13 +52,6 @@ export default {
   },
   data() { return {} },
   methods: {
-    groupsAsCss(group) {
-      return group
-      .replace(/\s+/g, '-')
-      .replace(/,/g, '')
-      .replace(/&/g, 'and')
-      .toLowerCase();
-    },
     groupName(name) {
       return this.$store.dispatch('setGroupName', name)
     }
