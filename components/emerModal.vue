@@ -21,7 +21,7 @@
   </modal>
 </template>
 
-<style>
+<style lang="scss">
 hr {
   background-color: silver;
   height: 1px;
@@ -30,8 +30,13 @@ hr {
 }
 
 h4 {
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: $weight-semi-bold;
   margin: 0 0 5px 0;
+}
+
+p {
+  color: $text-color;
 }
 </style>
 
