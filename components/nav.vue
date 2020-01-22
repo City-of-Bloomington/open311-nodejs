@@ -53,7 +53,6 @@
 
 <style lang="scss">
 nav {
-  background: red;
   position: relative;
   top: 62px;
   padding: 0 0 20px 0;
@@ -64,6 +63,8 @@ nav {
 
   h1 {
     color: white;
+    font-weight: $weight-semi-bold;
+    letter-spacing: .5px;
     display: inline-block;
     line-height: 30px;
     width: auto;
@@ -72,6 +73,7 @@ nav {
   h2 {
     color: white;
     font-size: 18px;
+    letter-spacing: .5px;
     position: relative;
     width: 100%;
     margin: 0;
