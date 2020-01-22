@@ -14,6 +14,8 @@
 @import 'spinner-loader.scss';
 @import 'footer.scss';
 
+$text-color:        darken($color-grey, 55%);
+
 /* Global */
 *, *:before, *:after {
   box-sizing: border-box;

@@ -58,8 +58,9 @@ module.exports = {
 
   styleResources: {
     scss: [
-      // '@/assets/scss/cobDS-tokens.scss',
+      
       '~/node_modules/cob-design-system/dist/system/system.utils.scss',
+      '@/assets/scss/main.scss',
     ]
   },
 
