@@ -1,15 +1,18 @@
 require('dotenv').config()
 module.exports = {
   dev: (process.env.NODE_ENV !== 'production'),
+
   router: {
     base:         process.env.BASE_URL
   },
+
   manifest: {
     name:         'uReport - City of Bloomington, Indiana',
     short_name:   'uReport',
     description:  'uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
     theme_color:  '#1e59ae'
   },
+
   head: {
     title:        'uReport',
     meta: [
@@ -44,6 +47,7 @@ module.exports = {
       }
     ]
   },
+
   serverMiddleware: ['~/post/index'],
   loading: { color: '#FFFFFF' },
   css: [
@@ -51,24 +55,24 @@ module.exports = {
     '@/assets/scss/main.scss',
     '~/plugins/leaflet/leaflet.css'
   ],
+
+  styleResources: {
+    scss: [
+      // '@/assets/scss/cobDS-tokens.scss',
+      '~/node_modules/cob-design-system/dist/system/system.utils.scss',
+    ]
+  },
+
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
+    '@nuxtjs/style-resources',
     ['@nuxtjs/pwa', {
       icon: true,
       sizes: [16, 120, 144, 152, 192, 384, 512],
     }]
   ],
-  /*workbox: {
-    dev: true,
-    importScripts: process.env.BASE_URL + ['/sw.js'],
-    runtimeCaching: [{
-      urlPattern: 'https://fonts.googleapis.com/.*',
-      handler: 'cacheFirst',
-      method: 'GET',
-      strategyOptions: {cacheableResponse: {statuses: [0, 200]}}
-    }]
-  },*/
+
   axios: {
     baseURL:              process.env.BASE_URL,
     browserBaseURL:       process.env.BROWSER_BASE_URL,
@@ -76,6 +80,7 @@ module.exports = {
     credentials:          true,
     proxyHeaders:         true
   },
+
   env: {
     crmBaseUrl:           process.env.CRM_BASE_URL,
     crmTickets:           process.env.CRM_TICKETS,
@@ -96,11 +101,14 @@ module.exports = {
     mapBoxId:             process.env.MAPBOX_ID,
     reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
   },
+
   plugins: [
     { src: '~/plugins/ga.js',        ssr: false },
     { src: '~/plugins/localStorage', ssr: false },
-    { src: '~/plugins/api-methods' }
+    { src: '~/plugins/api-methods' },
+    { src: '~/plugins/design-system' },
   ],
+
   build: {
     vendors: ['babel-polyfill'],
 
