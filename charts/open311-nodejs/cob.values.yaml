@@ -1,0 +1,82 @@
+# Default values for open311-nodejs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: docker-repo.bloomington.in.gov/cob/open311-nodejs
+  tag: a323dc6
+  pullPolicy: IfNotPresent
+
+# any values entered under environment will be automatically added to the ConfigMap upon template rendering
+environment:
+
+# General networking/logging settings
+  PORT: "3000"
+  LOCAL_PORT: "3000"
+  HOST: "0.0.0.0"
+  NODE_ENV: "production"
+  NPM_CONFIG_LOGLEVEL: "info"
+
+# URLs for various external services
+  BASE_URL: "/ureport"
+  BROWSER_BASE_URL: "/ureport"
+  MAPBOX_URL: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+  OSM_URL: "https://nominatim.openstreetmap.org/reverse?format=jsonv2"
+
+  # requires a running instance of https://github.com/City-of-Bloomington/uReport
+  CRM_API_URL: "https://bloomington.in.gov/crm/open311/v2/"
+  CRM_BASE_URL: "https://bloomington.in.gov/crm/"
+  CRM_TICKETS: "tickets/view?ticket_id="
+
+  #requires a running instance of https://github.com/City-of-Bloomington/master_address
+  MASTER_ADD_URL: "https://apps.bloomington.in.gov/master_address/addresses?format=json&address="
+
+  ARCGIS_REV_GEO: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&location="
+  LOGO_URL: "https://bloomington.in.gov/"
+
+# API endpoints
+  SERVICES_API: "services.json"
+  POST_API: "requests.json"
+  POST_PROXY: "/ureport/post"
+  ATTRS_API: "services/"
+
+# API keys/IDs
+  MAPBOX_KEY: "pk.eyJ1IjoiYnV0Y2hlcmFkIiwiYSI6ImNqbDJsNHY3MjFycncza3FqcXJ3eG50bHEifQ.eVWUz75oMDW3DaksDE-RMw"
+  MAPBOX_ID: "mapbox.streets"
+  OPEN_311_KEY: "51795b41816ba"
+  RECAPTCHA_SITEKEY: "6LeX4-8SAAAAAC3ShZdxV_tW5BEIFqTBzAJGh9Eb"
+  RECAPTCHA_SERVERKEY: "6LeX4-8SAAAAAHTUm4nwqLXPGUbzvGKffqkul_6X"
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+
+  # only uncomment if you want static assignment from your LB
+  # we use MetalLB, so you may have to adjust the service type to fit your needs
+  #loadBalancerIP: "x.x.x.x"
+
+  port: 3000
+
+# adjust the hostnames below to your needs
+ingress:
+  enabled: true # using LoadBalancer for now
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: kubeproxy.bloomington.in.gov
+      paths: "/ureport"
+
+  #tls:
+  #  - secretName: cert-wildcard
+  #    hosts:
+  #      - kubeproxy.bloomington.in.gov
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
