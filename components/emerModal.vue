@@ -21,25 +21,6 @@
   </modal>
 </template>
 
-<style lang="scss" scoped>
-hr {
-  background-color: silver;
-  height: 1px;
-  border: none;
-  margin: 15px 0;
-}
-
-h4 {
-  font-size: 18px;
-  font-weight: $weight-semi-bold;
-  margin: 0 0 5px 0;
-}
-
-p {
-  color: $text-color;
-}
-</style>
-
 <script>
 import modal from '~/components/modal.vue'
 

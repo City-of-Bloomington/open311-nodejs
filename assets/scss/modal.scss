@@ -4,15 +4,36 @@
 
 .modal-wrapper {
   .modal-container {
+    hr {
+      background-color: silver;
+      height: 1px;
+      border: none;
+      margin: 15px 0;
+    }
+
+    h4 {
+      padding: 0;
+      letter-spacing: 1px;
+      font-size: 18px;
+      font-weight: $weight-semi-bold;
+    }
+
     .modal-header {
       h4 {
         margin: 0;
-        padding: 0;
-        letter-spacing: 1px;
       }
     }
+
     .modal-body {
       max-height: 300px;
+      
+      h4 {
+        margin: 0 0 5px 0;
+      }
+
+      p {
+        color: $text-color;
+      } 
     }
   }
 }

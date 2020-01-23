@@ -144,10 +144,12 @@ ul {
   list-style: none;
 
   li {
+    font-size: 18px;
     padding: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
     a {
+      font-size: 18px;
       display: block;
       color: white;
       padding: 10px 5px;
@@ -402,7 +404,12 @@ and (max-device-width : 480px) {
     }
 
     &.info-process {
-      top: 175px;
+      top: 165px;
+
+      h2 {
+        font-size: 20px;
+        line-height: 22px;
+      }
     }
 
     &.location {
@@ -437,12 +444,7 @@ and (max-device-width : 480px) {
     }
 
     &.info-process {
-      height: 165px;
-
-      nav {
-        top: 50px;
-        padding: 0;
-      }
+      height: 155px;
     }
 
     &.location {
@@ -459,11 +461,18 @@ and (max-device-width : 480px) {
     }
   }
 
+  ul {
+    li {
+
+      a {
+        font-size: 16px;
+      }
+    }
+  }
+
   .progress-stepper {
     width: calc(100% - 40px);
   }
-
-  
 
   .search {
     // width: calc(100% - 40px);
@@ -491,8 +500,6 @@ and (max-device-width : 480px) {
       align-items: center;
 
       h3 {
-        // background-color: purple;
-        font-size: 18px;
         margin: 0 0 0 60px;
         text-align: left;
       }

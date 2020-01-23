@@ -16,6 +16,11 @@
       display: block;
       margin: 0 15px 0 0;
 
+      &.break {
+        margin: 0;
+        width: 100%;
+      }
+
       &:last-of-type {
         margin: 0;
       }
