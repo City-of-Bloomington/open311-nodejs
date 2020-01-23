@@ -95,10 +95,18 @@ nav {
   @media only screen
   and (min-device-width : 320px)
   and (max-device-width : 480px) {
+    top: 50px;
+    padding: 0;
     width: calc(100% - 40px);
 
     h1 {
-      font-size: 22px;
+      font-size: 25px;
+      line-height: 25px;
+    }
+
+    h2 {
+      font-size: 20px;
+      line-height: 20px;
     }
   }
 }
