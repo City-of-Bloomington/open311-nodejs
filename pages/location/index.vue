@@ -20,7 +20,7 @@
               </div>
             </div>
 
-            <label for="location">Location:</label>
+            <label for="location">Location of Service Request:</label>
             <input v-model="address_string"
                    v-on:keyup.enter="searchAddressString"
                    v-on:keyup.delete="clearSearch"
@@ -28,12 +28,11 @@
                    id="location"
                    ref="location-input"
                    autocomplete="off">
-            <button type="button" class="locate" @click="getCurrentPosition">
-              <span>Locate Me</span>
-            </button>
 
-            <button type="button" class="clear" @click="clearSearch">
-              <span>Clear Search</span>
+            <button
+              class="locate"
+              @click="getCurrentPosition">
+              <span>Locate Me</span>
             </button>
           </div>
         </form>
@@ -98,39 +97,158 @@
   </div>
 </template>
 
-<style type="text/css">
+<style lang="scss" scoped>
+main {
+  &.location {
+    margin: 5px auto 0 auto;
+    background-color: pink;
+    height: auto;
 
-  #geo-loc-text-icon {
-    display: inline-block;
-    top: 8px;
-    position: relative;
-    width: 30px;
-    height: 30px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 4px;
-    padding: 5px;
-    box-sizing: border-box;
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      background-color: purple !important;
+      height: auto;
+    }
   }
+}
 
-  .leaflet-control-attribution {
-    display: none;
-  }
+#map-element {
+  height: 200px;
+}
 
-  h3 strong {
-    font-weight: 600;
-  }
-
-  h4 {
-    margin: 0 0 20px 0;
-  }
-
-  button {
-    color: white;
-  }
+.search {
+  background-color: grey;
+  padding: 10px 0;
+  margin: 5px auto 0 auto;
 
   .form-group {
-    margin: 0 0 20px 0 !important;
+    position: relative;
+    margin: 0 !important;
+    height: 70px;
   }
+
+  .locate {
+    z-index: 1000;
+    position: relative;
+    top: -28px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    display: block;
+
+    span {
+      @include visuallyHidden();
+    }
+
+    &:before {
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-size: contain;
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  label {
+    margin: 0 0 5px 0;
+    // @include visuallyHidden;
+  }
+
+  input {
+    position: relative;
+    z-index: 1000;
+    border: none;
+    background: rgba(225,225,225,0.2);
+    color: white;
+    margin: 0;
+    font-size: 20px;
+    padding: 5px 10px 5px 40px !important;
+
+    &::placeholder {
+      color: white;
+    }
+  }
+
+  @media only screen
+  and (min-device-width : 320px)
+  and (max-device-width : 480px) {
+    .form-group {
+      height: 50px;
+    }
+  }
+}
+
+.auto-suggest {
+  z-index: 1;
+  position: absolute;
+  background-color: white;
+  -webkit-border-bottom-right-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  width: 100%;
+  max-height: 350px;
+  overflow-y: scroll;
+  font-size: 18px;
+
+  ul {
+
+    list-style: none;
+    padding: 0;
+
+    li {
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      color: $biscay;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      &:hover,
+      &:focus {
+        background: lighten(#ccc, 10%);
+      }
+    }
+  }
+}
+
+#geo-loc-text-icon {
+  display: inline-block;
+  top: 8px;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.leaflet-control-attribution {
+  display: none;
+}
+
+h3 strong {
+  font-weight: 600;
+}
+
+h4 {
+  margin: 0 0 20px 0;
+}
+
+button {
+  color: white;
+}
 </style>
 
 <script>

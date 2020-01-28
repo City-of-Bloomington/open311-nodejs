@@ -1,7 +1,5 @@
 <template>
   <div>
-    <topBar />
-
     <div class="progress-stepper">
       <span class="title">Progress:</span>
       <div v-bind:class="{ active: stepActive.one, 'complete': stepComplete.one }">
@@ -51,11 +49,99 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.progress-stepper {
+  position: relative;
+  height: 50px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: row;
+  font-size: 18px;
+  line-height: 25px;
+
+  span {
+    &.title {
+      flex: 1 1 10%;
+    }
+  }
+
+  div {
+    position: relative;
+    background: #ccc;
+    color: $biscay;
+    margin: 0 0 0 15px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 25px;
+    text-align: center;
+
+    &.active {
+      background: white;
+
+      &:before {
+        position: absolute;
+        content: '';
+        width: 33px;
+        height: 33px;
+        border-radius: 50%;
+        border: 2px solid white;
+        left: -4px;
+        top: -4px;
+        z-index: 10;
+      }
+    }
+
+    &.complete {
+      color: white;
+      background: $fern;
+
+      &:after {
+        background: $fern;
+      }
+    }
+
+    &:first-of-type {
+      margin: 0;
+    }
+
+    &:last-of-type {
+      &:after {
+        display: none;
+      }
+    }
+
+    &:after {
+      position: absolute;
+      content: '';
+      width: 20px;
+      height: 2px;
+      right: -20px;
+      background: #ccc;
+      display: block;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    svg {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 15px;
+      height: 12px;
+      display: block;
+      fill: white;
+    }
+  }
+}
+
 nav {
   position: relative;
-  top: 62px;
-  padding: 0 0 20px 0;
+  padding: 5px 0 20px 0;
   display: flex;
   flex-flow: wrap;
   margin: 0 auto;
@@ -95,7 +181,6 @@ nav {
   @media only screen
   and (min-device-width : 320px)
   and (max-device-width : 480px) {
-    top: 50px;
     padding: 0;
     width: calc(100% - 40px);
 

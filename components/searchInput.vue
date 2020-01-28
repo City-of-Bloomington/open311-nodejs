@@ -1,30 +1,59 @@
 <template>
-  <div class="search homepage-search" v-on-clickaway="away">
-    <div class="form-group">
-      <label>Search</label>
-      <input type="text"
-             v-model="input"
-             placeholder="Search"/>
-      <button type="button" class="clear" @click="clearSearch" v-if="showClearBtn">
-        <span>Clear Search</span>
-      </button>
+  <div
+    class="search"
+    v-on-clickaway="away">
 
-        <div class="auto-suggest" v-if="focused">
-        <ul>
-          <li
-            v-for="(group, i) in data"
-            :key="group.service_code"
-            v-if="filter(group)"
-            @keyup.enter="complete(i)"
-            @click="complete(i)"
-            tabindex="0"
-            v-html="group.service_name">
-          </li>
-        </ul>
-      </div>
+    <fn1-input
+      v-model="input"
+      label="Search"
+      placeholder="Seach"
+      name="search"
+      id="search" />
+
+    <div
+      v-if="focused"
+      class="auto-suggest">
+      <ul>
+        <li
+          v-for="(group, i) in data"
+          :key="group.service_code"
+          v-if="filter(group)"
+          @keyup.enter="complete(i)"
+          @click="complete(i)"
+          tabindex="0"
+          v-html="group.service_name">
+        </li>
+      </ul>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .search {
+    background: green;
+    padding: 20px 0;
+
+    ::v-deep label {
+      @include visuallyHidden;
+    }
+
+    input {
+      padding: 5px 10px;
+      font-size: 18px;
+    }
+
+    .auto-suggest {
+      background-color: cornflowerblue;
+    }
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      width: calc(100% - 40px);
+      padding: 10px 0;
+    }
+  }
+</style>
 
 <script>
 import { mixin as clickaway } from 'vue-clickaway';

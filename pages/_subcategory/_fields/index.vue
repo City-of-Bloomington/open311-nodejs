@@ -98,7 +98,8 @@
           <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
             <legend>{{ item.description }}:</legend>
             <div v-for="value, i in item.values"
-                 :class="{'break': i > 1}">
+                 :class="{'no-break': (value.name == 'no') || (value.name == 'yes')}">
+
               <label :for="`${item.code}-${value.name}`">
                 <input
                   type="radio"
@@ -142,6 +143,8 @@
   main {
     h2 {
       color: white;
+      font-size: 20px;
+      line-height: 22px;
       font-weight: 600;
       letter-spacing: .25px;
       margin: 0 0 5px 0;
