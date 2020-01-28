@@ -13,12 +13,14 @@
     }
 
     div {
+      margin: 0;
+      width: 100%;
       display: block;
-      margin: 0 15px 0 0;
+      
 
-      &.break {
-        margin: 0;
-        width: 100%;
+      &.no-break {
+        width: auto;
+        margin: 0 15px 0 0;
       }
 
       &:last-of-type {

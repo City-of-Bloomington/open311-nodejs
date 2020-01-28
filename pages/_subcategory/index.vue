@@ -9,17 +9,17 @@
     </header>
 
     <main class="subcategory">
-      <ul class="subcategories">
+      <ul>
         <li v-for="subCat in subGroupList"
             :key="subCat.service_name"
             @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-fields', params:{'fields':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
+        
+        <li @click="showModal = true">
+          <span>Can't find what your looking for?</span>
+        </li>
       </ul>
-
-      <button
-        class="text-btn"
-        @click="showModal = true">- Can't Find It? -</button>
 
       <modal v-if="showModal">
         <h4 slot="header">uReport: Can't Find It</h4>
@@ -35,6 +35,23 @@
     <nuxt-child/>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  main {
+    &.subcategory {
+      margin: 5px auto 0 auto;
+      background-color: pink;
+      height: calc(100vh - 200px);
+
+      @media only screen
+      and (min-device-width : 320px)
+      and (max-device-width : 480px) {
+        background-color: purple !important;
+        height: calc(100vh - 240px);
+      }
+    }
+  }
+</style>
 
 <script>
 import axios     from 'axios'

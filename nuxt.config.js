@@ -18,7 +18,7 @@ module.exports = {
     meta: [
       { charset:  'utf-8' },
       { name:     'viewport',
-        content:  'width=device-width, initial-scale=1'
+        content:  'width=device-width, initial-scale=1, maximum-scale=1'
       },
       { hid:      'description',
         name:     'description',
@@ -83,6 +83,13 @@ module.exports = {
   },
 
   env: {
+    cityWebsiteUrl:       'https://bloomington.in.gov/',
+    appName:              process.env.APP_NAME,
+    cityName:             process.env.CITY_NAME,
+    logoHeading:          process.env.LOGO_HEADING,
+    logoSubHeading:       process.env.LOGO_SUB_HEADING,
+    frontendBase:         process.env.FE_BASE,
+
     crmBaseUrl:           process.env.CRM_BASE_URL,
     crmTickets:           process.env.CRM_TICKETS,
     logoUrl:              process.env.LOGO_URL,

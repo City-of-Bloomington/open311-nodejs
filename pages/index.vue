@@ -1,11 +1,8 @@
 <template>
   <div>
-    <header class="home" ref="top">
-      <topBar />
-      <search-input
-        :data="initGroupData"
-        field="service_name" />
-    </header>
+    <search-input
+      :data="initGroupData"
+      field="service_name" />
 
     <main class="home">
       <div class="grid">
@@ -31,6 +28,23 @@
     </main>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  main {
+    &.home {
+      margin: 0 auto;
+      background-color: pink;
+      height: calc(100vh - 200px);
+
+      @media only screen
+      and (min-device-width : 320px)
+      and (max-device-width : 480px) {
+        background-color: purple !important;
+        height: calc(100vh - 220px);
+      }
+    }
+  }
+</style>
 
 <script>
 import axios          from 'axios'
