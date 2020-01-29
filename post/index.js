@@ -25,32 +25,33 @@ app.post('/', function (req, res, next) {
     if(!body.success) {
       return res.status(500).json({"responseCode" : 1, "responseDesc" : "Failed reCaptcha validation"});
     }
-    return postForm();
+    return res
+    // return postForm();
   });
 
-  postForm = () => {
-    const formData = req.body;
-    formData.api_key = process.env.OPEN_311_KEY;
-    delete formData['g_recaptcha_response'];
+  // postForm = () => {
+  //   const formData = req.body;
+  //   formData.api_key = process.env.OPEN_311_KEY;
+  //   delete formData['g_recaptcha_response'];
 
-    if (req.files.media) {
-      formData.media = {
-        value: req.files.media.data,
-        options: {
-          filename:     `${req.files.media.data-Date.now()}`,
-          contentType:  req.files.media.mimetype
-        }
-      }
-    }
+  //   if (req.files.media) {
+  //     formData.media = {
+  //       value: req.files.media.data,
+  //       options: {
+  //         filename:     `${req.files.media.data-Date.now()}`,
+  //         contentType:  req.files.media.mimetype
+  //       }
+  //     }
+  //   }
 
-    request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
-      if (err) {
-        return console.error('Submit failed:', err);
-      }
-      console.log('Submit successful:', body);
-      res.json({ body })
-    });
-  }
+  //   request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
+  //     if (err) {
+  //       return console.error('Submit failed:', err);
+  //     }
+  //     console.log('Submit successful:', body);
+  //     res.json({ body })
+  //   });
+  // }
   return false;
 })
 

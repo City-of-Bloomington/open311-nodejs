@@ -109,13 +109,19 @@ main {
     and (max-device-width : 480px) {
       background-color: purple !important;
       height: auto;
+
+      #map-element {
+        height: 200px;
+      }
     }
   }
 }
 
 #map-element {
-  height: 200px;
+  height: 300px;
 }
+
+
 
 .search {
   background-color: grey;

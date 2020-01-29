@@ -34,13 +34,15 @@
     &.home {
       margin: 0 auto;
       background-color: pink;
-      height: calc(100vh - 200px);
+      max-height: calc(100vh - 200px);
+      height: auto;
 
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         background-color: purple !important;
-        height: calc(100vh - 220px);
+        max-height: calc(100vh - 220px);
+        height: auto;
       }
     }
   }

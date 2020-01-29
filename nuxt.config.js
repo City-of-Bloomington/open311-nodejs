@@ -9,7 +9,7 @@ module.exports = {
   manifest: {
     name:         'uReport - City of Bloomington, Indiana',
     short_name:   'uReport',
-    description:  'uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
+    description:  'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
     theme_color:  '#1e59ae'
   },
 
@@ -22,7 +22,7 @@ module.exports = {
       },
       { hid:      'description',
         name:     'description',
-        content:  'uReport is an app to notify the City of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
+        content:  'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
       },
       {
         name:     'apple-mobile-web-app-title',
