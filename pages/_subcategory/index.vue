@@ -39,15 +39,17 @@
 <style lang="scss" scoped>
   main {
     &.subcategory {
-      margin: 5px auto 0 auto;
+      margin: 0 auto;
       background-color: pink;
-      height: calc(100vh - 200px);
+      max-height: calc(100vh - 200px);
+      height: auto;
 
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         background-color: purple !important;
-        height: calc(100vh - 240px);
+        max-height: calc(100vh - 240px);
+        height: auto;
       }
     }
   }

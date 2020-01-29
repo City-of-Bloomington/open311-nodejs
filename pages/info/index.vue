@@ -9,7 +9,7 @@
     </header>
 
     <main class="info-process" ref="mainElm">
-      <p>To submit anonymously, leave these fields empty.</p><br>
+      <p>You may submit anonymously by leaving these fields empty.</p><br>
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="first_name"
