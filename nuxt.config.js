@@ -107,18 +107,25 @@ module.exports = {
     mapBoxUrl:            process.env.MAPBOX_URL,
     mapBoxKey:            process.env.MAPBOX_KEY,
     mapBoxId:             process.env.MAPBOX_ID,
-    reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY
+    reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY,
+    googleApiKey:         process.env.GOOGLE_API_KEY,
+    cityBoundaryGeoJson:  process.env.CITY_BOUNDARY_PATH,
+    coordsProjection:     process.env.COORDS_PROJECTION,
+    cityHallLatLong:      JSON.parse(process.env.CITY_HALL_LAT_LONG),
   },
 
   plugins: [
-    { src: '~/plugins/ga.js',        ssr: false },
-    { src: '~/plugins/localStorage', ssr: false },
     { src: '~/plugins/api-methods' },
     { src: '~/plugins/design-system' },
+    { src: '~/plugins/universal-computed' },
+    { src: '~/plugins/ga.js',        ssr: false },
+    // { src: '~/plugins/localStorage', ssr: false },
+    { src: '~/plugins/google-map',   ssr: false },
   ],
 
   build: {
-    vendors: ['babel-polyfill'],
+    vendors:    ['babel-polyfill'],
+    transpile:  [/^vue2-google-maps($|\/)/],
 
     extend (config, { isDev, isClient }) {
       if (isDev && process.client) {
