@@ -5,91 +5,86 @@
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
-
-      <div class="search container">
-        <form action="" @submit.prevent>
-          <div class="form-group">
-
-            <div v-if="loading">
-              <h3 v-if="!geoError" style="position: absolute; margin: 0 0 0 40px; font-size: 20px; line-height: 33px;">Finding your location.</h3>
-
-              <h3 v-if="geoError" style="position: absolute; margin: 0 0 0 45px; font-size: 20px; line-height: 33px;">Can't find your location.</h3>
-
-              <div class="loader-wrapper" v-if="!geoError">
-                <div class="bar"></div>
-              </div>
-            </div>
-
-            <label for="location">Location of Service Request:</label>
-            <input v-model="address_string"
-                   v-on:keyup.enter="searchAddressString"
-                   v-on:keyup.delete="clearSearch"
-                   type="text"
-                   id="location"
-                   ref="location-input"
-                   autocomplete="off">
-
-            <button
-              class="locate"
-              @click="getCurrentPosition">
-              <span>Locate Me</span>
-            </button>
-          </div>
-        </form>
-      </div>
     </header>
 
     <main class="location">
-      <div v-if="showGeoErrorHelp">
-        <h3>Please report the issue location.</h3><br>
-        <p>You may search for an address manually without using the Geolocation API.</p><br>
-        <p>- or -</p><br>
-        <p>How to enable (Geolocation API) using:</p>
-        <ul>
-          <li>
-            <a :href="chromeGeoTutUrl" target="_blank">Google Chrome</a>
-          </li>
-          <li>
-            <a :href="firefoxGeoTutUrl" target="_blank">FireFox</a>
-          </li>
-          <li>
-            <a :href="safariGeoTutUrl" target="_blank">Safari</a>
-          </li>
-        </ul>
-      </div>
+        <div class="field-group">
+          <label for="location-search" v-if="geoLocationPosition.geoCoded">
+            Service Request Location: {{ geoLocationPosition.geoCoded[0].formatted_address }}
+          </label>
 
-      <div style="position: relative;" v-if="loadingLocation">
-        <h3>Gathering results:</h3>
-        <div class="loader-wrapper location">
-          <div class="bar"></div>
+          <gmap-autocomplete
+            placeholder="Service Request Location"
+            @place_changed="setPlace"
+            :select-first-on-enter="true"
+            :options="{
+              radius:       150000,
+              strictBounds: true,
+              bounds:       cityBoundary,
+              componentRestrictions: { country: 'us' }
+            }" />
         </div>
-      </div>
 
-      <div class="search-results" ref="results" v-if="showResults">
-        <h3 v-if="addressResults">
-          Search Results:
-          <span v-if="addressResults.length >= 1">{{addressResults.length}} results</span>
-          <span v-if="((addressResults.length == 0 || addressResults.length == '') && !loadingLocation) || (address_string == '')">No results</span>
-        </h3>
-        <ul class="address-results">
-          <li v-for="address in addressResults"
-              :key="address.streetAddress"
-              @click="addressResult(address)">
-              {{address.streetAddress}}
-          </li>
-        </ul>
-      </div>
+      <GmapMap
+        :center="mapCenter()"
+        @center_changed="updateCenter"
+        @dragend="geocodeLatLng"
+        :zoom="13"
+        map-type-id="roadmap"
+        style="width: 100%; height: 300px"
+        :options="{
+          zoomControl:        true,
+          mapTypeControl:     true,
+          scaleControl:       false,
+          streetViewControl:  false,
+          rotateControl:      false,
+          fullscreenControl:  false,
+          disableDefaultUi:   true,
+          draggable:          true,
+          styles: [
+            {
+              featureType:    'poi',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            },
+            {
+              featureType:    'poi.medical',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            },
+            {
+              featureType:    'poi.government',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            }
+          ]
+        }">
+        <div id="cross"></div>
 
-      <div v-if="(address_string == '') && (!loading) && (!showGeoErrorHelp)">
-        <h3>A service request requires an address in order to proceed.</h3><br>
-        <p>Please search for an address or use the Geolocation <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.619 20.619" id="geo-loc-text-icon"><title>location-icon</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><g id="location-icon"><circle cx="10.309" cy="10.309" r="8.149" fill="none" stroke="#fff" stroke-miterlimit="10"/><circle cx="10.309" cy="10.309" r="3.963" fill="#fff"/><line x1="10.309" y1="18.459" x2="10.309" y2="20.619" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="10.309" x2="10.309" y2="2.16" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="2.16" y1="10.309" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/><line x1="20.619" y1="10.309" x2="18.459" y2="10.309" fill="none" stroke="#fff" stroke-miterlimit="10"/></g></g></g></svg> icon in the search input to determine your location.</p><br>
-      </div>
-
-      <div id="map-element" ref="mapElement"></div>
-
+        <GmapPolygon
+          v-if="cityBoundary"
+          :paths="cityBoundary"
+          :options="{
+            strokeColor:    'rgb(30, 90, 174)',
+            strokeOpacity:  0.8,
+            strokeWeight:   2,
+            fillColor:      'rgb(30, 90, 174)',
+            fillOpacity:    0.15
+          }"
+        />
+      </GmapMap>
       <footer>
         <nuxt-link
-          v-if="showNextButton"
+          v-if="true"
           to="/info"
           class="button next-button">Next</nuxt-link>
       </footer>
@@ -104,152 +99,42 @@ main {
     background-color: pink;
     height: auto;
 
+    form {
+      margin: 0 0 20px 0;
+    }
+
+    ::v-deep .vue-map-hidden {
+      display: block;
+      #cross{
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background: #000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      #cross::before{
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 2px;
+        background: #000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
     @media only screen
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
       background-color: purple !important;
       height: auto;
-
-      #map-element {
-        height: 200px;
-      }
     }
   }
-}
-
-#map-element {
-  height: 300px;
-}
-
-
-
-.search {
-  background-color: grey;
-  padding: 10px 0;
-  margin: 5px auto 0 auto;
-
-  .form-group {
-    position: relative;
-    margin: 0 !important;
-    height: 70px;
-  }
-
-  .locate {
-    z-index: 1000;
-    position: relative;
-    top: -28px;
-    left: 5px;
-    width: 25px;
-    height: 25px;
-    padding: 0;
-    display: block;
-
-    span {
-      @include visuallyHidden();
-    }
-
-    &:before {
-      position: absolute;
-      content: '';
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      background-size: contain;
-      width: 25px;
-      height: 25px;
-    }
-  }
-
-  label {
-    margin: 0 0 5px 0;
-    // @include visuallyHidden;
-  }
-
-  input {
-    position: relative;
-    z-index: 1000;
-    border: none;
-    background: rgba(225,225,225,0.2);
-    color: white;
-    margin: 0;
-    font-size: 20px;
-    padding: 5px 10px 5px 40px !important;
-
-    &::placeholder {
-      color: white;
-    }
-  }
-
-  @media only screen
-  and (min-device-width : 320px)
-  and (max-device-width : 480px) {
-    .form-group {
-      height: 50px;
-    }
-  }
-}
-
-.auto-suggest {
-  z-index: 1;
-  position: absolute;
-  background-color: white;
-  -webkit-border-bottom-right-radius: 4px;
-  -webkit-border-bottom-left-radius: 4px;
-  -moz-border-radius-bottomright: 4px;
-  -moz-border-radius-bottomleft: 4px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  width: 100%;
-  max-height: 350px;
-  overflow-y: scroll;
-  font-size: 18px;
-
-  ul {
-
-    list-style: none;
-    padding: 0;
-
-    li {
-      cursor: pointer;
-      border-bottom: 1px solid #ccc;
-      padding: 10px;
-      color: $biscay;
-
-      &:last-of-type {
-        border-bottom: none;
-      }
-
-      &:hover,
-      &:focus {
-        background: lighten(#ccc, 10%);
-      }
-    }
-  }
-}
-
-#geo-loc-text-icon {
-  display: inline-block;
-  top: 8px;
-  position: relative;
-  width: 30px;
-  height: 30px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.leaflet-control-attribution {
-  display: none;
-}
-
-h3 strong {
-  font-weight: 600;
-}
-
-h4 {
-  margin: 0 0 20px 0;
 }
 
 button {
@@ -261,18 +146,14 @@ button {
 import axios          from 'axios'
 import headerNav      from '~/components/nav.vue'
 import { mapFields }  from 'vuex-map-fields'
-
-let leaflet;
-if (process.browser) {
-  leaflet = require('leaflet')
-}
+import { gmapApi }    from 'vue2-google-maps'
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    if(from.path == '/')
-      next('/');
-    next();
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   if(from.path == '/')
+  //     next('/');
+  //   next();
+  // },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`,
@@ -286,8 +167,13 @@ export default {
   },
   data() {
     return {
-      cityHallLong:     '-86.5369425',
-      cityHallLat:      '39.1703084',
+      addressInput:     '',
+
+      autosuggChoice: '',
+      latLng: null,
+
+      cityHallLong:     -86.5369425,
+      cityHallLat:      39.1703084,
       chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
       firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
       safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
@@ -315,111 +201,170 @@ export default {
         four:           false,
         five:           false,
         six:            false,
-      }
+      },
+      newBounds: null,
+      autoSuggResults: null,
+
+      geoLocationPositionError: null,
+      geoLocationPosition:      {
+        lat:      null,
+        lng:      null,
+        accuracy: null,
+        geoCoded: null,
+      },
+
+      reportedMapCenter: null,
+
     }
   },
   mounted() {
-    let vm      = this;
-    vm.geoError = false;
+    this.$gmapApiPromiseLazy()
+    .then(() => {
+      console.log('google -', google)
+      console.log('cityBoundary -', this.cityBoundary)
 
-    if(vm.hasLocationLat() == '') {
-      vm.loading = true;
+      this.geoLocatePromise()
+      .then((res) => {
 
-      vm.geoLocatePromise()
-      .then(position => {
-        if(position.coords) {
-          vm.lat  = position.coords.latitude;
-          vm.long = position.coords.longitude;
-        } else {
-          console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        console.log('geoLocatePromise() -', res);
+
+        this.reportedMapCenter = {
+          lat: res.coords.latitude,
+          lng: res.coords.longitude,
         }
-      })
-      .then(function(){
-        vm.initMap();
-      })
-      .catch(function(){
-        vm.geoError = true;
-        vm.loading  = false;
-        vm.lat      = vm.cityHallLat;
-        vm.long     = vm.cityHallLong;
-        vm.initMap();
+        
+        // this.geoLocationPosition.lat = res.coords.latitude;
+        // this.geoLocationPosition.lng = res.coords.longitude;
 
-        console.log(`%c .: Geolocation Error :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        
+        this.geoLocationPosition.accuracy = res.coords.accuracy;
+
+        let pos = {
+          lat: res.coords.latitude,
+          lng: res.coords.longitude
+        };
+
+        this.geocodeLatLng(pos);
+      })
+      .catch((err) => {
+        this.geoLocationPositionError = err.message;
+        console.log('geoLocatePromise() -', err.message);
       });
-    } else {
-      vm.initMap();
-    }
+    });
+
+    // this.getCurrentPosition()
+    // .then((position) => {
+    //   if(position.coords) {
+    //     self.location.lat = position.coords.latitude;
+    //     self.location.long = position.coords.longitude;
+    //   } else {
+    //     console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+    //   }
+    // })
+    // .catch((err) => {
+      
+    // });
+
+    
+
+    // this.newBounds = new google.maps.LatLngBounds(
+    //   new google.maps.LatLng(28.70, -127.50), 
+    //   new google.maps.LatLng(48.85, -55.90));
+    // });
+
+   
+
+    this.getCityBoundaryGeoJson()
+    .then((res) => {
+      console.log('getCityBoundaryGeoJson() -', res)
+      this.setCityBoundary(res);
+    })
+    .catch((e) => {
+      console.log(`City Boundary Failed 🛑`,
+                  `\n\n ${e} \n\n`);
+    });
   },
-  watch: {
-    lat: function() {
-      this.updateAddressString(this.lat, this.long);
-    }
-  },
+  watch: {},
   methods: {
-    hasLocationLat(){
-      if(
-        !this.lat ||
-        this.lat == '' ||
-        this.lat == null ||
-        this.lat == undefined
-      )
-        return ''
-      return this.lat
+    updateCenter(latLng) {
+      
+      if(latLng) {
+        this.reportedMapCenter = {
+          lat: latLng.lat(),
+          lng: latLng.lng(),
+        }
+
+        console.log('reportedMapCenter - ', this.reportedMapCenter)
+        // this.mapCenter();
+      }
+      
     },
-    hasLocationLong(){
-      if(
-        !this.long ||
-        this.long == '' ||
-        this.long == null ||
-        this.long == undefined
-      )
-        return ''
-      return this.long
+    mapCenter(){
+      // if(this.geoLocationPosition.lat != null)
+      //   return {"lat": this.geoLocationPosition.lat,"lng": this.geoLocationPosition.lng}
+
+      if(this.reportedMapCenter != null)
+        return this.reportedMapCenter
+        
+      return this.cityHallLatLong
     },
-    hasLocationAddress(){
-      if(
-        !this.address_string ||
-        this.address_string == '' ||
-        this.address_string == null ||
-        this.address_string == undefined
-      )
-        return ''
-      return this.address_string
+    setPlace(place){
+      console.log('setPlace() - ', place.formatted_address);
+      console.log('setPlace() - ', place.address_components);
+      console.log('setPlace() - ', place.name)
+      console.log('setPlace() - ', place)
+
+      
+      this.autoSuggResults = place;
+
+      this.reportedMapCenter = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      }
     },
     geoLocatePromise() {
-      if (navigator.geolocation) {
-        console.log(`%c .: Geolocation supported :.`,`background: #1e59ae; color: white; padding: 2px 5px; border-radius: 2px;`);
-        return new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject)
-        )
-      } else {
-        return new Promise(
-          resolve => resolve({})
-        )
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        }
+      })
+    },
+    geocodeLatLng(map){
+
+      // this.reportedMapCenter = {
+      //     lat: latLng.lat(),
+      //     lng: latLng.lng(),
+      //   }
+
+      // let pos = {
+      //   lat: this.geoLocationPosition.lat,
+      //   lng: this.geoLocationPosition.lng
+      // };
+
+      const geocoder = new google.maps.Geocoder();
+
+      if(this.reportedMapCenter) {
+        geocoder.geocode({ 'location': this.reportedMapCenter }, (results, status) => {
+          this.geoLocationPosition.geoCoded = results;
+
+          console.log('geocodeLatLng() - ', results, status); 
+        });
       }
     },
     getCurrentPosition() {
-      this.loading = true;
-
-      if(this.address_string != '')
-        this.address_string = ''
       this.geoLocatePromise()
       .then(position => {
         if(position.coords) {
-          this.lat = position.coords.latitude;
-          this.long = position.coords.longitude;
-          this.updateMap(this.lat, this.long);
           console.log(`Original -- latitude: `
-                      + `${this.lat} | `
-                      + `longitude: ${this.long}`
+                      + `${position.coords.latitud} | `
+                      + `longitude: ${position.coords.longitude}`
           );
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
       })
-      .catch( error => {
-        console.log(error);
-        let errMsg = null;
+      .catch((error) => {
+        var errMsg = null;
         switch(error.code) {
           case error.PERMISSION_DENIED:
               errMsg = "User denied the request for Geolocation.";
@@ -434,90 +379,10 @@ export default {
               errMsg = "An unknown error occurred.";
               break;
         }
+        console.log('geo fail ', error)
         console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       })
     },
-    updateAddressString(lat, long){
-      axios.get(`${process.env.arcgisRevGeo}${long},${lat}`)
-      .then(response => {
-        this.loading = false;
-        this.address_string = response.data.address.Match_addr;
-        this.updateMap(lat, long);
-        this.$store.dispatch('setLocationLat', lat)
-        this.$store.dispatch('setLocationLong', long)
-      })
-      .catch(error => {this.loading = false; });
-    },
-    initMap() {
-      let self    = this,
-          mymap   = L.map('map-element');
-      this.mymap  = mymap;
-
-      mymap.setView([this.lat, this.long], 20);
-
-      let crosshairIcon = L.icon({
-        iconUrl:      `${process.env.baseUrl}/images/map-crosshair.png`,
-        iconSize:     [71, 71],
-        iconAnchor:   [35.5, 35.5],
-      });
-
-      let crosshair = new L.marker(mymap.getCenter(),{
-        icon:       crosshairIcon,
-        clickable:  false
-      }).addTo(mymap);
-
-      mymap.on('move', function(ev) {
-        crosshair.setLatLng(mymap.getCenter());
-      });
-
-      mymap.on('moveend', function(ev) {
-        self.lat = mymap.getCenter().lat;
-        self.long = mymap.getCenter().lng;
-      });
-
-      L.tileLayer(process.env.mapBoxUrl,{
-        attribution:  false,
-        maxZoom:      18,
-        setView:      true,
-        detectRetina: true,
-        id:           `${process.env.mapBoxId}`,
-        accessToken:  `${process.env.mapBoxKey}`
-      }).addTo(mymap);
-    },
-    updateMap(lat,long) {
-      this.mymap.setView([lat,long]);
-      this.$refs.mapElement.style.display = "block";
-    },
-    clearSearch() {
-      this.loading        = false;
-      this.lat            = '';
-      this.long           = '';
-      this.search_results = '';
-      this.address_string = '';
-      this.$refs.mapElement.style.display = "none";
-    },
-    addressResult(address) {
-      this.lat            = address.latitude;
-      this.long           = address.longitude;
-      this.address_string = address.streetAddress;
-      this.showResults    = false;
-      this.updateMap(this.lat, this.long);
-    },
-    searchAddressString() {
-      this.loadingLocation = true;
-
-      if(this.address_string != '') {
-        axios.get(`${process.env.masterAddUrl}${this.address_string}`)
-        .then(response => {
-          this.showResults      = true;
-          this.loadingLocation  = false;
-          this.search_results   = response.data;
-        })
-        .catch(error => {
-          alert(`Error via Master Address API: ${error}`);
-        })
-      }
-    }
   },
   computed: {
     ...mapFields([
@@ -525,23 +390,7 @@ export default {
       'serviceInfos.location_info.lat',
       'serviceInfos.location_info.long',
     ]),
-    addressResults() {
-      return this.search_results
-    },
-    showNextButton() {
-      this.address_string;
-      this.lat;
-      this.long;
-      this.loading;
-      return this.loading == false && (this.address_string != null || this.address_string != '') && this.lat != '' && this.long != '';
-    },
-    showGeoErrorHelp() {
-      this.geoError;
-      this.loadingLocation;
-      this.showResults;
-      this.address_string;
-      return this.geoError && this.loadingLocation == false && this.showResults == false && (this.address_string == null || this.address_string == '');
-    }
+    google: gmapApi,
   }
 }
 </script>

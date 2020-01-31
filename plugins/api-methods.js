@@ -1,5 +1,6 @@
 import Vue    from 'vue'
 import axios  from 'axios'
+import proj4  from 'proj4'
 
 Vue.mixin({
   data() { return {} },
@@ -68,6 +69,45 @@ Vue.mixin({
         .replace(/,/g, '')
         .replace(/&/g, 'and')
         .toLowerCase();
+    },
+    getCityBoundaryGeoJson() {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.cityBoundaryGeoJson)
+          .then((res) => resolve(res.data.features))
+          .catch((e) => reject(e))
+      })
+    },
+    setCityBoundary(res) {
+      let lngLat    = [],
+          geoCoords = [],
+           boundary = res;
+
+      if (boundary) {
+        let raw = [];
+        
+        boundary.forEach((r) => {
+          raw.push(r.geometry.coordinates)
+        })
+        var repJson = [].concat.apply([], [].concat.apply([], raw));
+
+        let projCoords = repJson.map((p) => {
+          return p.map((e) => {
+            return proj4(this.coordsProjection).inverse(e);
+          })
+        });
+
+        let projCoordsLatLng = projCoords.map((p) => {
+          return p.map((e) => {
+            return { lat: e[1], lng: e[0] }
+          })
+        });
+
+        // remove 2, 3, 4 as they are n/a areas
+        let setOrder = [0, 1, 5, 6, 7, 8],
+            output   = setOrder.map(i => projCoordsLatLng[i]);
+
+        return this.$store.dispatch('setCityBoundaryData', output);
+      }
     },
   }
 })

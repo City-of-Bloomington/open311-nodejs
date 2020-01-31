@@ -43,7 +43,7 @@
     <nav>
       <h1 v-html="group"></h1>
       <h2 v-if="navSubGroup">
-        {{ subGroup | truncate(30) }}
+        {{ subGroup | truncate(25) }}
       </h2>
     </nav>
   </div>
@@ -219,7 +219,7 @@ export default {
   filters: {
     truncate(string, value) {
       if(string.length >= value) {
-        return string.substring(0, value) + ' ...';
+        return string.substring(0, value) + '...';
       } else {
         return string
       }

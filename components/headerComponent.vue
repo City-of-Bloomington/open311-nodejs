@@ -39,7 +39,6 @@ export default {
       appName:            process.env.appName,
       baseUrl:            process.env.cityWebsiteUrl,
       headerLogo:         'city-of-bloomington-logo.svg',
-      cityName:           process.env.cityName,
       logoHeading:        process.env.logoHeading,
       logoSubHeading:     process.env.logoSubHeading,
       frontendBase:       process.env.frontendBase,

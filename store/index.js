@@ -38,7 +38,28 @@ export const defaultState = () => ({
     default_description: '',
     service_response: {},
   },
-  
+  cityBoundary: null,
+  cityName: process.env.cityName,
+  coordsProjection: process.env.coordsProjection,
+  cityHallLatLong: process.env.cityHallLatLong,
+  consoleLog: {
+    info: ['background: rgb(30, 90, 174)',
+      'color: white',
+      'display: block',
+      'border-radius: 3px',
+      'padding: 2px 0'].join(';'),
+
+    success: ['background: rgb(76, 174, 79)',
+      'color: white',
+      'display: block',
+      'border-radius: 3px',
+      'padding: 2px 0'].join(';'),
+
+    error: ['background: rgb(235, 59, 36)',
+      'color: white', 'display: block',
+      'border-radius: 3px',
+      'padding: 2px 0'].join(';')
+  }
 });
 
 const state = () => defaultState();
@@ -113,7 +134,10 @@ export const mutations = {
   },
   storeLocSearchHeight(state, payload) {
     state.loc_search_height = payload
-  }
+  },
+  SET_CITY_BOUNDARY_RESPONSE_DATA(state, payload) {
+    state.cityBoundary = payload;
+  },
 }
 
 export const actions = {
@@ -149,6 +173,9 @@ export const actions = {
   },
   setDefaultImage(context, payload) {
     context.commit('storeDefaultImage', payload)
+  },
+  setCityBoundaryData(context, payload) {
+    context.commit("SET_CITY_BOUNDARY_RESPONSE_DATA", payload)
   },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
