@@ -8,6 +8,8 @@
     </header>
 
     <main class="location">
+      {{ reportedMapCenter }}<br>
+
       <div class="field-group">
         <label for="location-search" v-if="geoLocationPosition.geoCoded">
           Service Request Location: {{ geoLocationPosition.geoCoded[0].formatted_address }}
@@ -220,7 +222,13 @@ export default {
       },
 
       reportedMapCenter: null,
-
+      
+      centerPosition: {
+        lat: 10.762622,
+        lng: 106.660172,
+      },
+      zoom: 16,
+      positions: [],
     }
   },
   mounted() {
@@ -233,6 +241,8 @@ export default {
       .then((res) => {
 
         console.log('geoLocatePromise() -', res);
+
+        this.trackPosition();
 
         this.reportedMapCenter = {
           lat: res.coords.latitude,
@@ -256,6 +266,8 @@ export default {
         this.geoLocationPositionError = err.message;
         console.log('geoLocatePromise() -', err.message);
       });
+
+      // this.watchGeoLocation();
     });
 
     // this.getCurrentPosition()
@@ -292,25 +304,75 @@ export default {
   },
   watch: {},
   methods: {
+    trackPosition() {
+      if (navigator.geolocation) {
+        let config = {
+          enableHighAccuracy: true,
+        };
+
+        navigator.geolocation.watchPosition(this.successPosition, this.failurePosition, config)
+      } else {
+        alert(`Browser doesn't support Geolocation`)
+      }
+    },
+    successPosition: function(position) {
+      this.positions.push({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+
+      this.reportedMapCenter = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      }
+
+      // alert(JSON.stringify(this.reportedMapCenter))
+
+      // this.centerPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
+
+      console.log('tracking pushing', this.centerPosition)
+    },
+    failurePosition: function(err) {
+      alert('Error Code: ' + err.code + ' Error Message: ' + err.message)
+    },
     updateCenter(latLng) {
       
       if(latLng) {
-        this.reportedMapCenter = {
+        // this.reportedMapCenter = {
+        //   lat: latLng.lat(),
+        //   lng: latLng.lng(),
+        // }
+
+        let testing = {
           lat: latLng.lat(),
           lng: latLng.lng(),
         }
 
-        console.log('reportedMapCenter - ', this.reportedMapCenter)
+        // console.log('reportedMapCenter - ', this.reportedMapCenter)
+        console.log('reportedMapCenter - ', testing)
+
         // this.mapCenter();
       }
       
+    },
+    geocodeLatLng(coords){
+      const geocoder = new google.maps.Geocoder();
+
+      if(coords) {
+        geocoder.geocode({ 'location': coords }, (results, status) => {
+          this.geoLocationPosition.geoCoded = results;
+
+          console.log('geocodeLatLng() - ', results, status); 
+        });
+      }
     },
     mapCenter(){
       // if(this.geoLocationPosition.lat != null)
       //   return {"lat": this.geoLocationPosition.lat,"lng": this.geoLocationPosition.lng}
 
-      if(this.reportedMapCenter != null)
+      if(this.reportedMapCenter != null){
         return this.reportedMapCenter
+      }
         
       return this.cityHallLatLong
     },
@@ -328,34 +390,20 @@ export default {
         lng: place.geometry.location.lng(),
       }
     },
+    watchGeoLocation() {
+      if(navigator.geolocation) {
+        navigator.getlocation.watchPosition(position => {
+          alert(position)
+	        console.log('watching position', position)
+        });
+      }
+    },
     geoLocatePromise() {
       return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
+          navigator.geolocation.getCurrentPosition(resolve, reject)
         }
       })
-    },
-    geocodeLatLng(map){
-
-      // this.reportedMapCenter = {
-      //     lat: latLng.lat(),
-      //     lng: latLng.lng(),
-      //   }
-
-      // let pos = {
-      //   lat: this.geoLocationPosition.lat,
-      //   lng: this.geoLocationPosition.lng
-      // };
-
-      const geocoder = new google.maps.Geocoder();
-
-      if(this.reportedMapCenter) {
-        geocoder.geocode({ 'location': this.reportedMapCenter }, (results, status) => {
-          this.geoLocationPosition.geoCoded = results;
-
-          console.log('geocodeLatLng() - ', results, status); 
-        });
-      }
     },
     getCurrentPosition() {
       this.geoLocatePromise()

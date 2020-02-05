@@ -58,8 +58,7 @@ module.exports = {
 
   styleResources: {
     scss: [
-      
-      '~/node_modules/cob-design-system/dist/system/system.utils.scss',
+      '@/assets/scss/system.utils.scss',
       '@/assets/scss/main.scss',
     ]
   },
@@ -126,6 +125,7 @@ module.exports = {
   build: {
     vendors:    ['babel-polyfill'],
     transpile:  [/^vue2-google-maps($|\/)/],
+    // transpile:  [/^cob-design-system($|\/)/],
 
     extend (config, { isDev, isClient }) {
       if (isDev && process.client) {

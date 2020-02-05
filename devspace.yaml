@@ -1,0 +1,55 @@
+version: v1beta5
+images:
+  open311-nodejs:
+    image: docker-repo.bloomington.in.gov/cob/open311-nodejs
+    tag: ds-${DEVSPACE_TIMESTAMP}-${DEVSPACE_GIT_COMMIT}
+    dockerfile: ./Dockerfile
+    build:
+      disabled: false
+deployments:
+# dev deployment handled by patches
+- name: open311-nodejs
+  namespace: production
+  helm:
+    chart:
+      name: ./charts/open311-nodejs
+    values:
+      environment:
+        NODE_ENV: production
+      image:
+        npmscript: build+start
+        tag: ds-${DEVSPACE_TIMESTAMP}-${DEVSPACE_GIT_COMMIT}
+      ingress:
+        hosts:
+        - host: kubeproxy.bloomington.in.gov
+          paths: /ureport
+    valuesFiles:
+    - ./charts/open311-nodejs/cob.values.yaml
+    replaceImageTags: false
+    v2: false
+    
+profiles:
+- name: prod
+  patches:
+
+  - op: replace
+    path: images.open311-nodejs.tag
+    value: PROD-${DEVSPACE_GIT_COMMIT}
+  - op: replace
+    path: deployments[0].helm.values.image.tag
+    value: PROD-${DEVSPACE_GIT_COMMIT}
+  
+
+- name: dev
+  patches:
+  - op: replace
+    path: deployments[0].namespace
+    value: dev
+
+  - op: replace
+    path: deployments[0].helm.values.environment.NODE_ENV
+    value: development
+
+  - op: replace
+    path: deployments[0].helm.values.ingress.hosts[0].host
+    value: kubetest.bloomington.in.gov
