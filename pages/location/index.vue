@@ -8,22 +8,28 @@
     </header>
 
     <main class="location">
-        <div class="field-group">
-          <label for="location-search" v-if="geoLocationPosition.geoCoded">
-            Service Request Location: {{ geoLocationPosition.geoCoded[0].formatted_address }}
-          </label>
+      <div class="field-group">
+        <label for="location-search" v-if="geoLocationPosition.geoCoded">
+          Service Request Location: {{ geoLocationPosition.geoCoded[0].formatted_address }}
+        </label>
 
-          <gmap-autocomplete
-            placeholder="Service Request Location"
-            @place_changed="setPlace"
-            :select-first-on-enter="true"
-            :options="{
-              radius:       150000,
-              strictBounds: true,
-              bounds:       cityBoundary,
-              componentRestrictions: { country: 'us' }
-            }" />
-        </div>
+        <gmap-autocomplete
+          placeholder="Service Request Location"
+          @place_changed="setPlace"
+          :select-first-on-enter="true"
+          :options="{
+            strictBounds: true,
+            bounds: {
+              north:  39.2,
+              south:  39.1,
+              east:  -86.5,
+              west:  -86.6
+            },
+          }" />
+      </div>
+
+      <!-- bounds: {north: 52.4, south: 52.3, east: 4.7, west: 5.0}, -->
+      <!-- bounds: {north: 13, south: 7, east: 35, west: 28}, -->
 
       <GmapMap
         :center="mapCenter()"
