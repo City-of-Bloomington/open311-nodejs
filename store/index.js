@@ -27,6 +27,7 @@ export const defaultState = () => ({
       phone:          '',
       email:          ''
     },
+    location_string:  null,
     location_info: {
       address_string: '',
       lat:            '',
@@ -135,8 +136,11 @@ export const mutations = {
   storeLocSearchHeight(state, payload) {
     state.loc_search_height = payload
   },
+  SET_LOCATION_STRING(state, payload) {
+    state.serviceInfos.location_string = payload
+  },
   SET_CITY_BOUNDARY_RESPONSE_DATA(state, payload) {
-    state.cityBoundary = payload;
+    state.cityBoundary = payload
   },
 }
 
@@ -173,6 +177,9 @@ export const actions = {
   },
   setDefaultImage(context, payload) {
     context.commit('storeDefaultImage', payload)
+  },
+  setLocationString(context, payload) {
+    context.commit('SET_LOCATION_STRING', payload)
   },
   setCityBoundaryData(context, payload) {
     context.commit("SET_CITY_BOUNDARY_RESPONSE_DATA", payload)

@@ -14,7 +14,7 @@
         </label>
 
         <gmap-autocomplete
-          :value="autocompleteValue"
+          :value="location_string"
           :class="['autocomplete-search', {'locating': findingUserPosition }]"
           placeholder="Service Request Location"
           @place_changed="setPlace"
@@ -188,8 +188,8 @@ main {
         &:before {
           position: absolute;
           content: '';
-          top: 4px;
-          left: 4px;
+          top: 5px;
+          left: 5px;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
           background-size: contain;
           width: 18px;
@@ -313,24 +313,12 @@ export default {
   },
   data() {
     return {
-      addressInput:     '',
-
-      autosuggChoice: '',
-      latLng: null,
-
-      cityHallLong:     -86.5369425,
-      cityHallLat:      39.1703084,
       chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
       firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
       safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
-      geoError:         false,
-      loadingLocation:  false,
-      loading:          false,
-      showMap:          true,
-      map:              null,
-      search_results:   null,
-      addressesList:    null,
-      showResults:      false,
+
+
+
       navSubGroup:      true,
       stepActive: {
         one:            false,
@@ -348,7 +336,6 @@ export default {
         five:           false,
         six:            false,
       },
-      newBounds: null,
 
       geoLocationPositionError: null,
       geoLocationPosition:      {
@@ -367,8 +354,7 @@ export default {
       zoom: 17,
       positions: [],
 
-      mapCenterCoords: {},
-      autocompleteValue: '',
+      mapCenterCoords: null,
 
       findingUserPosition: false
     }
@@ -376,80 +362,41 @@ export default {
   mounted() {
     this.$gmapApiPromiseLazy()
     .then(() => {
-      console.log('google -', google)
-      
+      if(this.location_string == null) {
+        this.geoLocatePromise()
+        .then((res) => {
 
-      this.geoLocatePromise()
-      .then((res) => {
+          this.findingUserPosition = false;
 
-        console.log('geoLocatePromise() -', res);
+          console.log('geoLocatePromise() -', res);
 
-        // this.trackPosition();
+          this.reportedMapCenter = {
+            lat: res.coords.latitude,
+            lng: res.coords.longitude,
+          }
 
-        this.reportedMapCenter = {
-          lat: res.coords.latitude,
-          lng: res.coords.longitude,
-        }
+          this.geoLocationPosition.accuracy = res.coords.accuracy;
 
-        this.geoLocationPosition.accuracy = res.coords.accuracy;
+          this.geocodeLatLng(this.reportedMapCenter);
+        })
+        .catch((err) => {
+          this.geoLocationPositionError = err.message;
+          console.log('geoLocatePromise() -', err.message);
+        });
+      }
+    });
 
-        let pos = {
-          lat: res.coords.latitude,
-          lng: res.coords.longitude
-        };
-
-        this.geocodeLatLng(pos);
-      })
-      .catch((err) => {
-        this.geoLocationPositionError = err.message;
-        console.log('geoLocatePromise() -', err.message);
+    if(!this.cityBoundary){
+      this.getCityBoundaryGeoJson()
+      .then((res) => this.setCityBoundary(res))
+      .catch((e)  => {
+        console.log(`City Boundary Failed 🛑`,
+                    `\n\n ${e} \n\n`);
       });
-    });
-
-    this.getCityBoundaryGeoJson()
-    .then((res) => {
-      console.log('getCityBoundaryGeoJson() -', res)
-      this.setCityBoundary(res);
-      console.log('cityBoundary -', this.cityBoundary)
-    })
-    .catch((e) => {
-      console.log(`City Boundary Failed 🛑`,
-                  `\n\n ${e} \n\n`);
-    });
+    }
   },
   watch: {},
   methods: {
-    // trackPosition() {
-    //   if (navigator.geolocation) {
-    //     let config = {
-    //       enableHighAccuracy: true,
-    //     };
-
-    //     navigator.geolocation.watchPosition(this.successPosition, this.failurePosition, config)
-    //   } else {
-    //     alert(`Browser doesn't support Geolocation`)
-    //   }
-    // },
-    // successPosition: function(position) {
-    //   this.positions.push({
-    //     lat: position.coords.latitude,
-    //     lng: position.coords.longitude,
-    //   });
-
-    //   this.reportedMapCenter = {
-    //     lat: position.coords.latitude,
-    //     lng: position.coords.longitude,
-    //   }
-
-    //   // alert(JSON.stringify(this.reportedMapCenter))
-
-    //   // this.centerPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
-
-    //   console.log('tracking pushing', this.centerPosition)
-    // },
-    // failurePosition: function(err) {
-    //   alert('Error Code: ' + err.code + ' Error Message: ' + err.message)
-    // },
     updateCenter(latLng) {
       if(latLng) {
         this.mapCenterCoords = {
@@ -465,12 +412,13 @@ export default {
       if(coords) {
         geocoder.geocode({ 'location': coords }, (results, status) => {
           this.geoLocationPosition.geoCoded = results;
-          this.autocompleteValue = results[0].formatted_address;
+
+          this.$store.dispatch('setLocationString', results[0].formatted_address);
 
           console.log('geocodeLatLng() - ', results, status); 
         });
       } else {
-        console.log('Sorry cant run geocodeLatLng(coords) w/ out `coords { lat:xxx, lng:xxx }`')
+        console.log('Sorry cant run geocodeLatLng(coords) w/ out `coords = { lat:xxx, lng:xxx }`')
       }
     },
     mapDragEnd() {
@@ -490,7 +438,7 @@ export default {
     setPlace(place){
       console.log('setPlace() - ', place)
 
-      this.autocompleteValue = place.name;
+      this.$store.dispatch('setLocationString', place.name);
 
       this.zoom = 19;
 
@@ -502,12 +450,13 @@ export default {
     geoLocatePromise() {
       return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
+          this.findingUserPosition = true;
           navigator.geolocation.getCurrentPosition(resolve, reject)
         }
       })
     },
     getCurrentPosition() {
-      this.findingUserPosition = true;
+      
       this.geoLocatePromise()
       .then((position) => {
         if(position.coords) {
@@ -555,9 +504,7 @@ export default {
   },
   computed: {
     ...mapFields([
-      'serviceInfos.location_info.address_string',
-      'serviceInfos.location_info.lat',
-      'serviceInfos.location_info.long',
+      'serviceInfos.location_string'
     ]),
     google: gmapApi,
   }
