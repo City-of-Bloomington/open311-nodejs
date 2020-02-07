@@ -14,7 +14,7 @@
         </label>
 
         <gmap-autocomplete
-          :value="location_string"
+          :value="location_data.address"
           :class="['autocomplete-search', {'locating': findingUserPosition }]"
           placeholder="Service Request Location"
           @place_changed="setPlace"
@@ -139,6 +139,7 @@ main {
 
     .autocomplete-search {
       padding: 5px 8px 5px 95px;
+      height: 28px;
 
       &.locating {
         padding-left: 110px;
@@ -157,7 +158,7 @@ main {
       position: relative;
 
       &.find-me {
-        height: 28px;
+        height: 28px !important;
         margin: 0 0 0 auto;
         background: $color-green;
         // background: $color-orange-dark;
@@ -277,7 +278,7 @@ main {
 
       .vue-map-container {
         height: 275px;
-        margin: 0 0 10px 0;
+        margin: 10px 0;
       }
     }
   }
@@ -295,11 +296,11 @@ import { mapFields }  from 'vuex-map-fields'
 import { gmapApi }    from 'vue2-google-maps'
 
 export default {
-  // beforeRouteEnter (to, from, next) {
-  //   if(from.path == '/')
-  //     next('/');
-  //   next();
-  // },
+  beforeRouteEnter (to, from, next) {
+    if(from.path == '/')
+      next('/');
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - ${this.$store.getters.subGroup}`,
@@ -345,30 +346,24 @@ export default {
         geoCoded: null,
       },
 
-      reportedMapCenter: null,
-      
-      centerPosition: {
-        lat: 10.762622,
-        lng: 106.660172,
-      },
-      zoom: 17,
-      positions: [],
-
-      mapCenterCoords: null,
-
+      reportedMapCenter:   null,
+      zoom:                17,
+      mapCenterCoords:     null,
       findingUserPosition: false
     }
   },
   mounted() {
     this.$gmapApiPromiseLazy()
     .then(() => {
-      if(this.location_string == null) {
+      if(this.location_data == null) {
         this.geoLocatePromise()
         .then((res) => {
 
           this.findingUserPosition = false;
 
-          console.log('geoLocatePromise() -', res);
+          console.log(`geoLocatePromise() `,
+                      this.consoleLog.success
+                      `\n\n ${res} \n\n`);
 
           this.reportedMapCenter = {
             lat: res.coords.latitude,
@@ -383,6 +378,11 @@ export default {
           this.geoLocationPositionError = err.message;
           console.log('geoLocatePromise() -', err.message);
         });
+      } else {
+        this.reportedMapCenter = {
+          lat: this.location_data.lat,
+          lng: this.location_data.lng,
+        }
       }
     });
 
@@ -391,6 +391,7 @@ export default {
       .then((res) => this.setCityBoundary(res))
       .catch((e)  => {
         console.log(`City Boundary Failed 🛑`,
+                    this.consoleLog.error
                     `\n\n ${e} \n\n`);
       });
     }
@@ -413,7 +414,13 @@ export default {
         geocoder.geocode({ 'location': coords }, (results, status) => {
           this.geoLocationPosition.geoCoded = results;
 
-          this.$store.dispatch('setLocationString', results[0].formatted_address);
+          let locationData = {
+            address: results[0].formatted_address,
+            lat:     results[0].geometry.location.lat(),
+            lng:     results[0].geometry.location.lng()
+          }
+
+          this.$store.dispatch('setLocationData', locationData);
 
           console.log('geocodeLatLng() - ', results, status); 
         });
@@ -438,7 +445,13 @@ export default {
     setPlace(place){
       console.log('setPlace() - ', place)
 
-      this.$store.dispatch('setLocationString', place.name);
+      let locationData = {
+        address: place.name,
+        lat:     place.geometry.location.lat(),
+        lng:     place.geometry.location.lng()
+      }
+
+      this.$store.dispatch('setLocationData', locationData);
 
       this.zoom = 19;
 
@@ -504,7 +517,7 @@ export default {
   },
   computed: {
     ...mapFields([
-      'serviceInfos.location_string'
+      'serviceInfos.location_data'
     ]),
     google: gmapApi,
   }
