@@ -141,7 +141,7 @@
 
 nav {
   position: relative;
-  padding: 0 0 20px 0;
+  padding: 0 0 5px 0;
   display: flex;
   flex-flow: wrap;
   margin: 0 auto;

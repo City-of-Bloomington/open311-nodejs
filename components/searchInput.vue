@@ -30,7 +30,7 @@
 
 <style lang="scss" scoped>
   .search {
-    background: green;
+    // background: green;
     padding: 20px 0;
 
     ::v-deep label {
