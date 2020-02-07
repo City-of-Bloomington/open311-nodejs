@@ -116,7 +116,6 @@ export default {
       }
     }
   },
-  mounted() {},
   methods: {
     dataURItoBlob(dataURI) {
       if(dataURI) {
@@ -170,13 +169,13 @@ export default {
           }
         }
 
-        // for (var pair of formData.entries()) {
-        //   console.log(pair[0]+ ', ' + pair[1]);
-        // }
+        for (var pair of formData.entries()) {
+          console.log(pair[0]+ ', ' + pair[1]);
+        }
 
         let processingHTML = `
           <div>
-            <p>Please hold tight while we process your request.</p>
+            <p>Processing your service request.</p>
           </div>
         `;
 
@@ -195,7 +194,7 @@ export default {
       'serviceInfos.service_attrs',
       'serviceInfos.location_info.lat',
       'serviceInfos.location_info.long',
-      'serviceInfos.location_info.address_string',
+      'serviceInfos.location_data.address_string',
       'serviceInfos.personal_info.email',
       'serviceInfos.personal_info.first_name',
       'serviceInfos.personal_info.last_name',

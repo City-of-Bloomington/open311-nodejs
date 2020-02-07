@@ -14,7 +14,7 @@
         </label>
 
         <gmap-autocomplete
-          :value="location_data.address"
+          :value="location_data.placeAddress"
           :class="['autocomplete-search', {'locating': findingUserPosition }]"
           placeholder="Service Request Location"
           @place_changed="setPlace"
@@ -32,13 +32,14 @@
         <button
           :class="['find-me', {'locating': findingUserPosition }]"
           @click="getCurrentPosition">
+          <!-- <svg class="pulse" expanded="true" height="20px" width="20px">
+            <circle class="pulse" cx="50%" cy="50%" r="2px"></circle>
+          </svg> -->
+
           <span v-if="findingUserPosition">Locating ...</span>
           <span v-else>Find me</span>
         </button>
       </div>
-
-      <!-- bounds: {north: 52.4, south: 52.3, east: 4.7, west: 5.0}, -->
-      <!-- bounds: {north: 13, south: 7, east: 35, west: 28}, -->
 
       <GmapMap
         :center="mapCenter()"
@@ -178,10 +179,6 @@ main {
         border-top-right-radius: 0 !important;
         border-bottom-right-radius: 0 !important;
 
-        &:hover {
-          background: $color-green-dark;
-        }
-
         &:focus {
           outline: none;
         }
@@ -195,6 +192,36 @@ main {
           background-size: contain;
           width: 18px;
           height: 18px;
+        }
+
+        svg {
+          position: absolute;
+          left: 4px;
+
+          .pulse {
+            stroke: white; 
+            stroke-width: 2px;
+            stroke-opacity: 1;
+            fill: white;
+            fill-opacity: 0;
+            transform-origin: 50% 50%;
+            animation-duration: 2s;
+            animation-name: pulse;
+            animation-iteration-count: infinite;
+          }
+
+          @keyframes pulse {
+            from {
+              stroke-width: 3px;
+              stroke-opacity: 1;
+              transform: scale(0.3);
+            }
+            to {
+              stroke-width: 0;
+              stroke-opacity: 0.2;
+              transform: scale(2.2);
+            }
+          }
         }
 
         &.locating {
@@ -415,9 +442,10 @@ export default {
           this.geoLocationPosition.geoCoded = results;
 
           let locationData = {
-            address: results[0].formatted_address,
-            lat:     results[0].geometry.location.lat(),
-            lng:     results[0].geometry.location.lng()
+            address:      results[0].formatted_address,
+            placeAddress: results[0].formatted_address,
+            lat:          results[0].geometry.location.lat(),
+            lng:          results[0].geometry.location.lng()
           }
 
           this.$store.dispatch('setLocationData', locationData);
@@ -446,9 +474,10 @@ export default {
       console.log('setPlace() - ', place)
 
       let locationData = {
-        address: place.name,
-        lat:     place.geometry.location.lat(),
-        lng:     place.geometry.location.lng()
+        address:      place.name,
+        placeAddress: place.name + ', ' + place.formatted_address,
+        lat:          place.geometry.location.lat(),
+        lng:          place.geometry.location.lng()
       }
 
       this.$store.dispatch('setLocationData', locationData);

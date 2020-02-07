@@ -11,7 +11,7 @@ Vue.mixin({
      * attributes given a service category ID.
      *
      * @promise     getServiceAttrs
-     * @param       { Number } code - service category id
+     * @param       { String } code - service category id
      * @resolve     { Object }
      * @reject      { Error }
      * @return      { Promise <Object> } Resolves to an Object containing
@@ -22,6 +22,25 @@ Vue.mixin({
         axios.get(`${process.env.apiUrl}${process.env.attrsApi}${code}.json`)
         .then(res => resolve(res.data))
         .catch(e => reject(e))
+      })
+    },
+    /**
+     * An HTTP GET request promise returning a service request
+     * given the service request ID.
+     *
+     * @promise     getServiceRequest
+     * @param       { String } id - service category id
+     * @resolve     { Object }
+     * @reject      { Error }
+     * @return      { Promise <Object> } Resolves to an Object containing
+     *              the service request by id.
+     */
+    getServiceRequest(id) {
+      // https://bloomington.in.gov/crm/open311/v2/requests/171665.json
+      return new Promise((resolve, reject) => {
+        axios.get(`${process.env.apiUrl}/requests/${id}.json`)
+        .then(res => resolve(res.data))
+        .catch(e => reject(e));
       })
     },
     /**

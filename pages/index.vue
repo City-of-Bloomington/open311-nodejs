@@ -36,6 +36,8 @@
       // background-color: pink;
       max-height: calc(100vh - 200px);
       height: auto;
+      
+      
 
       @media only screen
       and (min-device-width : 320px)
