@@ -8,14 +8,14 @@
     </header>
 
     <main class="location">
-      {{ reportedMapCenter }}<br>
-
       <div class="field-group">
-        <label for="location-search" v-if="geoLocationPosition.geoCoded">
-          Service Request Location: {{ geoLocationPosition.geoCoded[0].formatted_address }}
+        <label for="location-search">
+          Service request location:
         </label>
 
         <gmap-autocomplete
+          :value="autocompleteValue"
+          :class="['autocomplete-search', {'locating': findingUserPosition }]"
           placeholder="Service Request Location"
           @place_changed="setPlace"
           :select-first-on-enter="true"
@@ -28,6 +28,13 @@
               west:  -86.6
             },
           }" />
+
+        <button
+          :class="['find-me', {'locating': findingUserPosition }]"
+          @click="getCurrentPosition">
+          <span v-if="findingUserPosition">Locating ...</span>
+          <span v-else>Find me</span>
+        </button>
       </div>
 
       <!-- bounds: {north: 52.4, south: 52.3, east: 4.7, west: 5.0}, -->
@@ -36,10 +43,9 @@
       <GmapMap
         :center="mapCenter()"
         @center_changed="updateCenter"
-        @dragend="geocodeLatLng"
-        :zoom="13"
+        @dragend="mapDragEnd"
+        :zoom="zoom"
         map-type-id="roadmap"
-        style="width: 100%; height: 300px"
         :options="{
           zoomControl:        true,
           mapTypeControl:     true,
@@ -76,7 +82,7 @@
             }
           ]
         }">
-        <div id="cross"></div>
+        <div class="cross"></div>
 
         <GmapPolygon
           v-if="cityBoundary"
@@ -103,16 +109,144 @@
 <style lang="scss" scoped>
 main {
   &.location {
+    $duration: 1.4s;
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg);   }
+      50%  { transform: rotate(135deg); }
+      100% { transform: rotate(450deg); }
+    }
+
     margin: 5px auto 0 auto;
-    background-color: pink;
     height: auto;
 
     form {
       margin: 0 0 20px 0;
     }
 
+    label {
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 0 0 5px 0;
+    }
+
+    .vue-map-container {
+      width: 100%;
+      height: 400px;
+      margin: 20px 0;
+    }
+
+    .autocomplete-search {
+      padding: 5px 8px 5px 95px;
+
+      &.locating {
+        padding-left: 110px;
+      }
+    }
+
+    .field-group {
+      position: relative;
+
+      input {
+        box-shadow: none;
+      }
+    }
+
+    button {
+      position: relative;
+
+      &.find-me {
+        height: 28px;
+        margin: 0 0 0 auto;
+        background: $color-green;
+        // background: $color-orange-dark;
+        // color: darken($color-orange-darker, 35%);
+        padding: 5px 8px 5px 28px;
+        font-size: 14px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        -webkit-border-radius: 3px;
+        -webkit-border-top-right-radius: 0 !important;
+        -webkit-border-bottom-right-radius: 0 !important;
+        -moz-border-radius: 3px;
+        -moz-border-radius-topright: 0 !important;
+        -moz-border-radius-bottomright: 0 !important;
+        border-radius: 3px;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+
+        &:hover {
+          background: $color-green-dark;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &:before {
+          position: absolute;
+          content: '';
+          top: 4px;
+          left: 4px;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          background-size: contain;
+          width: 18px;
+          height: 18px;
+        }
+
+        &.locating {
+          &:before {
+            animation: spin $duration linear infinite;
+          }
+        }
+      }
+
+      &.locate {
+        z-index: 1000;
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background: red;
+        display: block;
+
+        span {
+          @include visuallyHidden();
+        }
+
+        &:before {
+          position: absolute;
+          content: '';
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          background-size: contain;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
     ::v-deep .vue-map-hidden {
-      display: block;
+      pointer-events: none;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      
+      .cross {
+        display: block;
+        width: 40px;
+        height: 40px;
+        background-size: contain;
+        background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='71px' height='71px' viewBox='0 0 71 71' enable-background='new 0 0 71 71' xml:space='preserve'%3E%3Cg%3E%3Cg%3E%3Cpath fill='black' d='M35.5,47.6c-6.7,0-12.1-5.4-12.1-12.1c0-6.7,5.4-12.1,12.1-12.1c6.7,0,12.1,5.4,12.1,12.1C47.6,42.2,42.2,47.6,35.5,47.6z M35.5,25.4c-5.6,0-10.1,4.5-10.1,10.1s4.5,10.1,10.1,10.1s10.1-4.5,10.1-10.1S41.1,25.4,35.5,25.4z'/%3E%3C/g%3E%3Cg%3E%3Cpath fill='black' d='M71,33.8h-5.8c-0.9-15-12.9-27.1-28-28V0h-3.4v5.8c-15,0.9-27.1,12.9-28,28H0v3.4h5.8c0.9,15,12.9,27.1,28,28V71h3.4v-5.8 c15-0.9,27.1-12.9,28-28H71V33.8z M35.5,61.8C21,61.8,9.2,50,9.2,35.5S21,9.2,35.5,9.2S61.8,21,61.8,35.5S50,61.8,35.5,61.8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+
       #cross{
         position: absolute;
         width: 2px;
@@ -139,8 +273,12 @@ main {
     @media only screen
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
-      background-color: purple !important;
       height: auto;
+
+      .vue-map-container {
+        height: 275px;
+        margin: 0 0 10px 0;
+      }
     }
   }
 }
@@ -211,7 +349,6 @@ export default {
         six:            false,
       },
       newBounds: null,
-      autoSuggResults: null,
 
       geoLocationPositionError: null,
       geoLocationPosition:      {
@@ -227,32 +364,33 @@ export default {
         lat: 10.762622,
         lng: 106.660172,
       },
-      zoom: 16,
+      zoom: 17,
       positions: [],
+
+      mapCenterCoords: {},
+      autocompleteValue: '',
+
+      findingUserPosition: false
     }
   },
   mounted() {
     this.$gmapApiPromiseLazy()
     .then(() => {
       console.log('google -', google)
-      console.log('cityBoundary -', this.cityBoundary)
+      
 
       this.geoLocatePromise()
       .then((res) => {
 
         console.log('geoLocatePromise() -', res);
 
-        this.trackPosition();
+        // this.trackPosition();
 
         this.reportedMapCenter = {
           lat: res.coords.latitude,
           lng: res.coords.longitude,
         }
-        
-        // this.geoLocationPosition.lat = res.coords.latitude;
-        // this.geoLocationPosition.lng = res.coords.longitude;
 
-        
         this.geoLocationPosition.accuracy = res.coords.accuracy;
 
         let pos = {
@@ -266,36 +404,13 @@ export default {
         this.geoLocationPositionError = err.message;
         console.log('geoLocatePromise() -', err.message);
       });
-
-      // this.watchGeoLocation();
     });
-
-    // this.getCurrentPosition()
-    // .then((position) => {
-    //   if(position.coords) {
-    //     self.location.lat = position.coords.latitude;
-    //     self.location.long = position.coords.longitude;
-    //   } else {
-    //     console.log(`%c .: Geolocation position missing :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-    //   }
-    // })
-    // .catch((err) => {
-      
-    // });
-
-    
-
-    // this.newBounds = new google.maps.LatLngBounds(
-    //   new google.maps.LatLng(28.70, -127.50), 
-    //   new google.maps.LatLng(48.85, -55.90));
-    // });
-
-   
 
     this.getCityBoundaryGeoJson()
     .then((res) => {
       console.log('getCityBoundaryGeoJson() -', res)
       this.setCityBoundary(res);
+      console.log('cityBoundary -', this.cityBoundary)
     })
     .catch((e) => {
       console.log(`City Boundary Failed 🛑`,
@@ -304,56 +419,45 @@ export default {
   },
   watch: {},
   methods: {
-    trackPosition() {
-      if (navigator.geolocation) {
-        let config = {
-          enableHighAccuracy: true,
-        };
+    // trackPosition() {
+    //   if (navigator.geolocation) {
+    //     let config = {
+    //       enableHighAccuracy: true,
+    //     };
 
-        navigator.geolocation.watchPosition(this.successPosition, this.failurePosition, config)
-      } else {
-        alert(`Browser doesn't support Geolocation`)
-      }
-    },
-    successPosition: function(position) {
-      this.positions.push({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
+    //     navigator.geolocation.watchPosition(this.successPosition, this.failurePosition, config)
+    //   } else {
+    //     alert(`Browser doesn't support Geolocation`)
+    //   }
+    // },
+    // successPosition: function(position) {
+    //   this.positions.push({
+    //     lat: position.coords.latitude,
+    //     lng: position.coords.longitude,
+    //   });
 
-      this.reportedMapCenter = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      }
+    //   this.reportedMapCenter = {
+    //     lat: position.coords.latitude,
+    //     lng: position.coords.longitude,
+    //   }
 
-      // alert(JSON.stringify(this.reportedMapCenter))
+    //   // alert(JSON.stringify(this.reportedMapCenter))
 
-      // this.centerPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
+    //   // this.centerPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
 
-      console.log('tracking pushing', this.centerPosition)
-    },
-    failurePosition: function(err) {
-      alert('Error Code: ' + err.code + ' Error Message: ' + err.message)
-    },
+    //   console.log('tracking pushing', this.centerPosition)
+    // },
+    // failurePosition: function(err) {
+    //   alert('Error Code: ' + err.code + ' Error Message: ' + err.message)
+    // },
     updateCenter(latLng) {
-      
       if(latLng) {
-        // this.reportedMapCenter = {
-        //   lat: latLng.lat(),
-        //   lng: latLng.lng(),
-        // }
-
-        let testing = {
+        this.mapCenterCoords = {
           lat: latLng.lat(),
           lng: latLng.lng(),
         }
-
-        // console.log('reportedMapCenter - ', this.reportedMapCenter)
-        console.log('reportedMapCenter - ', testing)
-
-        // this.mapCenter();
+        console.log('updateCenter() - ', this.mapCenterCoords)
       }
-      
     },
     geocodeLatLng(coords){
       const geocoder = new google.maps.Geocoder();
@@ -361,41 +465,38 @@ export default {
       if(coords) {
         geocoder.geocode({ 'location': coords }, (results, status) => {
           this.geoLocationPosition.geoCoded = results;
+          this.autocompleteValue = results[0].formatted_address;
 
           console.log('geocodeLatLng() - ', results, status); 
         });
+      } else {
+        console.log('Sorry cant run geocodeLatLng(coords) w/ out `coords { lat:xxx, lng:xxx }`')
+      }
+    },
+    mapDragEnd() {
+      this.geocodeLatLng(this.mapCenterCoords);
+
+      this.reportedMapCenter = {
+        lat: this.mapCenterCoords.lat,
+        lng: this.mapCenterCoords.lng,
       }
     },
     mapCenter(){
-      // if(this.geoLocationPosition.lat != null)
-      //   return {"lat": this.geoLocationPosition.lat,"lng": this.geoLocationPosition.lng}
-
-      if(this.reportedMapCenter != null){
+      if(this.reportedMapCenter != null)
         return this.reportedMapCenter
-      }
         
       return this.cityHallLatLong
     },
     setPlace(place){
-      console.log('setPlace() - ', place.formatted_address);
-      console.log('setPlace() - ', place.address_components);
-      console.log('setPlace() - ', place.name)
       console.log('setPlace() - ', place)
 
-      
-      this.autoSuggResults = place;
+      this.autocompleteValue = place.name;
+
+      this.zoom = 19;
 
       this.reportedMapCenter = {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
-      }
-    },
-    watchGeoLocation() {
-      if(navigator.geolocation) {
-        navigator.getlocation.watchPosition(position => {
-          alert(position)
-	        console.log('watching position', position)
-        });
       }
     },
     geoLocatePromise() {
@@ -406,34 +507,48 @@ export default {
       })
     },
     getCurrentPosition() {
+      this.findingUserPosition = true;
       this.geoLocatePromise()
-      .then(position => {
+      .then((position) => {
         if(position.coords) {
-          console.log(`Original -- latitude: `
-                      + `${position.coords.latitud} | `
-                      + `longitude: ${position.coords.longitude}`
-          );
+          
+          let pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          this.reportedMapCenter = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+
+          this.findingUserPosition = false;
+        
+          console.log(this.geocodeLatLng(pos));
+          console.log('getCurrentPosition() - ', position);
+          console.log(this.reportedMapCenter);
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
       })
       .catch((error) => {
-        var errMsg = null;
+        let errMsg = null;
+
         switch(error.code) {
           case error.PERMISSION_DENIED:
-              errMsg = "User denied the request for Geolocation.";
-              break;
+            errMsg = "User denied the request for Geolocation.";
+            break;
           case error.POSITION_UNAVAILABLE:
-              errMsg = "Location information is unavailable.";
-              break;
+            errMsg = "Location information is unavailable.";
+            break;
           case error.TIMEOUT:
-              errMsg = "The request to get user location timed out.";
-              break;
+            errMsg = "The request to get user location timed out.";
+            break;
           case error.UNKNOWN_ERROR:
-              errMsg = "An unknown error occurred.";
-              break;
+            errMsg = "An unknown error occurred.";
+            break;
         }
-        console.log('geo fail ', error)
+        console.log('getCurrentPosition() geoLocatePromise - ', error)
         console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       })
     },

@@ -139,8 +139,13 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
   main {
+    &.fields {
+      max-height: calc(100vh - 244px);
+      height: auto;
+    }
+
     h2 {
       color: white;
       font-size: 20px;

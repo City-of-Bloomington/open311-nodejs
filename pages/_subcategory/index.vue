@@ -40,14 +40,14 @@
   main {
     &.subcategory {
       margin: 0 auto;
-      background-color: pink;
+      // background-color: pink;
       max-height: calc(100vh - 200px);
       height: auto;
 
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
-        background-color: purple !important;
+        // background-color: purple !important;
         max-height: calc(100vh - 240px);
         height: auto;
       }

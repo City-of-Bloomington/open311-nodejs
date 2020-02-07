@@ -9,7 +9,7 @@
 
 <style lang="scss">
   .nuxt-wrapper {
-    background-color: brown;
+    // background-color: brown;
     position: relative;
     top: 90px;
     height: calc(100vh - 90px);
