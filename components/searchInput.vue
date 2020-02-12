@@ -15,7 +15,7 @@
       </form>
 
       <div
-        v-if="focused"
+        v-if="focused && isNan(input)"
         class="auto-suggest">
         <ul v-if="data">
           <li
@@ -29,8 +29,6 @@
           </li>
         </ul>
       </div>
-
-      
     </div>
   </div>
 </template>
@@ -59,9 +57,13 @@
         border: 1px solid $color-grey-dark;
         color: $text-color;
         font-size: 18px;
+        line-height: 30px;
+        min-height: 30px;
         border-radius: $radius-default;
         caret-color: $color-blue; //no IE support
-        padding-left: 40px;
+        padding: 0 0 0 40px;
+        background-color: white;
+        // background-color: red;
         background-size: 20px;
         background-repeat: no-repeat;
         background-position: left 10px center;
@@ -73,32 +75,38 @@
         }
 
         &::-webkit-input-placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%);
           font-weight: 400;
         }
 
         &:-moz-placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%);
           font-weight: 400;
         }
 
         &::-moz-placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%);
           font-weight: 400;
         }
 
         &:-ms-input-placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%) !important;
           font-weight: 400 !important;
         }
 
 
         &::-ms-input-placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%);
           font-weight: 400;
         }
 
         &::placeholder {
+          vertical-align: middle;
           color: lighten($text-color, 40%);
           font-weight: 400;
         }
@@ -109,8 +117,6 @@
         background-color: $color-green;
         border-color: $color-green;
         margin: 0;
-
-        svg {}
 
         &:hover,
         &:focus {
@@ -191,6 +197,42 @@
     and (max-device-width : 480px) {
       width: calc(100% - 40px);
       padding: 10px 0;
+
+      .form-wrapper {
+        form {
+          ::v-deep {
+            input {
+              padding-left: 30px;
+              background-size: 15px;
+
+              &::-webkit-input-placeholder {
+                font-size: 16px;
+              }
+
+              &:-moz-placeholder {
+                font-size: 16px;
+              }
+
+              &::-moz-placeholder {
+                font-size: 16px;
+              }
+
+              &:-ms-input-placeholder {
+                font-size: 16px;
+              }
+
+
+              &::-ms-input-placeholder {
+                font-size: 16px;
+              }
+
+              &::placeholder {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -220,6 +262,7 @@ export default {
   },
   mounted() {},
   methods: {
+    isNan(val){ return isNaN(val) },
     away() {
       let numberRegEx = /^\d{6}$/,
             testInput = numberRegEx.test(this.input);

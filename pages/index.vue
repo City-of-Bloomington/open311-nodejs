@@ -312,6 +312,7 @@
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         // background-color: purple !important;
+        margin: 5px auto 0 auto;
         max-height: calc(100vh - 220px);
         height: auto;
 
@@ -319,16 +320,20 @@
 
           .service-info {
             header {
-              span {
-                &.category {
-                  margin: 0;
-                }
+              h2 {
+                width: 295px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
 
-                &.address {
-                  width: 295px;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
+            .meta-row {
+              flex-wrap: wrap;
+
+              span {
+                &:nth-child(3) {
+                  margin: 10px 0 0 0;
                 }
               }
             }
