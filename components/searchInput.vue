@@ -4,21 +4,19 @@
     v-on-clickaway="away">
 
     <div class="form-wrapper">
-      <form>
+      <form @submit.prevent autocomplete="off">
         <fn1-input
           v-model="input"
           label="Search"
           placeholder="Seach for services or a ticket number"
           name="search"
-          autocomplete="false"
+          autocomplete="off"
           id="search" />
       </form>
 
-      <div v-if="focused" class="auto-suggest">
-        <template v-if="serviceTicket">
-          <pre style="color: black; font-size: 12px;">{{ serviceTicket }}</pre>
-        </template>
-
+      <div
+        v-if="focused"
+        class="auto-suggest">
         <ul v-if="data">
           <li
             v-for="(group, i) in data"
@@ -31,6 +29,8 @@
           </li>
         </ul>
       </div>
+
+      
     </div>
   </div>
 </template>
@@ -193,10 +193,12 @@
       padding: 10px 0;
     }
   }
+
+  
 </style>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway';
+import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
   mixins: [ clickaway ],
@@ -205,7 +207,6 @@ export default {
       input:        '',
       focused:      false,
       showClearBtn: false,
-      serviceTicket: null,
     }
   },
   props: {
@@ -220,8 +221,13 @@ export default {
   mounted() {},
   methods: {
     away() {
-      this.focused = false;
-      this.clearSearch();
+      let numberRegEx = /^\d{6}$/,
+            testInput = numberRegEx.test(this.input);
+
+      if(!testInput){
+        this.focused = false;
+        this.clearSearch();
+      }
     },
     complete(i) {
       this.select(this.data[i]);
@@ -253,7 +259,7 @@ export default {
   watch: {
     'input': function(val, oldVal){
       if(val != oldVal) {
-        this.serviceTicket = null;
+        this.$store.dispatch("setServiceTicketData", null);
       }
 
       let numberRegEx = /^\d{6}$/,
@@ -262,13 +268,15 @@ export default {
       if(testInput){
         this.getServiceRequest(val)
         .then((res) => {
-          this.serviceTicket = res;
-          // alert(JSON.stringify(res));
-          console.log(res)
+          this.$store.dispatch("setServiceTicketData", res);
+
+          this.getServiceRequestCRMHTML(val)
+          .then((res) => {
+            this.$store.dispatch("setServiceTicketCRMHTML", res);
+          })
+          .catch((e)  => console.log(e));
         })
-        .catch((e)  => {
-          console.log(e)
-        })
+        .catch((e)  => console.log(e))
       }
 
       if(val.length >= 1) {

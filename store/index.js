@@ -39,10 +39,12 @@ export const defaultState = () => ({
     default_description: '',
     service_response: {},
   },
-  cityBoundary: null,
-  cityName:         process.env.cityName,
-  coordsProjection: process.env.coordsProjection,
-  cityHallLatLong:  process.env.cityHallLatLong,
+  serviceTicketData:  null,
+  serviceTicketCRMHTML: null,
+  cityBoundary:       null,
+  cityName:           process.env.cityName,
+  coordsProjection:   process.env.coordsProjection,
+  cityHallLatLong:    process.env.cityHallLatLong,
   consoleLog: {
     info: ['background: rgb(30, 90, 174)',
       'color: white',
@@ -142,6 +144,12 @@ export const mutations = {
   SET_CITY_BOUNDARY_RESPONSE_DATA(state, payload) {
     state.cityBoundary = payload
   },
+  SET_SERVICE_TICKET_DATA(state, payload) {
+    state.serviceTicketData = payload
+  },
+  SET_SERVICE_TICKET_CRM_HTML(state, payload) {
+    state.serviceTicketCRMHTML = payload
+  }
 }
 
 export const actions = {
@@ -183,6 +191,12 @@ export const actions = {
   },
   setCityBoundaryData(context, payload) {
     context.commit("SET_CITY_BOUNDARY_RESPONSE_DATA", payload)
+  },
+  setServiceTicketData(context, payload) {
+    context.commit("SET_SERVICE_TICKET_DATA", payload)
+  },
+  setServiceTicketCRMHTML(context, payload) {
+    context.commit("SET_SERVICE_TICKET_CRM_HTML", payload)
   },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)

@@ -63,6 +63,10 @@ module.exports = {
     ]
   },
 
+  buildModules: [
+    '@nuxtjs/moment'
+  ],
+
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',

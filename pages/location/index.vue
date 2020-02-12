@@ -46,7 +46,7 @@
         @center_changed="updateCenter"
         @dragend="mapDragEnd"
         :zoom="zoom"
-        map-type-id="roadmap"
+        map-type-id="hybrid"
         :options="{
           zoomControl:        true,
           mapTypeControl:     true,
