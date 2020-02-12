@@ -457,11 +457,13 @@ export default {
       }
     },
     mapDragEnd() {
-      this.geocodeLatLng(this.mapCenterCoords);
+      if(this.mapCenterCoords) {
+        this.geocodeLatLng(this.mapCenterCoords);
 
-      this.reportedMapCenter = {
-        lat: this.mapCenterCoords.lat,
-        lng: this.mapCenterCoords.lng,
+        this.reportedMapCenter = {
+          lat: this.mapCenterCoords.lat,
+          lng: this.mapCenterCoords.lng,
+        }
       }
     },
     mapCenter(){
