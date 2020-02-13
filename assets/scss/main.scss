@@ -28,13 +28,13 @@ body {
   position: relative;
   min-height: 100%;
   background: $color-blue;
-  // background: linear-gradient(0deg, rgba(49,93,165,1) 0%, rgba(24,51,101,1) 60%);
-  // background-attachment: fixed;
 }
 
 html {
-  // font-family: 'Abel', sans-serif;
   font-family: $font-text;
+  font-size: 100%;
+  -ms-text-size-adjust: 100%; 
+  -webkit-text-size-adjust: 100%;
   font-size: 20px;
   word-spacing: 1px;
   color: white;
@@ -44,8 +44,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  // background:  rgba(24,51,101,1);
-  // background: linear-gradient(0deg, rgba(49,93,165,1) 0%, rgba(24,51,101,1) 60%);
 }
 
 html,
@@ -65,13 +63,20 @@ body {
 
 
 main {
-  // background-color: orange;
+  // background-color: rgba(0, 255, 42, 0.548);
   position: relative;
   overflow-y: scroll;
   display: block;
   width: 520px;
   margin: 0 auto;
   padding: 0;
+
+   @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      width: calc(100% - 40px);
+
+    }
 }
 
 
@@ -80,8 +85,12 @@ p {
 
   &.emergency {
     font-size: 16px;
-    font-weight: 600;
     text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+
+    strong   {
+      color: white;
+    }
   }
 }
 
@@ -286,13 +295,6 @@ button {
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  main {
-    width: calc(100% - 40px);
-    height: calc(100vh - 275px); // 168 = height of elements untill main content
-    margin: 10px auto 0 auto;
-    padding: 0 0 20px 0;
-  }
-
   .disclaimer {
     .container {
       width: calc(100% - 40px);
@@ -324,11 +326,11 @@ and (max-device-width : 480px) {
 
 
   .grid {
-    grid-row-gap: 40px;
+    // grid-row-gap: 40px;
 
     > div {
-      margin-bottom: 10px;
-      padding: 0 0 10px 0;
+      margin-bottom: 5px;
+      padding: 0 0 5px 0;
       flex-basis: 100%;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -342,13 +344,14 @@ and (max-device-width : 480px) {
     .item {
       position: relative;
       height: 40px;
-      // background-color: pink;
+      // background-color: red;
       display: flex;
       align-items: center;
 
       h3 {
         margin: 0 0 0 60px;
         text-align: left;
+        font-size: 18px;
       }
 
       &.cleanup-and-sanitation {
@@ -407,8 +410,8 @@ and (max-device-width : 480px) {
 
       .icon {
         background-repeat: no-repeat;
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         top: 0;
         position: absolute;
       }

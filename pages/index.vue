@@ -4,7 +4,7 @@
       :data="initGroupData"
       field="service_name" />
 
-    <main class="home">
+    <main :class="['home', {'viewing-ticket': serviceTicketData}]">
       <div class="grid" v-if="!serviceTicketData">
         <div
           v-for="group, i in groupCategories"
@@ -131,7 +131,9 @@
       </div>
 
       <emerModal />
-      <p class="emergency">. :&nbsp;&nbsp;If Emergency, Call 911&nbsp;&nbsp;: .</p>
+      <p class="emergency">
+        <strong>Note:</strong> If an Emergency, dial 911.
+      </p>
     </main>
   </div>
 </template>
@@ -140,9 +142,18 @@
   main {
     &.home {
       margin: 0 auto;
-      // background-color: pink;
-      max-height: calc(100vh - 200px);
+      background-color: red;
       height: 100vh;
+      // background-color: pink;
+      // height: calc(100vh - 161px);
+      // max-height: calc(100vh - 165px);
+      // height: max-content;
+
+      &.viewing-ticket {
+        background: red;
+        max-height: calc(100vh - 165px);
+        height: max-content;
+      }
 
       .service-ticket {
         position: relative;
@@ -311,9 +322,10 @@
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
+        padding: 2px 0;
         // background-color: purple !important;
         margin: 5px auto 0 auto;
-        max-height: calc(100vh - 220px);
+        // max-height: calc(100vh - 125px);
         height: auto;
 
         .service-ticket {
@@ -391,12 +403,15 @@ export default {
         $(history).each(function(i, value) {
           let headingTxt = $(value).find("header h1").text(),
              testBodyTxt = $(value).find(".historyItem p") !== null,
-         testMessagesTxt = $(value).find(".historyItem .message") !== null;
+                 bodyTxt = testBodyTxt ? $(value).find(".historyItem p").text() : null,
+         testMessagesTxt = $(value).find(".historyItem .message") !== null,
+              messageTxt = testMessagesTxt ? $(value).find(".historyItem .message").text() : null;
+                 
           
           let data = {
             "heading":  headingTxt,
-            "body":     testBodyTxt ? $(value).find(".historyItem p").text() : null,
-            "messages": testMessagesTxt ? $(value).find(".historyItem .message").text() : null,
+            "body":     bodyTxt,
+            "messages": messageTxt,
           }
 
           names.push(data);

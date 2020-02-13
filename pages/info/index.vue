@@ -8,7 +8,7 @@
         :step-complete="stepComplete" />
     </header>
 
-    <main class="info-process" ref="mainElm">
+    <main class="info" ref="mainElm">
       <p>You may submit anonymously by leaving these fields empty.</p><br>
       <div class="form-group">
         <label for="first-name">First Name:</label>
@@ -57,6 +57,27 @@
 </template>
 
 <style lang="scss">
+
+main {
+  &.info {
+    background: red;
+    margin: 0 auto;
+    height: calc(100vh - 210px);
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      display: flex;
+      background-color: purple !important;
+      // max-height: calc(100vh - 240px);
+      // height: auto;
+      margin: 5px auto 0 auto;
+      // max-height: calc(100vh - 170px);
+      // height: auto;
+    }
+  }
+}
+
 .g-recaptcha {
   margin-bottom: 15px;
 }

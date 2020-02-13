@@ -40,16 +40,19 @@
   main {
     &.subcategory {
       margin: 0 auto;
-      // background-color: pink;
-      max-height: calc(100vh - 200px);
-      height: auto;
+      background-color: pink;
+      height: calc(100vh - 200px);
+      // height: auto;
+
+      ul {
+        width: 100%;
+      }
 
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
-        // background-color: purple !important;
-        max-height: calc(100vh - 240px);
-        height: auto;
+        margin-top: 5px;
+        height: 375px;
       }
     }
   }

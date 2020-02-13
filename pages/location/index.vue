@@ -110,16 +110,17 @@
 <style lang="scss" scoped>
 main {
   &.location {
+    background: red;
+    margin: 0 auto;
+    height: calc(100vh - 210px);
+    
     $duration: 1.4s;
 
     @keyframes spin {
       0%   { transform: rotate(0deg);   }
       50%  { transform: rotate(135deg); }
       100% { transform: rotate(450deg); }
-    }
-
-    margin: 5px auto 0 auto;
-    height: auto;
+    } 
 
     form {
       margin: 0 0 20px 0;
@@ -134,7 +135,7 @@ main {
 
     .vue-map-container {
       width: 100%;
-      height: 400px;
+      height: 350px;
       margin: 20px 0;
     }
 
@@ -301,10 +302,12 @@ main {
     @media only screen
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
-      height: auto;
+      margin-top: 10px;
+      background-color: green !important;
+      height: 355px;
 
       .vue-map-container {
-        height: 275px;
+        height: 210px;
         margin: 10px 0;
       }
     }

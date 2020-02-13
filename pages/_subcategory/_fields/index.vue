@@ -142,8 +142,16 @@
 <style lang="scss" scoped>
   main {
     &.fields {
-      max-height: calc(100vh - 244px);
-      height: auto;
+      // background: blue;
+      height: calc(100vh - 244px);
+
+      @media only screen
+      and (min-device-width : 320px)
+      and (max-device-width : 480px) {
+        background-color: red;
+        margin-top: 5px;
+        height: 355px;
+      }
     }
 
     h2 {
