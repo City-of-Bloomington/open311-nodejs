@@ -142,22 +142,24 @@
   main {
     &.home {
       margin: 0 auto;
-      background-color: red;
+      // background-color: red;
       height: 100vh;
+      max-height: calc(100vh - 165px);
+
       // background-color: pink;
       // height: calc(100vh - 161px);
       // max-height: calc(100vh - 165px);
       // height: max-content;
 
       &.viewing-ticket {
-        background: red;
+        padding-bottom: 20px;
         max-height: calc(100vh - 165px);
         height: max-content;
       }
 
       .service-ticket {
         position: relative;
-        margin: 25px 0 10px 0;
+        margin: 25px 0 20px 0;
         border-radius: $radius-default;
         background: white;
         box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.10);
@@ -324,7 +326,7 @@
       and (max-device-width : 480px) {
         padding: 2px 0;
         // background-color: purple !important;
-        margin: 5px auto 0 auto;
+        margin: 0 auto;
         // max-height: calc(100vh - 125px);
         height: auto;
 

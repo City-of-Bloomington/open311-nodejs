@@ -44,12 +44,18 @@
       </div>
 
       <p v-if="reCaptchaError">Error - Please validate the reCaptcha below.</p>
-      <div class="g-recaptcha" :data-sitekey="reCaptchaSiteKey"></div>
+      <!-- <div
+        class="g-recaptcha"
+        :data-sitekey="reCaptchaSiteKey"
+        data-callback="getToken()"
+        data-size="invisible"></div> -->
 
       <emerModal />
       <footer>
         <button
-          class="button next-button"
+          class="g-recaptcha button next-button"
+          :data-sitekey="reCaptchaSiteKey"
+          data-size="invisible"
           @click="submitPost()">Submit</button>
       </footer>
     </main>
@@ -110,6 +116,12 @@ export default {
     headerNav,
     emerModal
   },
+  created() {
+     
+  },
+  mounted() {
+    setTimeout(() => { grecaptcha.execute() }, 100);
+  },
   data() {
     return {
       reCaptchaError:     false,
@@ -168,8 +180,8 @@ export default {
         formData.append("g_recaptcha_response", captchaReponse)
         formData.append("service_code",         parseInt(this.service_code, 10))
         formData.append("lat",                  this.lat)
-        formData.append("long",                 this.long)
-        formData.append("address_string",       this.address_string)
+        formData.append("long",                 this.lng)
+        formData.append("address_string",       this.address)
         formData.append("email",                this.email)
         formData.append("first_name",           this.first_name)
         formData.append("last_name",            this.last_name)
@@ -213,9 +225,9 @@ export default {
       'serviceInfos.service_group.service_code',
       'serviceInfos.pre_service_attrs',
       'serviceInfos.service_attrs',
-      'serviceInfos.location_info.lat',
-      'serviceInfos.location_info.long',
-      'serviceInfos.location_data.address_string',
+      'serviceInfos.location_data.lat',
+      'serviceInfos.location_data.lng',
+      'serviceInfos.location_data.address',
       'serviceInfos.personal_info.email',
       'serviceInfos.personal_info.first_name',
       'serviceInfos.personal_info.last_name',

@@ -140,12 +140,13 @@
     }
 
     .auto-suggest {
-      background-color: white;
+      // background-color: white;
+      background: red;
 
       ul {
         z-index: 1000;
         position: absolute;
-        top: 38px;
+        top: 30px;
         border: 1px solid $color-grey-dark;
         border-top: none;
         overflow: scroll;
@@ -166,6 +167,7 @@
           margin: 0;
           cursor: pointer;
           color: $text-color;
+          font-size: 16px;
           border: 3px solid transparent;
 
           &:focus {
@@ -178,14 +180,14 @@
           }
 
           &:hover {
-            background-color: rgba($color-cloud, 0.75);
+            background-color: $color-cloud;
           }
 
-          &:nth-child(even) {
+          &:nth-child(odd) {
             background-color: rgba($color-cloud, 0.75);
 
             &:hover {
-              background-color: rgba($color-cloud, 0.75);
+              background-color: $color-cloud;
             }
           }
         }
