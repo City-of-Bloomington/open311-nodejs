@@ -268,11 +268,12 @@ export default {
       }
     },
     goToStep(step) {
-      if(step <= this.stepActive)
-      if(step == 2) {
-        this.$router.push('./')
-      } else {
-        this.$router.push(this.stepperPaths[step].path)
+      if(step <= this.stepActive){
+        if(step == 2) {
+          this.$router.push('./')
+        } else {
+          this.$router.push(this.stepperPaths[step].path)
+        }
       }
     },
     finishedStep(step) {
