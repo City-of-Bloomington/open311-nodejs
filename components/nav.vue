@@ -277,31 +277,8 @@ export default {
       }
     },
     finishedStep(step) {
-      switch(step) {
-        case 1:
-          if(step < this.stepActive)
-            return true
-        case 2:
-          if(step < this.stepActive)
-            return true;
-        case 3:
-          if(step < this.stepActive)
-            return true;
-        case 4:
-          if(step < this.stepActive) {
-            return true;
-          }
-        case 5:
-          if(step < this.stepActive) {
-            return true;
-          }
-        case 6:
-          if(step < this.stepActive) {
-            return true;
-          }
-        default:
-          break;
-      }
+      if(step < this.stepActive)
+        return true
     }
   },
   computed: {
