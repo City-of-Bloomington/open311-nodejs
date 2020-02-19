@@ -70,9 +70,8 @@ main {
     @media only screen
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
-      display: flex;
-      background-color: purple !important;
       margin: 5px auto 0 auto;
+      height: 355px;
     }
   }
 }
