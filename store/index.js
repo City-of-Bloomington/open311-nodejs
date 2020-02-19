@@ -62,7 +62,18 @@ export const defaultState = () => ({
       'color: white', 'display: block',
       'border-radius: 3px',
       'padding: 2px 0'].join(';')
-  }
+  },
+  totalSteps:   5,
+  stepperPaths: {
+    1: {
+      name: 'home',
+      path: '/',
+    },
+    2: {},
+    3: {},
+    4: {},
+    5: {},
+  },
 });
 
 const state = () => defaultState();
@@ -149,7 +160,19 @@ export const mutations = {
   },
   SET_SERVICE_TICKET_CRM_HTML(state, payload) {
     state.serviceTicketCRMHTML = payload
-  }
+  },
+  SET_PROGRESS_STEP_TWO(state, payload) {
+    state.stepperPaths[2] = payload
+  },
+  SET_PROGRESS_STEP_THREE(state, payload) {
+    state.stepperPaths[3] = payload
+  },
+  SET_PROGRESS_STEP_FOUR(state, payload) {
+    state.stepperPaths[4] = payload
+  },
+  SET_PROGRESS_STEP_FIVE(state, payload) {
+    state.stepperPaths[5] = payload
+  },
 }
 
 export const actions = {
@@ -198,6 +221,18 @@ export const actions = {
   setServiceTicketCRMHTML(context, payload) {
     context.commit("SET_SERVICE_TICKET_CRM_HTML", payload)
   },
+  setProgressStepTwo(context, payload) {
+    context.commit("SET_PROGRESS_STEP_TWO", payload)
+  },
+  setProgressStepThree(context, payload) {
+    context.commit("SET_PROGRESS_STEP_THREE", payload)
+  },
+  setProgressStepFour(context, payload) {
+    context.commit("SET_PROGRESS_STEP_FOUR", payload)
+  },
+  setProgressStepFive(context, payload) {
+    context.commit("SET_PROGRESS_STEP_FIVE", payload)
+  },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
     commit('storeInitGroupData', data)
@@ -208,8 +243,6 @@ export const getters = {
   getField,
   seenModal:          state => state.seen_modal,
   initGroupData:      state => state.initGroupData,
-  group:              state => state.serviceInfos.service_group.group,
-  subGroup:           state => state.serviceInfos.service_group.service_name,
   subGroupCode:       state => state.serviceInfos.service_group.service_code,
   routeCode:          state => state.serviceInfos.service_group.route_code,
   response:           state => state.serviceInfos.service_response,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="progress-stepper">
+    <!-- <div class="progress-stepper">
       <span class="title">Progress:</span>
       <div v-bind:class="{ active: stepActive.one, 'complete': stepComplete.one }">
         <svg v-if="stepComplete.one" version="1.1" id="check" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46px" height="37px" viewBox="0 0 46 37" enable-background="new 0 0 46 37" xml:space="preserve">
@@ -38,12 +38,37 @@
         </svg>
         <span v-if="!stepComplete.six">6</span>
       </div>
+    </div> -->
+
+    <div class="progress-stepper">
+      <span class="title">Progress:</span>
+      
+      <div
+        v-for="step, i in totalSteps"
+        ref="progressSteps"
+        :title="`Go to Step ` + [[ step ]]"
+        :key="step"
+        :class="['step-outside',{
+          'active':   stepActive == step,
+          'complete': finishedStep(step)
+        }]">
+
+        <div class="step-inside" @click="goToStep(step)">
+          <svg v-if="finishedStep(step)" version="1.1" id="check" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46px" height="37px" viewBox="0 0 46 37" enable-background="new 0 0 46 37" xml:space="preserve">
+            <polygon id="check-icon" fill="" points="0.2230862,22.3627338 14.1432562,36.2812843 45,5.4261613 40.3345947,0.7607598 14.1432562,26.9504795 4.7655683,17.5744114 "/>
+          </svg>
+
+          <span v-if="stepActive <= step">
+            {{ step }}
+          </span>
+        </div>
+      </div>
     </div>
 
     <nav>
       <h1 v-html="group"></h1>
       <h2 v-if="navSubGroup">
-        {{ subGroup | truncate(25) }}
+        {{ service_name | truncate(25) }}
       </h2>
     </nav>
   </div>
@@ -80,7 +105,10 @@
     text-align: center;
 
     &.active {
-      background: white;
+
+      .step-inside {
+        background-color: white;
+      }
 
       &:before {
         position: absolute;
@@ -96,11 +124,16 @@
     }
 
     &.complete {
+      cursor: pointer;
       color: white;
-      background: $fern;
+      background: $color-green;
+
+      .step-inside {
+        background: $color-green;
+      }
 
       &:after {
-        background: $fern;
+        background: $color-green;
       }
     }
 
@@ -199,10 +232,11 @@ nav {
 </style>
 
 <script>
-import topBar from './topBar.vue'
+import topBar         from './topBar.vue'
+import { mapFields }  from 'vuex-map-fields'
 
 export default {
-  props: ['stepActive','stepComplete','navSubGroup','backHome'],
+  props: ['stepActive','stepComplete','navSubGroup'],
   components: {
     topBar
   },
@@ -210,7 +244,8 @@ export default {
     return {
       showModal:       false,
       allData:         [],
-      hideBackButton:  false
+      hideBackButton:  false,
+      
     }
   },
   mounted() {
@@ -227,20 +262,54 @@ export default {
     }
   },
   methods: {
-    navBackButton() {
-      if(!this.backHome)
-        return this.$router.back();
-      return this.$router.push('/');
-    },
     confirmRoute() {
       if(this.$route.path == '/confirm') {
         this.hideBackButton = true;
       }
+    },
+    goToStep(step) {
+      if(step <= this.stepActive)
+      if(step == 2) {
+        this.$router.push('./')
+      } else {
+        this.$router.push(this.stepperPaths[step].path)
+      }
+    },
+    finishedStep(step) {
+      switch(step) {
+        case 1:
+          if(step < this.stepActive)
+            return true
+        case 2:
+          if(step < this.stepActive)
+            return true;
+        case 3:
+          if(step < this.stepActive)
+            return true;
+        case 4:
+          if(step < this.stepActive) {
+            return true;
+          }
+        case 5:
+          if(step < this.stepActive) {
+            return true;
+          }
+        case 6:
+          if(step < this.stepActive) {
+            return true;
+          }
+        default:
+          break;
+      }
     }
   },
   computed: {
-    group()   { return this.$store.getters.group },
-    subGroup(){ return this.$store.getters.subGroup },
+    ...mapFields([
+      'stepperPaths',
+      'totalSteps',
+      'serviceInfos.service_group.group',
+      'serviceInfos.service_group.service_name',
+    ]),
   }
 }
 </script>

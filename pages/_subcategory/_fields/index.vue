@@ -2,10 +2,8 @@
   <div>
     <header class="info-process">
       <headerNav
-        :back-home="backHome"
         :nav-sub-group="navSubGroup"
-        :step-active="stepActive"
-        :step-complete="stepComplete" />
+        :step-active="stepActive" />
     </header>
 
     <main class="info-process fields" ref="mainElm">
@@ -142,13 +140,11 @@
 <style lang="scss" scoped>
   main {
     &.fields {
-      // background: blue;
       height: calc(100vh - 244px);
 
       @media only screen
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
-        background-color: red;
         margin-top: 5px;
         height: 355px;
       }
@@ -287,23 +283,22 @@ export default {
       captures:            [],
       response:            {},
       singleImgMessage:    'Sorry, we only support a single image at the moment.',
-      stepActive: {
-        one:               false,
-        two:               false,
-        three:             true,
-        four:              false,
-        five:              false,
-        six:               false
-      },
-      stepComplete: {
-        one:               true,
-        two:               true,
-        three:             false,
-        four:              false,
-        five:              false,
-        six:               false
-      }
+      stepActive:          3,
     }
+  },
+  created() {
+    let stepThreeData = {
+      name:     this.$route.name,
+      path:     this.$route.fullPath,
+    }
+
+    let stepTwoData = {
+      name:     'subcategory',
+      path:     this.$route.params.subcategory,
+    }
+
+    this.$store.dispatch('setProgressStepThree', stepThreeData);
+    this.$store.dispatch('setProgressStepTwo',   stepTwoData);
   },
   mounted() {
     let noServiceCode = this.service_code == '';

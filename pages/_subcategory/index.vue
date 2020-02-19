@@ -2,10 +2,8 @@
   <div>
     <header class="subcategory">
       <headerNav
-        :back-home="backHome"
         :nav-sub-group="navSubGroup"
-        :step-active="stepActive"
-        :step-complete="stepComplete" />
+        :step-active="stepActive" />
     </header>
 
     <main class="subcategory">
@@ -40,9 +38,7 @@
   main {
     &.subcategory {
       margin: 0 auto;
-      background-color: pink;
       height: calc(100vh - 200px);
-      // height: auto;
 
       ul {
         width: 100%;
@@ -93,22 +89,7 @@ export default {
       backHome:        false,
       showModal:       false,
       navSubGroup:     false,
-      stepActive: {
-        one:           false,
-        two:           true,
-        three:         false,
-        four:          false,
-        five:          false,
-        six:           false
-      },
-      stepComplete: {
-        one:           true,
-        two:           false,
-        three:         false,
-        four:          false,
-        five:          false,
-        six:           false
-      },
+      stepActive:      2,
       routeNames: {
         cs:           'cleanup-and-sanitation',
         csProper:     'Cleanup & Sanitation',
@@ -124,6 +105,16 @@ export default {
         mProper:      'Miscellaneous'
       }
     }
+  },
+  created(){
+    console.log('To ::', this.$route)
+
+    let stepData = {
+      name: this.$route.name,
+      path: this.$route.fullPath,
+    }
+
+    this.$store.dispatch('setProgressStepTwo', stepData);
   },
   mounted() {
     if(this.group == ''){

@@ -3,8 +3,7 @@
     <header class="location">
       <headerNav
         :nav-sub-group="navSubGroup"
-        :step-active="stepActive"
-        :step-complete="stepComplete" />
+        :step-active="stepActive" />
     </header>
 
     <main class="location">
@@ -110,7 +109,6 @@
 <style lang="scss" scoped>
 main {
   &.location {
-    background: red;
     margin: 0 auto;
     height: calc(100vh - 210px);
     
@@ -351,23 +349,7 @@ export default {
 
 
       navSubGroup:      true,
-      stepActive: {
-        one:            false,
-        two:            false,
-        three:          false,
-        four:           true,
-        five:           false,
-        six:            false,
-      },
-      stepComplete: {
-        one:            true,
-        two:            true,
-        three:          true,
-        four:           false,
-        five:           false,
-        six:            false,
-      },
-
+      stepActive:       4,
       geoLocationPositionError: null,
       geoLocationPosition:      {
         lat:      null,
@@ -381,6 +363,14 @@ export default {
       mapCenterCoords:     null,
       findingUserPosition: false
     }
+  },
+  created() {
+    let stepData = {
+      name: this.$route.name,
+      path: this.$route.fullPath,
+    }
+
+    this.$store.dispatch('setProgressStepFour', stepData);
   },
   mounted() {
     this.$gmapApiPromiseLazy()

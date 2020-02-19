@@ -2,7 +2,6 @@
   <div>
     <header class="info-process">
       <headerNav
-        :back-home="backHome"
         :nav-sub-group="navSubGroup"
         :step-active="stepActive"
         :step-complete="stepComplete" />
