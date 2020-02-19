@@ -3,8 +3,7 @@
     <header class="info-process">
       <headerNav
         :nav-sub-group="navSubGroup"
-        :step-active="stepActive"
-        :step-complete="stepComplete" />
+        :step-active="stepActive" />
     </header>
 
     <main class="info" ref="mainElm">
@@ -65,7 +64,6 @@
 
 main {
   &.info {
-    background: red;
     margin: 0 auto;
     height: calc(100vh - 210px);
 
@@ -74,11 +72,7 @@ main {
     and (max-device-width : 480px) {
       display: flex;
       background-color: purple !important;
-      // max-height: calc(100vh - 240px);
-      // height: auto;
       margin: 5px auto 0 auto;
-      // max-height: calc(100vh - 170px);
-      // height: auto;
     }
   }
 }
@@ -130,22 +124,7 @@ export default {
       routeCodeData:      '',
       allData:            [],
       navSubGroup:        true,
-      stepActive: {
-        one:              false,
-        two:              false,
-        three:            false,
-        four:             false,
-        five:             true,
-        six:              false
-      },
-      stepComplete: {
-        one:              true,
-        two:              true,
-        three:            true,
-        four:             true,
-        five:             false,
-        six:              false
-      }
+      stepActive:         5,
     }
   },
   methods: {
