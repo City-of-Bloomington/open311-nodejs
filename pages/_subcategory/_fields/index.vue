@@ -1,289 +1,358 @@
 <template>
   <div>
-    <header class="info-process">
+    <header class="location">
       <headerNav
         :nav-sub-group="navSubGroup"
         :step-active="stepActive" />
     </header>
 
-    <main class="info-process fields" ref="mainElm">
-      <h2>General information:</h2>
+    <main class="location">
+      <div class="field-group">
+        <label for="location-search">
+          Service request location:
+        </label>
 
-      <div class="form-group camera-wrapper">  
-        <div style="display: flex;">
-          <label for="media">Include Image:
-          <input
-            type="file"
-            accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
-            @change="updateCanvasImage"
-            ref="fileInput"
-            name="media"></label>
+        <gmap-autocomplete
+          :value="location_data.placeAddress"
+          :class="['autocomplete-search', {'locating': findingUserPosition }]"
+          placeholder="Service Request Location"
+          @place_changed="setPlace"
+          :select-first-on-enter="true"
+          :options="{
+            strictBounds: true,
+            bounds: {
+              north:  39.2,
+              south:  39.1,
+              east:  -86.5,
+              west:  -86.6
+            },
+          }" />
 
-          <button
-            @click="$refs.fileInput.click()" 
-            v-if="captures.length < 1"
-            class="image-input">Include Photo</button>
-        </div>
-
-        <canvas
-          v-show="false"
-          id="imageCanvas"
-          ref="imageCanvas"></canvas>
-
-        <ul v-if="captures.length">
-          <li v-for="c in captures" :key="c">
-            <img :src="c" />
-            <button
-              type="button"
-              class="button"
-              @click="removeImage(c)">remove</button>
-          </li>
-        </ul>
+        <button
+          :class="['find-me', {'locating': findingUserPosition }]"
+          @click="getCurrentPosition">
+          <span v-if="findingUserPosition">Locating ...</span>
+          <span v-else>Find me</span>
+        </button>
       </div>
 
-      <div class="form-group">
-        <label for="default-description">Describe this issue:</label>
-        <textarea
-          v-model="default_description"
-          id="default-description"
-          name="default-description"
-          wrap="hard">
-        </textarea>
-      </div>
+      <GmapMap
+        :center="mapCenter()"
+        @center_changed="updateCenter"
+        @dragend="mapDragEnd"
+        :zoom="zoom"
+        map-type-id="hybrid"
+        :options="{
+          zoomControl:        true,
+          mapTypeControl:     true,
+          scaleControl:       false,
+          streetViewControl:  false,
+          rotateControl:      false,
+          fullscreenControl:  false,
+          disableDefaultUi:   true,
+          draggable:          true,
+          styles: [
+            {
+              featureType:    'poi',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            },
+            {
+              featureType:    'poi.medical',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            },
+            {
+              featureType:    'poi.government',
+              stylers: [
+                {
+                  visibility: 'off'
+                }
+              ]
+            }
+          ]
+        }">
+        <div class="cross"></div>
 
-      <div v-if="pre_service_attrs.length">
-        <h2>{{ service_name }} information:</h2>
-        <div class="form-group"
-             v-for="item, i in pre_service_attrs"
-             :key="item.code">
-
-          <div v-if="item.datatype === 'string'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              v-model="item.answer_value"
-              type="text"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'number'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="number"
-              v-model="item.answer_value"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'datetime'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="datetime-local"
-              v-model="item.answer_value"
-              :id="item.key"
-              :name="item.name" />
-          </div>
-
-          <div v-else-if="item.datatype === 'text'">
-            <label :for="item.code">{{ item.description }}</label>
-            <textarea
-              v-model="item.answer_value"
-              :id="item.code"
-              :name="item.name"
-              wrap="hard"></textarea>
-          </div>
-
-          <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-            <legend>{{ item.description }}:</legend>
-            <div v-for="value, i in item.values"
-                 :class="{'no-break': (value.name == 'no') || (value.name == 'yes')}">
-
-              <label :for="`${item.code}-${value.name}`">
-                <input
-                  type="radio"
-                  v-model="item.answer_value"
-                  :id="`${item.code}-${value.name}`"
-                  :value="value.key"
-                  :name="item.code" />
-                  {{ value.name }}</label>
-            </div>
-          </div>
-
-          <div v-else-if="item.datatype === 'multivaluelist'">
-            <label :for="item.description">{{ item.description }}</label>
-            <select
-              :id="item.description"
-              v-model="item.answer_value">
-              <option
-                v-for="item in item.values"
-                :value="item.key"
-                :key="item.name">{{ item.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
+        <GmapPolygon
+          v-if="cityBoundary"
+          :paths="cityBoundary"
+          :options="{
+            strokeColor:    'rgb(30, 90, 174)',
+            strokeOpacity:  0.8,
+            strokeWeight:   2,
+            fillColor:      'rgb(30, 90, 174)',
+            fillOpacity:    0.15
+          }"
+        />
+      </GmapMap>
       <footer>
         <nuxt-link
-          to="/location"
-          class="button next-button"
-          @click.native="storeFormInfo">Next
-        </nuxt-link>
+          v-if="true"
+          :to="{name: 'subcategory-fields-fields'}"
+          class="button next-button">Next</nuxt-link>
       </footer>
-
-      <emerModal />
     </main>
   </div>
 </template>
 
 <style lang="scss" scoped>
-  main {
-    &.fields {
-      height: calc(100vh - 244px);
+main {
+  &.location {
+    margin: 0 auto;
+    height: calc(100vh - 210px);
+    
+    $duration: 1.4s;
 
-      @media only screen
-      and (min-device-width : 320px)
-      and (max-device-width : 480px) {
-        margin-top: 5px;
-        height: 355px;
-      }
+    @keyframes spin {
+      0%   { transform: rotate(0deg);   }
+      50%  { transform: rotate(135deg); }
+      100% { transform: rotate(450deg); }
+    } 
+
+    form {
+      margin: 0 0 20px 0;
     }
 
-    h2 {
+    label {
       color: white;
-      font-size: 20px;
-      line-height: 22px;
       font-weight: 600;
-      letter-spacing: .25px;
+      font-size: 16px;
       margin: 0 0 5px 0;
     }
 
-    .fields {
-      h2 {
-        border-bottom: 1px solid rgba(225,225,225,0.2);
-        margin: 0 0 10px 0;
-      }
+    .vue-map-container {
+      width: 100%;
+      height: 350px;
+      margin: 20px 0;
+    }
 
-      .form-group {
-        margin: 0 0 40px 0 !important;
+    .autocomplete-search {
+      padding: 5px 8px 5px 95px;
+      height: 28px;
+
+      &.locating {
+        padding-left: 110px;
       }
     }
 
-    .g-recaptcha {
-      margin-bottom: 15px;
+    .field-group {
+      position: relative;
+
+      input {
+        box-shadow: none;
+      }
     }
 
-    footer {
-      button {
-        margin-bottom: 15px;
+    button {
+      position: relative;
+
+      &.find-me {
+        height: 28px !important;
+        margin: 0 0 0 auto;
+        background: $color-green;
+        // background: $color-orange-dark;
+        // color: darken($color-orange-darker, 35%);
+        padding: 5px 8px 5px 28px;
+        font-size: 14px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        -webkit-border-radius: 3px;
+        -webkit-border-top-right-radius: 0 !important;
+        -webkit-border-bottom-right-radius: 0 !important;
+        -moz-border-radius: 3px;
+        -moz-border-radius-topright: 0 !important;
+        -moz-border-radius-bottomright: 0 !important;
+        border-radius: 3px;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+
+        &:focus {
+          outline: none;
+        }
+
+        &:before {
+          position: absolute;
+          content: '';
+          top: 5px;
+          left: 5px;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          background-size: contain;
+          width: 18px;
+          height: 18px;
+        }
+
+        svg {
+          position: absolute;
+          left: 4px;
+
+          .pulse {
+            stroke: white; 
+            stroke-width: 2px;
+            stroke-opacity: 1;
+            fill: white;
+            fill-opacity: 0;
+            transform-origin: 50% 50%;
+            animation-duration: 2s;
+            animation-name: pulse;
+            animation-iteration-count: infinite;
+          }
+
+          @keyframes pulse {
+            from {
+              stroke-width: 3px;
+              stroke-opacity: 1;
+              transform: scale(0.3);
+            }
+            to {
+              stroke-width: 0;
+              stroke-opacity: 0.2;
+              transform: scale(2.2);
+            }
+          }
+        }
+
+        &.locating {
+          &:before {
+            animation: spin $duration linear infinite;
+          }
+        }
+      }
+
+      &.locate {
+        z-index: 1000;
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background: red;
+        display: block;
+
+        span {
+          @include visuallyHidden();
+        }
+
+        &:before {
+          position: absolute;
+          content: '';
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.619 20.619'%3E%3Ctitle%3Elocation-icon%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cg id='location-icon'%3E%3Ccircle cx='10.309' cy='10.309' r='8.149' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Ccircle cx='10.309' cy='10.309' r='3.963' fill='%23fff'/%3E%3Cline x1='10.309' y1='18.459' x2='10.309' y2='20.619' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='10.309' x2='10.309' y2='2.16' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='2.16' y1='10.309' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3Cline x1='20.619' y1='10.309' x2='18.459' y2='10.309' fill='none' stroke='%23fff' stroke-miterlimit='10'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          background-size: contain;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    ::v-deep .vue-map-hidden {
+      pointer-events: none;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      
+      .cross {
+        display: block;
+        width: 40px;
+        height: 40px;
+        background-size: contain;
+        background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='71px' height='71px' viewBox='0 0 71 71' enable-background='new 0 0 71 71' xml:space='preserve'%3E%3Cg%3E%3Cg%3E%3Cpath fill='black' d='M35.5,47.6c-6.7,0-12.1-5.4-12.1-12.1c0-6.7,5.4-12.1,12.1-12.1c6.7,0,12.1,5.4,12.1,12.1C47.6,42.2,42.2,47.6,35.5,47.6z M35.5,25.4c-5.6,0-10.1,4.5-10.1,10.1s4.5,10.1,10.1,10.1s10.1-4.5,10.1-10.1S41.1,25.4,35.5,25.4z'/%3E%3C/g%3E%3Cg%3E%3Cpath fill='black' d='M71,33.8h-5.8c-0.9-15-12.9-27.1-28-28V0h-3.4v5.8c-15,0.9-27.1,12.9-28,28H0v3.4h5.8c0.9,15,12.9,27.1,28,28V71h3.4v-5.8 c15-0.9,27.1-12.9,28-28H71V33.8z M35.5,61.8C21,61.8,9.2,50,9.2,35.5S21,9.2,35.5,9.2S61.8,21,61.8,35.5S50,61.8,35.5,61.8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      #cross{
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background: #000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      #cross::before{
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 2px;
+        background: #000;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      margin-top: 10px;
+      background-color: green !important;
+      height: 355px;
+
+      .vue-map-container {
+        height: 210px;
+        margin: 10px 0;
       }
     }
   }
+}
+
+button {
+  color: white;
+}
 </style>
 
 <script>
-import axios                  from 'axios'
-import emerModal              from '~/components/emerModal.vue'
-import headerNav              from '~/components/nav.vue'
-import modal                  from '~/components/modal.vue'
-import { mapGetters,
-         mapState }           from 'vuex'
-import { mapFields,
-         mapMultiRowFields }  from 'vuex-map-fields'
+import axios          from 'axios'
+import headerNav      from '~/components/nav.vue'
+import { mapFields }  from 'vuex-map-fields'
+import { gmapApi }    from 'vue2-google-maps'
 
 export default {
-  beforeRouteEnter (to, from, next) {
-
-    next(vm => {
-      let routeEqualsStoreCode = vm.service_code == to.params.fields,
-          emptyServiceAttrs    = !vm.pre_service_attrs.length,
-          runGetServiceAttrs   = from.path == '/' && emptyServiceAttrs;
-      
-      let serviceObj = vm.initGroupData.filter((e, i ) => {
-        if(e.service_code == to.params.fields)
-          return e
-      });
-      
-      if(!routeEqualsStoreCode) {
-        vm.$router.push({
-          name:  'subcategory-fields',
-          params: {
-            subcategory: vm.stringToDashed(serviceObj[0].group),
-            fields: to.params.fields
-          }
-        });
-      }
-
-      if(runGetServiceAttrs || !routeEqualsStoreCode) {
-        vm.$store.dispatch('setGroupName',    serviceObj[0].group);
-        vm.$store.dispatch('setSubGroupName', serviceObj[0].service_name);
-        vm.$store.dispatch('setGroupCode',    to.params.fields);
-        vm.$store.dispatch('setRouteCode',    to.params.fields);
-
-        let routeID = to.params.fields;
-        
-        vm.getServiceAttrs(routeID)
-        .then((res) => {
-          let data = res.attributes.map((e, i) => {
-            let dataReady = {...e, answer_value: ''}
-            return dataReady
-          });
-
-          vm.$store.dispatch('setPreServiceAttrs', data);
-        })
-        .catch(err => { console.log(`get fields err - ${err}`); });
-      }
-
-      if(vm.default_image)
-        vm.captures.push(vm.default_image);
-
-      if(from.name !== 'subcategory')
-        vm.backHome = true;
-    });
-
-    next();
-  },
   head () {
     return {
-      titleTemplate: `%s - ${this.service_name}`,
+      titleTemplate: `%s - ${this.$store.getters.subGroup}`,
       meta: [
-        { hid: 'description',
-          name: 'description',
-          content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
+        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
       ]
     }
   },
-  props: ['item'],
   components: {
-    emerModal,
-    headerNav,
-    modal
+    headerNav
   },
   data() {
     return {
-      backHome:            false,
-      routeCode:           '',
-      routeCodeData:       '',
-      allData:             [],
-      navSubGroup:         true,
-      percentCompleted:    '',
-      modalImage:          null,
-      formElements:        {},
-      defaultDescription:  '',
-      showVideoElm:        false,
-      mainElm:             '',
-      imgContext:          null,
-      imgCanvas:           null,
-      selectedImage:       null,
-      imgElement:          null,
-      imgOrientation:      '',
-      video:               {},
-      canvas:              {},
-      captures:            [],
-      response:            {},
-      singleImgMessage:    'Sorry, we only support a single image at the moment.',
-      stepActive:          3,
+      chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
+      firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
+      safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
+
+
+
+      navSubGroup:      true,
+      stepActive:       3,
+      geoLocationPositionError: null,
+      geoLocationPosition:      {
+        lat:      null,
+        lng:      null,
+        accuracy: null,
+        geoCoded: null,
+      },
+
+      reportedMapCenter:   null,
+      zoom:                17,
+      mapCenterCoords:     null,
+      findingUserPosition: false
     }
   },
   created() {
@@ -301,135 +370,221 @@ export default {
     this.$store.dispatch('setProgressStepTwo',   stepTwoData);
   },
   mounted() {
-    let noServiceCode = this.service_code == '';
+    console.log('this.service_code', this.service_code)
 
-    if(noServiceCode) {
-      this.routeCode = this.$route.params.fields.substr(this.$route.params.fields.lastIndexOf('/') + 1);
+    console.log(this.$route.params.fields)
+
+    if(this.service_code == '') {
+      this.routeCode = this.$route.params.fields;
 
       this.$store.dispatch('setGroupCode', this.routeCode);
       this.$store.dispatch('setRouteCode', this.routeCode);
+
+      switch (this.$route.params.subcategory) {
+        case this.routeNames.cs:
+          this.groupProperName = this.routeNames.csProper
+          break;
+        case this.routeNames.spt:
+          this.groupProperName = this.routeNames.sptProper
+          break;
+        case this.routeNames.pr:
+          this.groupProperName = this.routeNames.prProper
+          break;
+        case this.routeNames.h:
+          this.groupProperName = this.routeNames.hProper
+          break;
+        case this.routeNames.wsu:
+          this.groupProperName = this.routeNames.wsuProper
+          break;
+        case this.routeNames.m:
+          this.groupProperName = this.routeNames.mProper
+          break;
+        default:
+          this.$router.push({ path: '/' });
+      }
+      this.$store.dispatch('setGroupName', this.groupProperName)
       
       this.allDatas;
       this.routeDataGroup;
       this.routeDataSubGroup;
     }
-  },
-  methods: {
-    removeImage(c){
-      this.$store.dispatch('setDefaultImage', '');
-      this.captures.splice(this.captures.indexOf(c), 1);
-      this.$refs.fileInput.value = '';
-    },
-    updateCanvasImage(e) {
-      let self    = this,
-          files   = e.target.files,
-          reader  = new FileReader();
 
-      reader.onload = (e) => {
-        let img = new Image();
+    this.$gmapApiPromiseLazy()
+    .then(() => {
+      if(this.location_data == null) {
+        this.geoLocatePromise()
+        .then((res) => {
 
-        img.onload = () => {
-          self.drawCanvasImage(img);
-        }
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(files[0]);
-    },
-    drawCanvasImage(img) {
-      const EXIF = require('exif-js');
+          this.findingUserPosition = false;
 
-      let self   = this,
-          canvas = self.$refs.imageCanvas;
+          console.log(`geoLocatePromise() `,
+                      this.consoleLog.success
+                      `\n\n ${res} \n\n`);
 
-      EXIF.getData(img, function() {
-        self.imgOrientation = this.exifdata.Orientation;
-      });
-
-      let max_width  = 1000,
-          max_height = 1000,
-          width      = img.width,
-          height     = img.height,
-          ctx        = canvas.getContext("2d");
-
-      if (4 < self.imgOrientation && 
-          self.imgOrientation < 9) {
-        if (width > height) {
-          if (width > max_width) {
-            img.height    *= max_width / img.width;
-            img.width     = max_width;
-
-            height        = img.height;
-            width         = img.width;
-
-            canvas.width  = img.height;
-            canvas.height = img.width;
+          this.reportedMapCenter = {
+            lat: res.coords.latitude,
+            lng: res.coords.longitude,
           }
-        }
+
+          this.geoLocationPosition.accuracy = res.coords.accuracy;
+
+          this.geocodeLatLng(this.reportedMapCenter);
+        })
+        .catch((err) => {
+          this.geoLocationPositionError = err.message;
+          console.log('geoLocatePromise() -', err.message);
+        });
       } else {
-        if (height > max_height) {
-          img.height      *= max_height / img.width;
-          img.width       = max_width;
-
-          height          = img.height;
-          width           = img.width;
-
-          canvas.width    = img.height;
-          canvas.height   = img.width;
+        this.reportedMapCenter = {
+          lat: this.location_data.lat,
+          lng: this.location_data.lng,
         }
-
-        canvas.width = width;
-        canvas.height = height;
       }
+    });
 
-      switch (self.imgOrientation) {
-        case 2: ctx.transform(-1, 0,  0,  1, width,   0);      break;
-        case 3: ctx.transform(-1, 0,  0, -1, width,   height); break;
-        case 4: ctx.transform(1,  0,  0, -1, 0,       height); break;
-        case 5: ctx.transform(0,  1,  1,  0, 0,       0);      break;
-        case 6: ctx.transform(0,  1, -1,  0, height,  0);      break;
-        case 7: ctx.transform(0, -1, -1,  0, height,  width);  break;
-        case 8: ctx.transform(0, -1,  1,  0, 0,       width);  break;
-        default: break;
+    if(!this.cityBoundary){
+      this.getCityBoundaryGeoJson()
+      .then((res) => this.setCityBoundary(res))
+      .catch((e)  => {
+        console.log(`City Boundary Failed 🛑`,
+                    this.consoleLog.error
+                    `\n\n ${e} \n\n`);
+      });
+    }
+  },
+  watch: {},
+  methods: {
+    updateCenter(latLng) {
+      if(latLng) {
+        this.mapCenterCoords = {
+          lat: latLng.lat(),
+          lng: latLng.lng(),
+        }
+        console.log('updateCenter() - ', this.mapCenterCoords)
       }
-
-      ctx.drawImage(img, 0, 0, width, height);
-
-      if(self.captures.length < 1) {
-        self.captures.push(canvas.toDataURL('image/jpeg', 0.7));
-        this.$store.commit('storeDefaultImage', this.captures[0]);
-      } else { alert(self.singleImgMessage) }
     },
-    storeFormInfo() {
-      this.$store.commit('storeDefaultImage', this.captures[0]);
+    geocodeLatLng(coords){
+      const geocoder = new google.maps.Geocoder();
+
+      if(coords) {
+        geocoder.geocode({ 'location': coords }, (results, status) => {
+          this.geoLocationPosition.geoCoded = results;
+
+          let locationData = {
+            address:      results[0].formatted_address,
+            placeAddress: results[0].formatted_address,
+            lat:          results[0].geometry.location.lat(),
+            lng:          results[0].geometry.location.lng()
+          }
+
+          this.$store.dispatch('setLocationData', locationData);
+
+          console.log('geocodeLatLng() - ', results, status); 
+        });
+      } else {
+        console.log('Sorry cant run geocodeLatLng(coords) w/ out `coords = { lat:xxx, lng:xxx }`')
+      }
+    },
+    mapDragEnd() {
+      if(this.mapCenterCoords) {
+        this.geocodeLatLng(this.mapCenterCoords);
+
+        this.reportedMapCenter = {
+          lat: this.mapCenterCoords.lat,
+          lng: this.mapCenterCoords.lng,
+        }
+      }
+    },
+    mapCenter(){
+      if(this.reportedMapCenter != null)
+        return this.reportedMapCenter
+        
+      return this.cityHallLatLong
+    },
+    setPlace(place){
+      console.log('setPlace() - ', place)
+
+      let locationData = {
+        address:      place.name,
+        placeAddress: place.name + ', ' + place.formatted_address,
+        lat:          place.geometry.location.lat(),
+        lng:          place.geometry.location.lng()
+      }
+
+      this.$store.dispatch('setLocationData', locationData);
+
+      this.zoom = 19;
+
+      this.reportedMapCenter = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      }
+    },
+    geoLocatePromise() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          this.findingUserPosition = true;
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        }
+      })
+    },
+    getCurrentPosition() {
+      
+      this.geoLocatePromise()
+      .then((position) => {
+        if(position.coords) {
+          
+          let pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          this.reportedMapCenter = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+
+          this.findingUserPosition = false;
+        
+          console.log(this.geocodeLatLng(pos));
+          console.log('getCurrentPosition() - ', position);
+          console.log(this.reportedMapCenter);
+        } else {
+          console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        }
+      })
+      .catch((error) => {
+        let errMsg = null;
+
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errMsg = "User denied the request for Geolocation.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errMsg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            errMsg = "The request to get user location timed out.";
+            break;
+          case error.UNKNOWN_ERROR:
+            errMsg = "An unknown error occurred.";
+            break;
+        }
+        console.log('getCurrentPosition() geoLocatePromise - ', error)
+        console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+      })
     },
   },
   computed: {
-    ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
     ...mapFields([
-      'fromServiceCode',
-      'subGroup',
-      'initGroupData',
-      'serviceInfos.service_attrs',
-      'serviceInfos.default_image',
-      'serviceInfos.default_description',
+      'routeNames',
+      'serviceInfos.location_data',
       'serviceInfos.service_group.group',
+      'serviceInfos.service_group.route_code',
       'serviceInfos.service_group.service_code',
-      'serviceInfos.service_group.service_name',
+      'serviceInfos.service_group.service_name'
     ]),
-    allDatas() {
-      const allRoutesubGroups = this.initGroupData.filter(
-        g => g.service_code == this.routeCode
-      );
-      return allRoutesubGroups[0];
-    },
-    routeDataGroup() {
-      this.$store.commit('storeGroupName', this.allDatas.group);
-      return this.allDatas.group;
-    },
-    routeDataSubGroup() {
-      this.$store.commit('storeSubGroupName', this.allDatas.service_name);
-      return this.allDatas.service_name;
-    },
+    google: gmapApi,
   }
 }
 </script>

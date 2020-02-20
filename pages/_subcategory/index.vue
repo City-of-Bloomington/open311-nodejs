@@ -90,20 +90,7 @@ export default {
       showModal:       false,
       navSubGroup:     false,
       stepActive:      2,
-      routeNames: {
-        cs:           'cleanup-and-sanitation',
-        csProper:     'Cleanup & Sanitation',
-        spt:          'streets-parking-and-traffic',
-        sptProper:    'Streets, Parking & Traffic',
-        pr:           'parks-and-recreation',
-        prProper:     'Parks & Recreation',
-        h:            'hazards',
-        hProper:      'Hazards',
-        wsu:          'water-and-sewage-utility',
-        wsuProper:    'Water & Sewage Utility',
-        m:            'miscellaneous',
-        mProper:      'Miscellaneous'
-      }
+      
     }
   },
   created(){
@@ -118,9 +105,7 @@ export default {
   },
   mounted() {
     if(this.group == ''){
-      this.groupRouteName = this.$route.params.subcategory;
-
-      switch (this.groupRouteName) {
+      switch (this.$route.params.subcategory) {
         case this.routeNames.cs:
           this.groupProperName = this.routeNames.csProper
           break;
@@ -171,6 +156,7 @@ export default {
     ...mapFields([
       'initGroupData',
       'fromServiceCode',
+      'routeNames',
       'serviceInfos.service_group.group',
       'serviceInfos.service_group.service_code',
     ]),

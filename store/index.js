@@ -74,6 +74,20 @@ export const defaultState = () => ({
     4: {},
     5: {},
   },
+  routeNames: {
+    cs:         'cleanup-and-sanitation',
+    csProper:   'Cleanup & Sanitation',
+    spt:        'streets-parking-and-traffic',
+    sptProper:  'Streets, Parking & Traffic',
+    pr:         'parks-and-recreation',
+    prProper:   'Parks & Recreation',
+    h:          'hazards',
+    hProper:    'Hazards',
+    wsu:        'water-and-sewage-utility',
+    wsuProper:  'Water & Sewage Utility',
+    m:          'miscellaneous',
+    mProper:    'Miscellaneous'
+  }
 });
 
 const state = () => defaultState();
