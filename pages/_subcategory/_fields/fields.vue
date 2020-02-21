@@ -285,7 +285,7 @@ export default {
       captures:            [],
       response:            {},
       singleImgMessage:    'Sorry, we only support a single image at the moment.',
-      stepActive:          4,
+      stepActive:          5,
     }
   },
   created() {
@@ -294,7 +294,7 @@ export default {
       path: this.$route.fullPath,
     }
 
-    this.$store.dispatch('setProgressStepFour', stepData);
+    this.$store.dispatch('setProgressStepFive', stepData);
   },
   mounted() {
     let noServiceCode = this.service_code == '';
