@@ -7,7 +7,8 @@
     </header>
 
     <main class="info" ref="mainElm">
-      <p>You may submit anonymously by leaving these fields empty.</p><br>
+      <h2>Your Information</h2>
+      <p><strong>Note:</strong> <i>Information you provide through uReport is stored and retained by the City as a public record. You may submit a service ticket anonymously.</i></p>
       <div class="form-group">
         <label for="first-name">First Name:</label>
         <input v-model="first_name"
@@ -71,6 +72,26 @@ main {
   &.info {
     margin: 0 auto;
     height: calc(100vh - 210px);
+
+    h2 {
+      color: white;
+      font-size: 20px;
+      line-height: 22px;
+      font-weight: 600;
+      letter-spacing: .25px;
+      margin: 0 0 5px 0;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 16px;
+      line-height: 24px;
+      margin: 0 0 10px 0;
+
+      strong {
+        color: white;
+      }
+    }
 
     @media only screen
     and (min-device-width : 320px)

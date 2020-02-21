@@ -99,9 +99,6 @@ export default {
       meta: [
         { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
       ],
-      script: [
-        { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
-      ]
     }
   },
   components: {
@@ -116,8 +113,7 @@ export default {
   },
   data() {
     return {
-      reCaptchaError:     false,
-      reCaptchaSiteKey:   process.env.reCaptchaSiteKey,
+      
       backHome:           false,
       routeCode:          '',
       routeCodeData:      '',
@@ -127,90 +123,11 @@ export default {
     }
   },
   methods: {
-    dataURItoBlob(dataURI) {
-      if(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
-        var byteString;
-        if (dataURI.split(',')[0].indexOf('base64') >= 0)
-          byteString = atob(dataURI.split(',')[1]);
-        else
-          byteString = unescape(dataURI.split(',')[1]);
-        // separate out the mime component
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-        // write the bytes of the string to a typed array
-        var ia = new Uint8Array(byteString.length);
-        for (var i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
-        }
-        return new Blob([ia], {type:mimeString});
-      }
-    },
-    submitPost() {
-      if(!grecaptcha.getResponse()) {
-        this.reCaptchaError = true;
-        console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      } else {
-        let formData        = new FormData(),
-            blob            = this.dataURItoBlob(this.default_image),
-            captchaReponse  = grecaptcha.getResponse();
-
-        formData.append("g_recaptcha_response", captchaReponse)
-        formData.append("service_code",         parseInt(this.service_code, 10))
-        formData.append("lat",                  this.lat)
-        formData.append("long",                 this.lng)
-        formData.append("address_string",       this.address)
-        formData.append("email",                this.email)
-        formData.append("first_name",           this.first_name)
-        formData.append("last_name",            this.last_name)
-        formData.append("phone",                this.phone)
-        formData.append("description",          this.default_description)
-
-        if(blob != undefined)
-          formData.append("media",              blob)
-
-        Object.values(this.pre_service_attrs).map((key) => {
-          return formData.append(`attribute[${key.code}]`, `${key.answer_value}`)
-        }).join('&');
-
-        let config = {
-          onUploadProgress: (progressEvent) => {
-            this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            console.log(`Percent Completed: ${this.percentCompleted}`);
-          }
-        }
-
-        for (var pair of formData.entries()) {
-          console.log(pair[0]+ ', ' + pair[1]);
-        }
-
-        let processingHTML = `
-          <div>
-            <p>Processing your service request.</p>
-          </div>
-        `;
-
-        this.$refs.mainElm.innerHTML = processingHTML;
-
-        this.formSubmitHandOff(formData, config)
-        .then(res  => { console.log(res) })
-        .catch(err => { console.log(err) });
-      }
-    }
+    
   },
   computed: {
     ...mapFields([
-      'serviceInfos.service_group.service_code',
-      'serviceInfos.pre_service_attrs',
-      'serviceInfos.service_attrs',
-      'serviceInfos.location_data.lat',
-      'serviceInfos.location_data.lng',
-      'serviceInfos.location_data.address',
-      'serviceInfos.personal_info.email',
-      'serviceInfos.personal_info.first_name',
-      'serviceInfos.personal_info.last_name',
-      'serviceInfos.personal_info.phone',
-      'serviceInfos.default_description',
-      'serviceInfos.default_image',
+      
     ]),
   }
 }

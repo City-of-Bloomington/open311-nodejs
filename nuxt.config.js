@@ -122,7 +122,7 @@ module.exports = {
     { src: '~/plugins/design-system' },
     { src: '~/plugins/universal-computed' },
     { src: '~/plugins/ga.js',        ssr: false },
-    // { src: '~/plugins/localStorage', ssr: false },
+    { src: '~/plugins/localStorage', ssr: false },
     { src: '~/plugins/google-map',   ssr: false },
   ],
 
