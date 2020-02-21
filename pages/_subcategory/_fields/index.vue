@@ -37,6 +37,8 @@
       </div>
 
       <GmapMap
+        v-if="loaded"
+        ref="gmap"
         :center="mapCenter()"
         @center_changed="updateCenter"
         @dragend="mapDragEnd"
@@ -92,12 +94,15 @@
           }"
         />
       </GmapMap>
+
       <footer>
         <nuxt-link
           v-if="true"
           :to="{name: 'subcategory-fields-fields'}"
           class="button next-button">Next</nuxt-link>
       </footer>
+
+      <emerModal />
     </main>
   </div>
 </template>
@@ -316,23 +321,60 @@ button {
 <script>
 import axios          from 'axios'
 import headerNav      from '~/components/nav.vue'
+import emerModal      from '~/components/emerModal.vue'
 import { mapFields }  from 'vuex-map-fields'
 import { gmapApi }    from 'vue2-google-maps'
 
 export default {
+beforeRouteEnter (to, from, next) {
+  next(vm => {
+    let serviceType = vm.initGroupData.find(obj => obj.service_code == to.params.fields);
+
+      if(serviceType != undefined) {
+        console.log('defined', serviceType)
+
+        let catParam = vm.stringToDashed(serviceType.group);
+        console.log('catParam ', catParam);
+        console.log('to ', to.params.subcategory)
+
+        if(catParam != to.params.subcategory){
+          console.log('they diff')
+          console.log('to', to.params.subcategory)
+          console.log('from', from)
+
+          // replace before breaks, so we will settle for home rn
+          vm.$router.replace({params: { subcategory: catParam }})
+          // vm.$router.replace('/')
+        }
+
+        vm.$store.dispatch('setSubGroupName', serviceType.service_name);
+        vm.$store.dispatch('setGroupCode',    serviceType.service_code);
+        vm.$store.dispatch('setRouteCode',    serviceType.service_code);
+        vm.$store.dispatch('setGroupName',    serviceType.group)
+
+      } else {
+        
+        console.log('undefined, going home')
+        vm.$router.push('/');
+      }
+    })
+    next();
+  },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.subGroup}`,
+      titleTemplate: `%s - ${this.service_name}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
+        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.service_name}) uReport service request.` }
       ]
     }
   },
   components: {
-    headerNav
+    headerNav,
+    emerModal
   },
   data() {
     return {
+      loaded: false,
       chromeGeoTutUrl:  'https://support.google.com/chrome/answer/142065?hl=en',
       firefoxGeoTutUrl: 'https://support.mozilla.org/en-US/kb/does-firefox-share-my-location-websites',
       safariGeoTutUrl:  'https://support.apple.com/en-us/HT204690',
@@ -368,59 +410,62 @@ export default {
 
     this.$store.dispatch('setProgressStepThree', stepThreeData);
     this.$store.dispatch('setProgressStepTwo',   stepTwoData);
+
+
+    // let serviceType = this.initGroupData.find(obj => obj.service_code == this.$route.params.fields);
+
+    // if(serviceType != undefined) {
+    //   console.log('defined', serviceType)
+
+    //   let catParam = this.stringToDashed(serviceType.group);
+    //   console.log(catParam);
+
+    //   if(catParam != this.$route.params.subcategory){
+    //     console.log('they diff')
+    //     this.$router.push({params: { subcategory: catParam }})
+    //     // this.$router.replace({params: { subcategory: catParam }})
+    //     // .catch(err => {
+    //     //   console.log(err);
+
+    //     //   if (error.name != "NavigationDuplicated") {
+    //     //     throw error;
+    //     //   }
+    //     // })
+    //   }
+
+    //   this.$store.dispatch('setSubGroupName', serviceType.service_name);
+    //   this.$store.dispatch('setGroupCode',    serviceType.service_code);
+    //   this.$store.dispatch('setRouteCode',    serviceType.service_code);
+    //   this.$store.dispatch('setGroupName',    serviceType.group)
+
+    // } else {
+      
+    //   console.log('undefined, going home')
+    //   this.$router.push('/');
+    // }
   },
   mounted() {
-    console.log('this.service_code', this.service_code)
-
-    console.log(this.$route.params.fields)
-
-    if(this.service_code == '') {
-      this.routeCode = this.$route.params.fields;
-
-      this.$store.dispatch('setGroupCode', this.routeCode);
-      this.$store.dispatch('setRouteCode', this.routeCode);
-
-      switch (this.$route.params.subcategory) {
-        case this.routeNames.cs:
-          this.groupProperName = this.routeNames.csProper
-          break;
-        case this.routeNames.spt:
-          this.groupProperName = this.routeNames.sptProper
-          break;
-        case this.routeNames.pr:
-          this.groupProperName = this.routeNames.prProper
-          break;
-        case this.routeNames.h:
-          this.groupProperName = this.routeNames.hProper
-          break;
-        case this.routeNames.wsu:
-          this.groupProperName = this.routeNames.wsuProper
-          break;
-        case this.routeNames.m:
-          this.groupProperName = this.routeNames.mProper
-          break;
-        default:
-          this.$router.push({ path: '/' });
-      }
-      this.$store.dispatch('setGroupName', this.groupProperName)
-      
-      this.allDatas;
-      this.routeDataGroup;
-      this.routeDataSubGroup;
-    }
-
     this.$gmapApiPromiseLazy()
     .then(() => {
-      if(this.location_data == null) {
+
+      let hasLocationData = Object.entries(this.location_data).length != 0;
+
+      console.log('t/f', hasLocationData);
+      console.log(this.location_data);
+
+      if(hasLocationData) {
+        this.loaded = true;
+        console.log('hasLocationData')
+        this.reportedMapCenter = {
+          lat: this.location_data.lat,
+          lng: this.location_data.lng,
+        }
+      } else {
         this.geoLocatePromise()
         .then((res) => {
 
           this.findingUserPosition = false;
-
-          console.log(`geoLocatePromise() `,
-                      this.consoleLog.success
-                      `\n\n ${res} \n\n`);
-
+          
           this.reportedMapCenter = {
             lat: res.coords.latitude,
             lng: res.coords.longitude,
@@ -429,18 +474,22 @@ export default {
           this.geoLocationPosition.accuracy = res.coords.accuracy;
 
           this.geocodeLatLng(this.reportedMapCenter);
+          this.loaded = true;
         })
         .catch((err) => {
           this.geoLocationPositionError = err.message;
           console.log('geoLocatePromise() -', err.message);
+
+          this.location_data = {...this.default_location_data}
+
+          this.reportedMapCenter = {
+            lat: this.default_location_data.lat,
+            lng: this.default_location_data.lng,
+          }
         });
-      } else {
-        this.reportedMapCenter = {
-          lat: this.location_data.lat,
-          lng: this.location_data.lng,
-        }
       }
-    });
+    
+    })
 
     if(!this.cityBoundary){
       this.getCityBoundaryGeoJson()
@@ -519,6 +568,8 @@ export default {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
       }
+
+      this.loaded = true;
     },
     geoLocatePromise() {
       return new Promise((resolve, reject) => {
@@ -549,6 +600,7 @@ export default {
           console.log(this.geocodeLatLng(pos));
           console.log('getCurrentPosition() - ', position);
           console.log(this.reportedMapCenter);
+          this.loaded = true;
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
         }
@@ -577,8 +629,11 @@ export default {
   },
   computed: {
     ...mapFields([
+      'consoleLog',
       'routeNames',
+      'initGroupData',
       'serviceInfos.location_data',
+      'serviceInfos.default_location_data',
       'serviceInfos.service_group.group',
       'serviceInfos.service_group.route_code',
       'serviceInfos.service_group.service_code',

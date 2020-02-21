@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 
-import { getField, updateField } from 'vuex-map-fields';
+import { getField, updateField } from 'vuex-map-fields'
 
 // export const strict = false;
 
@@ -26,6 +26,12 @@ export const defaultState = () => ({
       last_name:      '',
       phone:          '',
       email:          ''
+    },
+    default_location_data: {
+      address: "Bloomington City Hall",
+      placeAddress: "Bloomington City Hall, 401 N Morton St, Bloomington, IN 47401, USA",
+      lat: 39.1701322,
+      lng: -86.5369248
     },
     location_data:  {},
     location_info: {
@@ -87,7 +93,8 @@ export const defaultState = () => ({
     wsuProper:  'Water & Sewage Utility',
     m:          'miscellaneous',
     mProper:    'Miscellaneous'
-  }
+  },
+  serviceTypes: null,
 });
 
 const state = () => defaultState();

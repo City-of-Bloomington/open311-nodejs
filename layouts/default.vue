@@ -30,6 +30,7 @@ import { mapFields }    from 'vuex-map-fields'
 export default {
   components: { headerComponent },
   data() { return {} },
+  created() {},
   mounted() {},
   methods:  {},
   computed: {}

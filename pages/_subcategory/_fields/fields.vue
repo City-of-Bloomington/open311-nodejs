@@ -184,7 +184,6 @@
 
 <script>
 import axios                  from 'axios'
-import emerModal              from '~/components/emerModal.vue'
 import headerNav              from '~/components/nav.vue'
 import modal                  from '~/components/modal.vue'
 import { mapGetters,
@@ -260,7 +259,6 @@ export default {
   },
   props: ['item'],
   components: {
-    emerModal,
     headerNav,
     modal
   },
