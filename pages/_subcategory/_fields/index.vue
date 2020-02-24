@@ -370,7 +370,7 @@ export default {
     return {
       titleTemplate: `%s - ${this.service_name}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.service_name}) uReport service request.` }
+        { hid: 'description', name: 'description', content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
       ]
     }
   },

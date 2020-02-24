@@ -183,8 +183,6 @@
 <script>
 import headerNav              from '~/components/nav.vue'
 import modal                  from '~/components/modal.vue'
-import { mapGetters,
-         mapState }           from 'vuex'
 import { mapFields,
          mapMultiRowFields }  from 'vuex-map-fields'
 

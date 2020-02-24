@@ -108,9 +108,9 @@ export default {
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.subGroup}`,
+      titleTemplate: `%s - ${this.service_name}`,
       meta: [
-        { hid: 'description', name: 'description', content: `Submit a ${this.$store.getters.group} (${this.$store.getters.subGroup}) uReport service request.` }
+        { hid: 'description', name: 'description', content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
       ],
       script: [
         { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
@@ -143,7 +143,9 @@ export default {
   },
   computed: {
     ...mapFields([
+      'serviceInfos.service_group.group',
       'serviceInfos.service_group.service_code',
+      'serviceInfos.service_group.service_name',
       'serviceInfos.pre_service_attrs',
       'serviceInfos.service_attrs',
       'serviceInfos.location_data.lat',

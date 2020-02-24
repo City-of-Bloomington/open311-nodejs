@@ -262,26 +262,6 @@ export const actions = {
 
 export const getters = {
   getField,
-  seenModal:          state => state.seen_modal,
-  initGroupData:      state => state.initGroupData,
-  subGroupCode:       state => state.serviceInfos.service_group.service_code,
-  routeCode:          state => state.serviceInfos.service_group.route_code,
-  response:           state => state.serviceInfos.service_response,
-  defaultImage:       state => state.serviceInfos.default_image,
-  serviceAttrs:       state => state.serviceInfos.service_attrs,
-  firstName:          state => state.serviceInfos.personal_info.first_name,
-  lastName:           state => state.serviceInfos.personal_info.last_name,
-  phone:              state => state.serviceInfos.personal_info.phone,
-  email:              state => state.serviceInfos.personal_info.email,
-  locationAddress:    state => state.serviceInfos.location_info.address_string,
-  locationLat:        state => state.serviceInfos.location_info.lat,
-  locationLong:       state => state.serviceInfos.location_info.long,
-  requestID:          state => state.serviceInfos.service_response.service_request_id,
-  topbarHeight:       state => state.topbar_height,
-  searchHeight:       state => state.search_height,
-  navHeight:          state => state.nav_height,
-  stepperHeight:      state => state.stepper_height,
-  locSearchHeight:    state => state.loc_search_height
 }
 
 export default {

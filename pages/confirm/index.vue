@@ -92,21 +92,18 @@ export default {
     }
   },
   computed: {
+    ...mapFields([
+      'serviceInfos.personal_info.first_name'
+    ]),
     crmMessageLink() {
       return `To view your request status, <a href='${this.crmLink}${this.serviceReqID}' target='_blank'>click here</a>.`
-    },
-    firstName() {
-      return this.$store.getters.firstName
     },
     requestID() {
       return `Your service request number is: <strong>${this.serviceReqID}</strong>`
     },
-    responseData() {
-      return this.$store.getters.response.data.body;
-    },
     thankYou() {
       if(this.firstName != '') {
-        return `<strong>${this.firstName}</strong>, thanks for the report!`
+        return `<strong>${this.first_name}</strong>, thanks for the report!`
       }
       return `Thanks for the report!`
     }
