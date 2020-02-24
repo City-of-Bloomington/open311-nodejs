@@ -55,7 +55,6 @@
 </style>
 
 <script>
-import axios     from 'axios'
 import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
@@ -94,8 +93,6 @@ export default {
     }
   },
   created(){
-    console.log('To ::', this.$route)
-
     let stepData = {
       name: this.$route.name,
       path: this.$route.fullPath,

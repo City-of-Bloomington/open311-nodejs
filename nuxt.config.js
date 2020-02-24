@@ -118,6 +118,7 @@ module.exports = {
   },
 
   plugins: [
+    { src: '~/plugins/axios' },
     { src: '~/plugins/api-methods' },
     { src: '~/plugins/design-system' },
     { src: '~/plugins/universal-computed' },

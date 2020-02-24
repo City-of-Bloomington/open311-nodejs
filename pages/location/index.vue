@@ -318,7 +318,6 @@ button {
 </style>
 
 <script>
-import axios          from 'axios'
 import headerNav      from '~/components/nav.vue'
 import { mapFields }  from 'vuex-map-fields'
 import { gmapApi }    from 'vue2-google-maps'

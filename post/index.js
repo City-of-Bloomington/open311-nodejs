@@ -2,13 +2,21 @@ require('dotenv').config();
 var express            = require("express");
 var app                = express();
 var request            = require('request');
+const axios            = require('axios')
+var bodyParser         = require('body-parser');
 const busboyBodyParser = require('busboy-body-parser');
 
 var secretKey = `${process.env.RECAPTCHA_SERVERKEY}`;
 let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
+
+// app.use(bodyParser.json()); //parse application/json
+// app.use(bodyParser.urlencoded({ extended: false }));
+
 app.post('/', function (req, res, next) {
+  console.log(req.body);
+
   var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
 
   if(
@@ -16,13 +24,24 @@ app.post('/', function (req, res, next) {
     req.body['g_recaptcha_response'] === '' ||
     req.body['g_recaptcha_response'] === null
   ) {
-    res.status(500).send({"responseCode" : 1, "responseDesc" : "Please validate reCaptcha"});
+    res.status(500)
+    .send({"responseCode" : 1, "responseDesc" : "Please validate reCaptcha"});
+
     return next();
   }
 
+  // axios.post(verificationUrl)
+  // .then((res) => {
+  //   console.log(res)
+  //   // postForm()
+  // })
+  // .catch((err)  => {
+  //   console.log(err)
+  // })
+
   request(verificationUrl, function(error, response, body) {
     body = JSON.parse(body);
-    if(!body.success) {
+    if(!req.success) {
       return res.status(500).json({"responseCode" : 1, "responseDesc" : "Failed reCaptcha validation"});
     }
     return res

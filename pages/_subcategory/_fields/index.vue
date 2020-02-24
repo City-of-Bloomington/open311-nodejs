@@ -29,7 +29,6 @@
           }" />
 
         <button
-          :disabled="!hasGeoNav"
           :class="['find-me', {'locating': findingUserPosition }]"
           @click="getCurrentPosition">
           <span v-if="findingUserPosition">Locating ...</span>
@@ -340,7 +339,6 @@
 </style>
 
 <script>
-import axios          from 'axios'
 import headerNav      from '~/components/nav.vue'
 import emerModal      from '~/components/emerModal.vue'
 import { mapFields }  from 'vuex-map-fields'
@@ -455,17 +453,11 @@ export default {
   },
   mounted() {
     this.$gmapApiPromiseLazy()
-    .then(() => {
-      
+    .then(() => {      
       let hasLocationData = Object.entries(this.location_data).length != 0;
-
-      console.log('t/f', hasLocationData);
-      console.log(this.location_data);
 
       if(hasLocationData) {
         this.loaded = true;
-        
-        console.log('hasLocationData')
         this.reportedMapCenter = {
           lat: this.location_data.lat,
           lng: this.location_data.lng,
@@ -518,13 +510,10 @@ export default {
   watch: {},
   methods: {
     hasGeoNavigator() {
-      console.log('testing')
       navigator.permissions &&
       navigator.permissions.query({name: 'geolocation'})
       .then((res) => {
-        console.log(res)
         if(res.state == 'granted' || res.state == 'prompt'){
-          console.log('granted')
           this.hasGeoNav = true;
         }
       });
@@ -624,9 +613,9 @@ export default {
 
           this.findingUserPosition = false;
         
-          console.log(this.geocodeLatLng(pos));
-          console.log('getCurrentPosition() - ', position);
-          console.log(this.reportedMapCenter);
+          // console.log(this.geocodeLatLng(pos));
+          // console.log('getCurrentPosition() - ', position);
+          // console.log(this.reportedMapCenter);
           this.loaded = true;
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);

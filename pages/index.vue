@@ -1,11 +1,12 @@
 <template>
   <div>
     <search-input
+      v-if="initGroupData"
       :data="initGroupData"
       field="service_name" />
 
     <main :class="['home', {'viewing-ticket': serviceTicketData}]">
-      <div class="grid" v-if="!serviceTicketData">
+      <div class="grid" v-if="!serviceTicketData && initGroupData">
         <div
           v-for="group, i in groupCategories"
           :key="group"
@@ -359,7 +360,6 @@
 </style>
 
 <script>
-import axios          from 'axios'
 import emerModal      from '~/components/emerModal.vue'
 import searchInput    from '~/components/searchInput.vue'
 import topBar         from '~/components/topBar.vue'

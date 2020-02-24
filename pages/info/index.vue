@@ -82,7 +82,6 @@ main {
 </style>
 
 <script>
-import axios          from 'axios'
 import emerModal      from '~/components/emerModal.vue'
 import headerNav      from '~/components/nav.vue'
 import { mapFields }  from 'vuex-map-fields'

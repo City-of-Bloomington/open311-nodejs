@@ -131,8 +131,6 @@
           data-size="invisible"
           @click="submitPost()">Submit</button>
       </footer>
-
-      <emerModal />
     </main>
   </div>
 </template>
@@ -183,7 +181,6 @@
 </style>
 
 <script>
-import axios                  from 'axios'
 import headerNav              from '~/components/nav.vue'
 import modal                  from '~/components/modal.vue'
 import { mapGetters,
@@ -303,6 +300,8 @@ export default {
     this.$store.dispatch('setProgressStepFive', stepData);
   },
   mounted() {
+    setTimeout(() => { grecaptcha.execute() }, 100);
+
     let noServiceCode = this.service_code == '';
 
     if(noServiceCode) {
@@ -480,7 +479,7 @@ export default {
       'subGroup',
       'initGroupData',
       'serviceInfos.service_group.service_code',
-      'serviceInfos.pre_service_attrs',
+      'serviceInfos.service_group.service_name',
       'serviceInfos.service_attrs',
       'serviceInfos.location_data.lat',
       'serviceInfos.location_data.lng',
