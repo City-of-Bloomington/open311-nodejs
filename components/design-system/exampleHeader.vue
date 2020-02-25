@@ -147,6 +147,7 @@ header {
   div {
     &:first-of-type {
       display: flex;
+      align-items: center;
       flex-wrap: wrap;
       width: 100%;
       margin: 0 auto;

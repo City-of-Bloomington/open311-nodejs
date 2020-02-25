@@ -7,10 +7,12 @@ module.exports = {
   },
 
   manifest: {
-    name:         'uReport - City of Bloomington, Indiana',
-    short_name:   'uReport',
-    description:  'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
-    theme_color:  '#1e59ae'
+    name: 'uReport - City of Bloomington, Indiana',
+    short_name: 'uReport',
+    description: 'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
+    theme_color: '#1e59ae',
+    background_color: '#1e5aae',
+    display: 'standalone',
   },
 
   head: {
@@ -125,7 +127,29 @@ module.exports = {
     { src: '~/plugins/ga.js',        ssr: false },
     { src: '~/plugins/localStorage', ssr: false },
     { src: '~/plugins/google-map',   ssr: false },
+    { src: '~/plugins/a2hs',         ssr: false }
   ],
+
+  workbox: {
+    swURL: 'service-worker.js',
+    importScripts: [
+      'service-worker.js'
+    ],
+    runtimeCaching: [
+      {
+        urlPattern: 'https://fonts.googleapis.com/.*',
+        handler:    'cacheFirst',
+        method:     'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      },
+      {
+        urlPattern: 'https://fonts.gstatic.com/.*',
+        handler:    'cacheFirst',
+        method:     'GET',
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
+      },
+    ],
+  },
 
   build: {
     vendors:    ['babel-polyfill'],
