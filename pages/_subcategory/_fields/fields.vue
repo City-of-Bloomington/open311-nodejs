@@ -263,7 +263,7 @@ export default {
   data() {
     return {
       reCaptchaError:     false,
-      reCaptchaSiteKey:   process.env.reCaptchaSiteKey,
+      reCaptchaSiteKey:   process.env.RECAPTCHA_SITEKEY,
 
       backHome:            false,
       routeCode:           '',

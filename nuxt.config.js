@@ -1,4 +1,4 @@
-require('dotenv').config()
+// require('dotenv').config()
 module.exports = {
   dev: (process.env.NODE_ENV !== 'production'),
 
@@ -69,7 +69,9 @@ module.exports = {
     ]
   },
 
-  buildModules: [],
+  buildModules: [
+    ['@nuxtjs/dotenv']
+  ],
 
   modules: [
     '@nuxtjs/axios',
@@ -90,36 +92,8 @@ module.exports = {
   },
 
   env: {
+    // A2HS - Add To Home Screen PWA Support
     a2hsPrompt:           false,
-    cityWebsiteUrl:       'https://bloomington.in.gov/',
-    appName:              process.env.APP_NAME,
-    cityName:             process.env.CITY_NAME,
-    logoHeading:          process.env.LOGO_HEADING,
-    logoSubHeading:       process.env.LOGO_SUB_HEADING,
-    frontendBase:         process.env.FE_BASE,
-
-    crmBaseUrl:           process.env.CRM_BASE_URL,
-    crmTickets:           process.env.CRM_TICKETS,
-    logoUrl:              process.env.LOGO_URL,
-    baseUrl:              process.env.BASE_URL,
-    localPort:            process.env.LOCAL_PORT,
-    servicesApi:          process.env.SERVICES_API,
-    postApi:              process.env.POST_API,
-    attrsApi:             process.env.ATTRS_API,
-    open311Key:           process.env.OPEN_311_KEY,
-    apiUrl:               process.env.CRM_API_URL,
-    postProxy:            process.env.POST_PROXY,
-    masterAddUrl:         process.env.MASTER_ADD_URL,
-    arcgisRevGeo:         process.env.ARCGIS_REV_GEO,
-    osmUrl:               process.env.OSM_URL,
-    mapBoxUrl:            process.env.MAPBOX_URL,
-    mapBoxKey:            process.env.MAPBOX_KEY,
-    mapBoxId:             process.env.MAPBOX_ID,
-    reCaptchaSiteKey:     process.env.RECAPTCHA_SITEKEY,
-    googleApiKey:         process.env.GOOGLE_API_KEY,
-    cityBoundaryGeoJson:  process.env.CITY_BOUNDARY_PATH,
-    coordsProjection:     process.env.COORDS_PROJECTION,
-    cityHallLatLong:      JSON.parse(process.env.CITY_HALL_LAT_LONG),
   },
 
   plugins: [

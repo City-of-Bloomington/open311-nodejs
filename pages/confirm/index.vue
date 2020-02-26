@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      crmLink:        `${process.env.crmBaseUrl}${process.env.crmTickets}`,
+      crmLink:        `${process.env.CRM_BASE_URL}${process.env.CRM_TICKETS}`,
       serviceReqID:   '',
       navSubGroup:    true,
       stepActive: {

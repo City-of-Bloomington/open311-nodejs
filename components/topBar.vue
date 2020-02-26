@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       showDisclaimer: false,
-      logoUrl:        process.env.logoUrl,
+      logoUrl:        process.env.LOGO_URL,
       topBarHeight:   ''
     }
   },

@@ -8,7 +8,7 @@ Vue.mixin({
     ...mapFields([
       'consoleLog',
       'cityBoundary',
-      'cityName',
+      'CITY_NAME',
       'coordsProjection',
       'cityHallLatLong',
     ]),

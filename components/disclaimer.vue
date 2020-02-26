@@ -39,7 +39,7 @@ export default {
   props: ['showDisclaimer'],
   data() {
     return {
-      crmUrl:  process.env.crmBaseUrl,
+      crmUrl:  process.env.CRM_BASE_URL,
     }
   },
   methods: {

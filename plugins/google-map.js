@@ -5,7 +5,7 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 // Vue.component('GmapCluster', GmapCluster)
 Vue.use(VueGoogleMaps, {
   load: {
-    key: process.env.googleApiKey,
+    key: process.env.GOOGLE_API_KEY,
     libraries: 'places',
     // v: '3.26',
   },

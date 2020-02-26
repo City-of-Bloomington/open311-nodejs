@@ -46,12 +46,13 @@ export default {
   data() {
     return {
       a2hs:               process.env.a2hsPrompt,
-      appName:            process.env.appName,
-      baseUrl:            process.env.cityWebsiteUrl,
+      appName:            process.env.APP_NAME,
+      baseUrl:            process.env.CITY_WEBSITE_URL,
+      cityName:           process.env.CITY_NAME,
       headerLogo:         require('../assets/images/city-of-bloomington-logo.svg'),
-      logoHeading:        process.env.logoHeading,
-      logoSubHeading:     process.env.logoSubHeading,
-      frontendBase:       process.env.frontendBase,
+      logoHeading:        process.env.LOGO_HEADING,
+      logoSubHeading:     process.env.LOGO_SUB_HEADING,
+      frontendBase:       process.env.FE_BASE,
     }
   }
 }

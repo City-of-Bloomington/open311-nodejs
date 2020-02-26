@@ -19,7 +19,7 @@ Vue.mixin({
      */
     getServiceAttrs(code) {
       return new Promise((resolve, reject) => {
-        axios.get(`${process.env.apiUrl}${process.env.attrsApi}${code}.json`)
+        axios.get(`${process.env.CRM_API_URL}${process.env.ATTRS_API}${code}.json`)
         .then(res => resolve(res.data))
         .catch(e => reject(e))
       })
@@ -37,7 +37,7 @@ Vue.mixin({
      */
     getServiceRequest(id) {
       return new Promise((resolve, reject) => {
-        axios.get(`${process.env.apiUrl}requests/${id}.json`)
+        axios.get(`${process.env.CRM_API_URL}requests/${id}.json`)
         .then(res => resolve(res.data))
         .catch(e => reject(e));
       })
@@ -56,7 +56,7 @@ Vue.mixin({
     getServiceRequestCRMHTML(id) {
       https://bloomington.in.gov/crm/tickets/view?ticket_id=171686
       return new Promise((resolve, reject) => {
-        axios.get(`https://bloomington.in.gov/crm/tickets/view?ticket_id=${id}`)
+        axios.get(`${process.env.CRM_BASE_URL}tickets/view?ticket_id=${id}`)
         .then(res => resolve(res.data))
         .catch((e) => console.log(e));
       })
@@ -75,7 +75,7 @@ Vue.mixin({
      */
     formSubmitHandOff(formData, config){
       return new Promise((resolve, reject) => {
-        axios.post(`${process.env.postProxy}`, formData, config)
+        axios.post(`${process.env.POST_PROXY}`, formData, config)
         .then(response => {
           this.$store.commit('storeResponseInfo', response);
         })
@@ -109,7 +109,7 @@ Vue.mixin({
     },
     getCityBoundaryGeoJson() {
       return new Promise((resolve, reject) => {
-        axios.get(process.env.cityBoundaryGeoJson)
+        axios.get(process.env.CITY_BOUNDARY_PATH)
           .then((res) => resolve(res.data.features))
           .catch((e) => reject(e))
       })

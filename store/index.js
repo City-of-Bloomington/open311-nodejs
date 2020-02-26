@@ -35,22 +35,22 @@ export const defaultState = () => ({
     },
     location_data:  {},
     location_info: {
-      address_string: '',
-      lat:            '',
-      long:           ''
+      address_string:     '',
+      lat:                '',
+      long:               ''
     },
-    default_image:    '',
-    service_attrs:    {},
-    pre_service_attrs: [],
-    default_description: '',
-    service_response: {},
+    default_image:        '',
+    service_attrs:        {},
+    pre_service_attrs:    [],
+    default_description:  '',
+    service_response:     {},
   },
-  serviceTicketData:  null,
-  serviceTicketCRMHTML: null,
-  cityBoundary:       null,
-  cityName:           process.env.cityName,
-  coordsProjection:   process.env.coordsProjection,
-  cityHallLatLong:    process.env.cityHallLatLong,
+  serviceTicketData:      null,
+  serviceTicketCRMHTML:   null,
+  cityBoundary:           null,
+  CITY_NAME:              process.env.CITY_NAME,
+  coordsProjection:       process.env.COORDS_PROJECTION,
+  cityHallLatLong:        JSON.parse(process.env.CITY_HALL_LAT_LONG),
   consoleLog: {
     info: ['background: rgb(30, 90, 174)',
       'color: white',
@@ -255,7 +255,7 @@ export const actions = {
     context.commit("SET_PROGRESS_STEP_FIVE", payload)
   },
   async nuxtServerInit({ commit }) {
-    let { data } = await axios.get(`${process.env.apiUrl}${process.env.servicesApi}`)
+    let { data } = await axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
     commit('storeInitGroupData', data)
   }
 }

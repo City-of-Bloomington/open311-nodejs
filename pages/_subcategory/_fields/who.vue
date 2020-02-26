@@ -111,9 +111,6 @@ export default {
       titleTemplate: `%s - ${this.service_name}`,
       meta: [
         { hid: 'description', name: 'description', content: `Submit a ${this.group} (${this.service_name}) uReport service request.` }
-      ],
-      script: [
-        { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
       ]
     }
   },
