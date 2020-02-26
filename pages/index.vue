@@ -131,7 +131,7 @@
         </div>
       </div>
 
-      <!-- <emerModal /> -->
+      <emerModal />
       <p class="emergency">
         <strong>Note:</strong> If an Emergency, dial 911.
       </p>
