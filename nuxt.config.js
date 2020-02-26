@@ -88,6 +88,7 @@ module.exports = {
   },
 
   env: {
+    a2hsPrompt:           false,
     cityWebsiteUrl:       'https://bloomington.in.gov/',
     appName:              process.env.APP_NAME,
     cityName:             process.env.CITY_NAME,

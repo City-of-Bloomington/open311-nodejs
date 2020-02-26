@@ -28,6 +28,7 @@
       :subNavItems="null">
 
       <fn1-button
+        v-if="a2hs"
         slot="dropdown"
         :title="`Add uReport to your desktop`"
         class="a2hs-button button">
@@ -44,6 +45,7 @@ export default {
   components: { exampleHeader },
   data() {
     return {
+      a2hs:               process.env.a2hsPrompt,
       appName:            process.env.appName,
       baseUrl:            process.env.cityWebsiteUrl,
       headerLogo:         'city-of-bloomington-logo.svg',
