@@ -42,7 +42,7 @@
                id="email">
       </div>
 
-      <emerModal />
+      
       
       <footer>
         <nuxt-link
@@ -50,6 +50,8 @@
           :to="{name: 'subcategory-fields-fields'}"
           class="button next-button">Next</nuxt-link>
       </footer>
+
+      <emerModal />
     </main>
   </div>
 </template>

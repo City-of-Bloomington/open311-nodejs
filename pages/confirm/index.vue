@@ -19,7 +19,18 @@
   </div>
 </template>
 
-<style type="text/css">
+<style lang="scss" scoped>
+
+  .ok-button {
+    background: $fern;
+    font-size: 30px;
+    color: white;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    margin: 40px auto 0 auto;
+  }
+
 
   main.thank-you h2 {
     border-bottom: none;

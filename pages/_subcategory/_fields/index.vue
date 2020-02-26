@@ -166,6 +166,7 @@
           // color: darken($color-orange-darker, 35%);
           padding: 5px 8px 5px 28px;
           font-size: 14px;
+          line-height: 14px;
           position: absolute;
           left: 0;
           bottom: 0;
