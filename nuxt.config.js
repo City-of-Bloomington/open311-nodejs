@@ -132,9 +132,9 @@ module.exports = {
   ],
 
   workbox: {
-    swURL: 'service-worker.js',
+    swURL: 'js/service-worker.js',
     importScripts: [
-      'service-worker.js'
+      'js/service-worker.js'
     ],
     runtimeCaching: [
       {
