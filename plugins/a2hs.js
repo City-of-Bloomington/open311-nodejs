@@ -1,33 +1,30 @@
 export default function() {
-  let deferredPrompt;
-  const addBtn = document.querySelector('.a2hs-button');
+  if (process.env.a2hsPrompt){
+    let deferredPrompt;
+    const addBtn = document.querySelector('.a2hs-button');
+    addBtn.style.display = 'none';
 
-  console.log(addBtn);
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('beforeinstallprompt');
+      e.preventDefault();
 
-  addBtn.style.display = 'none';
+      deferredPrompt = e;
+      addBtn.style.display = 'block';
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('beforeinstallprompt');
-    e.preventDefault();
-    
-    deferredPrompt = e;
-    
-    addBtn.style.display = 'block';
+      addBtn.addEventListener('click', (e) => {
 
-    addBtn.addEventListener('click', (e) => {
-      
-      addBtn.style.display = 'none';
-      
-      deferredPrompt.prompt();
-      
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('Accepted the A2HS prompt.');
-        } else {
-          console.log('Dismissed the A2HS prompt.');
-        }
-        deferredPrompt = null;
+        addBtn.style.display = 'none';
+        deferredPrompt.prompt();
+
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Accepted the A2HS prompt.');
+          } else {
+            console.log('Dismissed the A2HS prompt.');
+          }
+          deferredPrompt = null;
+        });
       });
-    });
-  });
+    });  
+  }
 }
