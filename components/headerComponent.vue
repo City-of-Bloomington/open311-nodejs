@@ -48,7 +48,7 @@ export default {
       a2hs:               process.env.a2hsPrompt,
       appName:            process.env.appName,
       baseUrl:            process.env.cityWebsiteUrl,
-      headerLogo:         'images/city-of-bloomington-logo.svg',
+      headerLogo:         require('../assets/images/city-of-bloomington-logo.svg'),
       logoHeading:        process.env.logoHeading,
       logoSubHeading:     process.env.logoSubHeading,
       frontendBase:       process.env.frontendBase,

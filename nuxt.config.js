@@ -44,6 +44,11 @@ module.exports = {
       }
     ],
     link: [
+      { 
+        rel:    'preconnect',
+        href:   'https://fonts.gstatic.com/',
+        crossorigin: 'true'
+      },
       { rel:      'stylesheet',
         href:     'https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600|Abel'
       }
@@ -53,9 +58,8 @@ module.exports = {
   serverMiddleware: ['~/post/index'],
   loading: { color: '#FFFFFF' },
   css: [
-    '@/assets/vendor/normalize/normalize.css',
+    // '@/assets/vendor/normalize/normalize.css',
     '@/assets/scss/main.scss',
-    '~/plugins/leaflet/leaflet.css'
   ],
 
   styleResources: {
@@ -132,9 +136,9 @@ module.exports = {
   ],
 
   workbox: {
-    swURL: 'js/service-worker.js',
+    swURL: '@/assets/js/service-worker.js',
     importScripts: [
-      'js/service-worker.js'
+      '@/assets/js/service-worker.js'
     ],
     runtimeCaching: [
       {
