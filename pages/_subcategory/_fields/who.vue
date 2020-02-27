@@ -41,9 +41,7 @@
                placeholder="Email"
                id="email">
       </div>
-
-      
-      
+    
       <footer>
         <nuxt-link
           v-if="true"

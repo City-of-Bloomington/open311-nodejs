@@ -418,43 +418,10 @@ export default {
 
     this.$store.dispatch('setProgressStepThree', stepThreeData);
     this.$store.dispatch('setProgressStepTwo',   stepTwoData);
-
-
-    // let serviceType = this.initGroupData.find(obj => obj.service_code == this.$route.params.fields);
-
-    // if(serviceType != undefined) {
-    //   console.log('defined', serviceType)
-
-    //   let catParam = this.stringToDashed(serviceType.group);
-    //   console.log(catParam);
-
-    //   if(catParam != this.$route.params.subcategory){
-    //     console.log('they diff')
-    //     this.$router.push({params: { subcategory: catParam }})
-    //     // this.$router.replace({params: { subcategory: catParam }})
-    //     // .catch(err => {
-    //     //   console.log(err);
-
-    //     //   if (error.name != "NavigationDuplicated") {
-    //     //     throw error;
-    //     //   }
-    //     // })
-    //   }
-
-    //   this.$store.dispatch('setSubGroupName', serviceType.service_name);
-    //   this.$store.dispatch('setGroupCode',    serviceType.service_code);
-    //   this.$store.dispatch('setRouteCode',    serviceType.service_code);
-    //   this.$store.dispatch('setGroupName',    serviceType.group)
-
-    // } else {
-      
-    //   console.log('undefined, going home')
-    //   this.$router.push('/');
-    // }
   },
   mounted() {
     this.$gmapApiPromiseLazy()
-    .then(() => {      
+    .then(() => {
       let hasLocationData = Object.entries(this.location_data).length != 0;
 
       if(hasLocationData) {
@@ -463,37 +430,10 @@ export default {
           lat: this.location_data.lat,
           lng: this.location_data.lng,
         }
-      } else {
-        this.getCurrentPosition()
-        .then((res) => {
-
-          this.findingUserPosition = false;
-          
-          this.reportedMapCenter = {
-            lat: res.coords.latitude,
-            lng: res.coords.longitude,
-          }
-
-          this.geoLocationPosition.accuracy = res.coords.accuracy;
-
-          this.geocodeLatLng(this.reportedMapCenter);
-          this.loaded = true;
-        })
-        .catch((err) => {
-          this.geoLocationPositionError = err.message;
-          console.log('geoLocatePromise() -', err.message);
-
-          this.location_data = {...this.default_location_data}
-
-          this.reportedMapCenter = {
-            lat: this.default_location_data.lat,
-            lng: this.default_location_data.lng,
-          }
-        });
-      }
+      } else { this.getCurrentPosition(); }
 
       this.hasGeoNavigator();
-    })
+    });
 
     if(!this.cityBoundary){
       this.getCityBoundaryGeoJson()
@@ -530,7 +470,7 @@ export default {
     },
     geocodeLatLng(coords){
       const geocoder = new google.maps.Geocoder();
-
+      
       if(coords) {
         geocoder.geocode({ 'location': coords }, (results, status) => {
           this.geoLocationPosition.geoCoded = results;
@@ -544,7 +484,7 @@ export default {
 
           this.$store.dispatch('setLocationData', locationData);
 
-          console.log('geocodeLatLng() - ', results, status); 
+          console.log('geocodeLatLng() - ', results, status);
         });
       } else {
         console.log('Sorry cant run geocodeLatLng(coords) w/ out `coords = { lat:xxx, lng:xxx }`')
@@ -600,6 +540,8 @@ export default {
       
       this.geoLocatePromise()
       .then((position) => {
+        console.log(position)
+
         if(position.coords) {
           
           let pos = {
@@ -613,13 +555,22 @@ export default {
           }
 
           this.findingUserPosition = false;
-        
-          // console.log(this.geocodeLatLng(pos));
-          // console.log('getCurrentPosition() - ', position);
-          // console.log(this.reportedMapCenter);
+
+          this.geocodeLatLng(pos);
+          
           this.loaded = true;
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+
+          this.findingUserPosition = false;
+          this.loaded = true;
+
+          this.location_data = {...this.default_location_data}
+
+          this.reportedMapCenter = {
+            lat: this.default_location_data.lat,
+            lng: this.default_location_data.lng,
+          }
         }
       })
       .catch((error) => {

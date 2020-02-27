@@ -7,12 +7,12 @@ module.exports = {
   },
 
   manifest: {
-    name: 'uReport - City of Bloomington, Indiana',
-    short_name: 'uReport',
-    description: 'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.',
-    theme_color: '#1e59ae',
+    name:             'uReport - City of Bloomington, Indiana',
+    short_name:       'uReport',
+    theme_color:      '#1e59ae',
     background_color: '#1e5aae',
-    display: 'standalone',
+    display:          'standalone',
+    description: 'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
   },
 
   head: {
@@ -102,15 +102,15 @@ module.exports = {
     { src: '~/plugins/design-system' },
     { src: '~/plugins/universal-computed' },
     { src: '~/plugins/ga.js',        ssr: false },
-    { src: '~/plugins/localStorage', ssr: false },
+    // { src: '~/plugins/localStorage', ssr: false },
     { src: '~/plugins/google-map',   ssr: false },
     { src: '~/plugins/a2hs',         ssr: false }
   ],
 
   workbox: {
-    swURL: '@/assets/js/service-worker.js',
+    swURL: 'js/service-worker.js',
     importScripts: [
-      '@/assets/js/service-worker.js'
+      'js/service-worker.js'
     ],
     runtimeCaching: [
       {

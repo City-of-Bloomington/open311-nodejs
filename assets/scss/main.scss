@@ -287,7 +287,7 @@ button,
 .button {
   cursor: pointer;
 
-  ::v-deep &.next-button {
+  &.next-button {
     background: $fern;
     color: white;
     padding: 10px 20px;
