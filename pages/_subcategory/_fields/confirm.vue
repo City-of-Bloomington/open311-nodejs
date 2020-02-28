@@ -9,7 +9,12 @@
     <main class="info-process thank-you">
 
       <h2 v-html="thankYou"></h2>
-      <h3>Your Service Request ID: <strong>{{ serviceReponse[0].service_request_id }}</strong></h3>
+      
+      <h3>
+        <strong>Service Request ID:
+        <span>{{ serviceReponse[0].service_request_id }}</span>
+        </strong>
+      </h3>
 
       <nuxt-link
         :to="{name: 'index'}"
@@ -35,6 +40,11 @@
         font-size: 24px;
         line-height: 28px;
         margin: 0 0 10px 0;
+
+        span {
+          background: darken($color-blue, 5%);
+          padding: 0 10px 2px 10px;
+        }
       }
 
       h3 {

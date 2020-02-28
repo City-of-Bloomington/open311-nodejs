@@ -4,6 +4,7 @@
     v-on-clickaway="away">
 
     <div class="form-wrapper">
+      {{ value }}
       <form @submit.prevent autocomplete="off">
         <fn1-input
           v-model="input"
@@ -248,7 +249,7 @@ export default {
   mixins: [ clickaway ],
   data() {
     return {
-      input:        '',
+      input:        'testing',
       focused:      false,
       showClearBtn: false,
     }
@@ -260,9 +261,11 @@ export default {
     field:  { type: String, required: false}
   },
   created() {
-    this.input = this.value || ''
+    console.log('created');
   },
-  mounted() {},
+  mounted() {
+    console.log('mounted');
+  },
   methods: {
     isNan(val){ return isNaN(val) },
     away() {
@@ -299,7 +302,22 @@ export default {
     },
     clearSearch() {
       this.input = ''
-    }
+    },
+    ticketLookup(val) {
+      this.getServiceRequest(val)
+      .then((res) => {
+        this.$store.dispatch("setServiceTicketData", res);
+
+        this.getServiceRequestCRMHTML(val)
+        .then((res) => {
+          this.$store.dispatch("setServiceTicketCRMHTML", res);
+          // alert('ok');
+          this.$router.replace({query: {ticket: val}})
+        })
+        .catch((e)  => console.log(e));
+      })
+      .catch((e)  => console.log(e))
+    },
   },
   watch: {
     'input': function(val, oldVal){
@@ -308,20 +326,10 @@ export default {
       }
 
       let numberRegEx = /^\d{6}$/,
-            testInput = numberRegEx.test(val);
+            ticketInputTest = numberRegEx.test(val);
 
-      if(testInput){
-        this.getServiceRequest(val)
-        .then((res) => {
-          this.$store.dispatch("setServiceTicketData", res);
-
-          this.getServiceRequestCRMHTML(val)
-          .then((res) => {
-            this.$store.dispatch("setServiceTicketCRMHTML", res);
-          })
-          .catch((e)  => console.log(e));
-        })
-        .catch((e)  => console.log(e))
+      if(ticketInputTest){
+        this.ticketLookup(val);
       }
 
       if(val.length >= 1) {
@@ -334,7 +342,26 @@ export default {
     }
   },
   updated() {
-    this.$emit('input', this.input)
+    console.log('updated');
+    console.log(this.input == "");
+    console.log(this.value);
+    console.log(this.field);
+
+    
+    
+    if(this.input == "" && this.value){
+      // let code = this.value;
+      // this.input = code;
+    }
+      
+
+
+
+    // console.log(this.input == "");
+    // console.log(this.value);
+
+    // if(this.input == "" && this.value)
+    //   this.input = this.value
   }
 }
 </script>

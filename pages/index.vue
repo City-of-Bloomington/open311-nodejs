@@ -3,6 +3,7 @@
     <search-input
       v-if="initGroupData"
       :data="initGroupData"
+      :value="ticketID"
       field="service_name" />
 
     <main :class="['home', {'viewing-ticket': serviceTicketData}]">
@@ -366,6 +367,14 @@ import topBar         from '~/components/topBar.vue'
 import { mapFields }  from 'vuex-map-fields'
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(to.query.ticket)
+        vm.ticketID = to.query.ticket
+
+      next();
+    });
+  },
   head () {
     return {
       titleTemplate: `%s - City of Bloomington`,
@@ -376,7 +385,9 @@ export default {
     searchInput,
     topBar
   },
-  data() { return {} },
+  data() { return {
+    ticketID: null,
+  } },
   methods: {
     formatDate(date) {
       let newDate = new Date(date)
