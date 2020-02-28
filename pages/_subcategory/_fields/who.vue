@@ -9,39 +9,42 @@
     <main class="info" ref="mainElm">
       <h2>Your Information</h2>
       <p><strong>Note:</strong> <i>Information you provide through uReport is stored and retained by the City as a public record. You may submit a service ticket anonymously.</i></p>
-      <div class="form-group">
-        <label for="first-name">First Name:</label>
-        <input v-model="first_name"
-               type="text"
-               placeholder="First Name"
-               id="first-name">
-      </div>
 
-      <div class="form-group">
-        <label for="last-name">Last Name:</label>
-        <input v-model="last_name"
-               type="text"
-               placeholder="Last Name"
-               id="last-name">
-      </div>
+      <form>
+        <div class="form-group">
+          <label for="first-name">First Name:</label>
+          <input v-model="first_name"
+                type="text"
+                placeholder="First Name"
+                id="first-name">
+        </div>
 
-      <div class="form-group">
-        <label for="phone">Phone:</label>
-        <input v-model="phone"
-               type="tel"
-               placeholder="Phone"
-               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-               id="phone">
-      </div>
+        <div class="form-group">
+          <label for="last-name">Last Name:</label>
+          <input v-model="last_name"
+                type="text"
+                placeholder="Last Name"
+                id="last-name">
+        </div>
 
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input v-model="email"
-               type="email"
-               placeholder="Email"
-               id="email">
-      </div>
-    
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input v-model="phone"
+                type="tel"
+                placeholder="Phone"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                id="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input v-model="email"
+                type="email"
+                placeholder="Email"
+                id="email">
+        </div>
+      </form>
+      
       <footer>
         <nuxt-link
           v-if="true"

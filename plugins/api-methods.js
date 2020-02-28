@@ -76,14 +76,14 @@ Vue.mixin({
     formSubmitHandOff(formData, config){
       return new Promise((resolve, reject) => {
         axios.post(`${process.env.POST_PROXY}`, formData, config)
-        .then(response => {
+        .then((response) => {
           this.$store.commit('storeResponseInfo', response);
         })
-        .then(response => {
-          this.$router.push({ path: 'confirm' });
+        .then((response) => {
+          this.$router.push({ name: 'subcategory-fields-confirm' });
           resolve('formData sent')
         })
-        .catch(error => {
+        .catch((error) => {
           this.reCaptchaError = true;
           console.log(`%c .: SS :: ${JSON.stringify(error.response.data.responseDesc)} :.`, `background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
           reject('formData fail', error.response.data.responseDesc)

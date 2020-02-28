@@ -12,7 +12,7 @@ module.exports = {
     theme_color:      '#1e59ae',
     background_color: '#1e5aae',
     display:          'standalone',
-    description: 'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
+    description:      'Use uReport to notify the City of Bloomington, Indiana of community issues, such as potholes, graffiti, malfunctioning street lights, and more.'
   },
 
   head: {
@@ -102,16 +102,16 @@ module.exports = {
     { src: '~/plugins/design-system' },
     { src: '~/plugins/universal-computed' },
     { src: '~/plugins/ga.js',        ssr: false },
-    // { src: '~/plugins/localStorage', ssr: false },
+    { src: '~/plugins/localStorage', ssr: false },
     { src: '~/plugins/google-map',   ssr: false },
     { src: '~/plugins/a2hs',         ssr: false }
   ],
 
   workbox: {
-    swURL: 'js/service-worker.js',
-    importScripts: [
-      'js/service-worker.js'
-    ],
+    swScope: '/ureport/',
+    // importScripts: [
+    //   '/js/service-worker.js'
+    // ],
     runtimeCaching: [
       {
         urlPattern: 'https://fonts.googleapis.com/.*',

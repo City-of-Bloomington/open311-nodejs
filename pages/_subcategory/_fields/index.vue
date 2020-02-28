@@ -132,10 +132,14 @@
         margin: 0 0 5px 0;
       }
 
+      .next-button {
+        margin: 20px 0 0 0;
+      }
+
       .vue-map-container {
         width: 100%;
         height: 350px;
-        margin: 20px 0;
+        margin: 20px 0 0 0;
       }
 
       .autocomplete-search {
@@ -559,6 +563,8 @@ export default {
           this.geocodeLatLng(pos);
           
           this.loaded = true;
+
+          return position;
         } else {
           console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
 

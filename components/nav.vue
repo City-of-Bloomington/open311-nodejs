@@ -10,7 +10,8 @@
         :key="step"
         :class="['step-outside',{
           'active':   stepActive == step,
-          'complete': finishedStep(step)
+          'complete': finishedStep(step),
+          'no-click': stepActive == 6
         }]">
 
         <div class="step-inside" @click="goToStep(step)">
@@ -95,6 +96,10 @@
       &:after {
         background: $color-green;
       }
+    }
+
+    &.no-click {
+      cursor: default;
     }
 
     &:first-of-type {
@@ -228,11 +233,13 @@ export default {
       }
     },
     goToStep(step) {
-      if(step <= this.stepActive){
-        if(step == 2){
-          this.$router.push(`/${this.stepperPaths[step].path}`)
-        } else {
-          this.$router.push(this.stepperPaths[step].path)
+      if(this.stepActive != 6) {
+        if(step <= this.stepActive){
+          if(step == 2){
+            this.$router.push(`/${this.stepperPaths[step].path}`)
+          } else {
+            this.$router.push(this.stepperPaths[step].path)
+          }
         }
       }
     },

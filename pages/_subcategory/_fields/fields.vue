@@ -9,121 +9,123 @@
     <main class="questions" ref="mainElm">
       <h2>General information:</h2>
 
-      <div class="form-group image-upload-wrapper">  
-        <div style="display: flex;">
-          <label for="media">Include Image:
-          <input
-            type="file"
-            accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
-            @change="updateCanvasImage"
-            ref="fileInput"
-            name="media"></label>
+      <form>
+        <div class="form-group image-upload-wrapper">  
+          <div style="display: flex;">
+            <label for="media">Include Image:
+            <input
+              type="file"
+              accept=".jpeg, .jpg, .png, .gif, .jp2, .jpx, .jpm, .tiff, .tiff-fx, .bmp, .x-bmp, .webp, .heif, .heic"
+              @change="updateCanvasImage"
+              ref="fileInput"
+              name="media"></label>
 
-          <button
-            @click="$refs.fileInput.click()" 
-            v-if="captures.length < 1"
-            class="image-input">Include Photo</button>
+            <button
+              @click="$refs.fileInput.click()" 
+              v-if="captures.length < 1"
+              class="image-input">Include Photo</button>
+          </div>
+
+          <canvas
+            v-show="false"
+            id="imageCanvas"
+            ref="imageCanvas"></canvas>
+
+          <ul v-if="captures.length">
+            <li v-for="c in captures" :key="c">
+              <img :src="c" />
+              <button
+                type="button"
+                class="button"
+                @click="removeImage(c)">remove</button>
+            </li>
+          </ul>
         </div>
 
-        <canvas
-          v-show="false"
-          id="imageCanvas"
-          ref="imageCanvas"></canvas>
+        <div class="form-group">
+          <label for="default-description">Describe this issue:</label>
+          <textarea
+            v-model="default_description"
+            id="default-description"
+            name="default-description"
+            wrap="hard">
+          </textarea>
+        </div>
 
-        <ul v-if="captures.length">
-          <li v-for="c in captures" :key="c">
-            <img :src="c" />
-            <button
-              type="button"
-              class="button"
-              @click="removeImage(c)">remove</button>
-          </li>
-        </ul>
-      </div>
+        <div v-if="pre_service_attrs.length">
+          <h2>{{ service_name }} information:</h2>
+          <div class="form-group"
+              v-for="item, i in pre_service_attrs"
+              :key="item.code">
 
-      <div class="form-group">
-        <label for="default-description">Describe this issue:</label>
-        <textarea
-          v-model="default_description"
-          id="default-description"
-          name="default-description"
-          wrap="hard">
-        </textarea>
-      </div>
+            <div v-if="item.datatype === 'string'">
+              <label :for="item.key">{{ item.description }}</label>
+              <input
+                v-model="item.answer_value"
+                type="text"
+                :id="item.key"
+                :name="item.name" />
+            </div>
 
-      <div v-if="pre_service_attrs.length">
-        <h2>{{ service_name }} information:</h2>
-        <div class="form-group"
-             v-for="item, i in pre_service_attrs"
-             :key="item.code">
+            <div v-else-if="item.datatype === 'number'">
+              <label :for="item.key">{{ item.description }}</label>
+              <input
+                type="number"
+                v-model="item.answer_value"
+                :id="item.key"
+                :name="item.name" />
+            </div>
 
-          <div v-if="item.datatype === 'string'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              v-model="item.answer_value"
-              type="text"
-              :id="item.key"
-              :name="item.name" />
-          </div>
+            <div v-else-if="item.datatype === 'datetime'">
+              <label :for="item.key">{{ item.description }}</label>
+              <input
+                type="datetime-local"
+                v-model="item.answer_value"
+                :id="item.key"
+                :name="item.name" />
+            </div>
 
-          <div v-else-if="item.datatype === 'number'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="number"
-              v-model="item.answer_value"
-              :id="item.key"
-              :name="item.name" />
-          </div>
+            <div v-else-if="item.datatype === 'text'">
+              <label :for="item.code">{{ item.description }}</label>
+              <textarea
+                v-model="item.answer_value"
+                :id="item.code"
+                :name="item.name"
+                wrap="hard"></textarea>
+            </div>
 
-          <div v-else-if="item.datatype === 'datetime'">
-            <label :for="item.key">{{ item.description }}</label>
-            <input
-              type="datetime-local"
-              v-model="item.answer_value"
-              :id="item.key"
-              :name="item.name" />
-          </div>
+            <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
+              <legend>{{ item.description }}:</legend>
+              <div v-for="value, i in item.values"
+                  :class="{'no-break': (value.name == 'no') || (value.name == 'yes')}">
 
-          <div v-else-if="item.datatype === 'text'">
-            <label :for="item.code">{{ item.description }}</label>
-            <textarea
-              v-model="item.answer_value"
-              :id="item.code"
-              :name="item.name"
-              wrap="hard"></textarea>
-          </div>
+                <label :for="`${item.code}-${value.name}`">
+                  <input
+                    type="radio"
+                    v-model="item.answer_value"
+                    :id="`${item.code}-${value.name}`"
+                    :value="value.key"
+                    :name="item.code" />
+                    {{ value.name }}</label>
+              </div>
+            </div>
 
-          <div v-else-if="item.datatype === 'singlevaluelist'" class="singlevaluelist">
-            <legend>{{ item.description }}:</legend>
-            <div v-for="value, i in item.values"
-                 :class="{'no-break': (value.name == 'no') || (value.name == 'yes')}">
-
-              <label :for="`${item.code}-${value.name}`">
-                <input
-                  type="radio"
-                  v-model="item.answer_value"
-                  :id="`${item.code}-${value.name}`"
-                  :value="value.key"
-                  :name="item.code" />
-                  {{ value.name }}</label>
+            <div v-else-if="item.datatype === 'multivaluelist'">
+              <label :for="item.description">{{ item.description }}</label>
+              <select
+                :id="item.description"
+                v-model="item.answer_value">
+                <option
+                  v-for="item in item.values"
+                  :value="item.key"
+                  :key="item.name">{{ item.name }}
+                </option>
+              </select>
             </div>
           </div>
-
-          <div v-else-if="item.datatype === 'multivaluelist'">
-            <label :for="item.description">{{ item.description }}</label>
-            <select
-              :id="item.description"
-              v-model="item.answer_value">
-              <option
-                v-for="item in item.values"
-                :value="item.key"
-                :key="item.name">{{ item.name }}
-              </option>
-            </select>
-          </div>
         </div>
-      </div>
-
+      </form>
+      
       <footer>
         <button
           class="g-recaptcha button next-button"
