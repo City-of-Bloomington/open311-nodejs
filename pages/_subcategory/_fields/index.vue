@@ -454,6 +454,82 @@ export default {
   },
   watch: {},
   methods: {
+    getCurrentPosition() {
+      
+      this.geoLocatePromise()
+      .then((position) => {
+        console.log(position)
+
+        if(position.coords) {
+          
+          let pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          this.reportedMapCenter = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+
+          this.findingUserPosition = false;
+
+          this.geocodeLatLng(pos);
+          
+          this.loaded = true;
+
+          return position;
+        } else {
+          console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+
+          this.findingUserPosition = false;
+          this.loaded = true;
+
+          this.location_data = {...this.default_location_data}
+
+          this.reportedMapCenter = {
+            lat: this.default_location_data.lat,
+            lng: this.default_location_data.lng,
+          }
+
+          console.info('HERE')
+        }
+      })
+      .catch((error) => {
+        let errMsg = null;
+
+        this.findingUserPosition = false;
+
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errMsg = "User denied the request for Geolocation.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errMsg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            errMsg = "The request to get user location timed out.";
+            break;
+          case error.UNKNOWN_ERROR:
+            errMsg = "An unknown error occurred.";
+            break;
+        }
+        console.log('getCurrentPosition() geoLocatePromise - ', error)
+        console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        
+        this.findingUserPosition = false;
+        this.loaded = true;
+
+        this.location_data = {...this.default_location_data}
+
+        this.reportedMapCenter = {
+          lat: this.default_location_data.lat,
+          lng: this.default_location_data.lng,
+        }
+
+        console.info('HERE')
+      })
+    },
     hasGeoNavigator() {
       navigator.permissions &&
       navigator.permissions.query({name: 'geolocation'})
@@ -540,68 +616,7 @@ export default {
         }
       })
     },
-    getCurrentPosition() {
-      
-      this.geoLocatePromise()
-      .then((position) => {
-        console.log(position)
-
-        if(position.coords) {
-          
-          let pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          
-          this.reportedMapCenter = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-
-          this.findingUserPosition = false;
-
-          this.geocodeLatLng(pos);
-          
-          this.loaded = true;
-
-          return position;
-        } else {
-          console.log(`%c .: Geolocation position N/A :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-
-          this.findingUserPosition = false;
-          this.loaded = true;
-
-          this.location_data = {...this.default_location_data}
-
-          this.reportedMapCenter = {
-            lat: this.default_location_data.lat,
-            lng: this.default_location_data.lng,
-          }
-        }
-      })
-      .catch((error) => {
-        let errMsg = null;
-
-        this.findingUserPosition = false;
-
-        switch(error.code) {
-          case error.PERMISSION_DENIED:
-            errMsg = "User denied the request for Geolocation.";
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errMsg = "Location information is unavailable.";
-            break;
-          case error.TIMEOUT:
-            errMsg = "The request to get user location timed out.";
-            break;
-          case error.UNKNOWN_ERROR:
-            errMsg = "An unknown error occurred.";
-            break;
-        }
-        console.log('getCurrentPosition() geoLocatePromise - ', error)
-        console.log(`%c .: Geolocation Error -- ${errMsg}:.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      })
-    },
+    
   },
   computed: {
     ...mapFields([
