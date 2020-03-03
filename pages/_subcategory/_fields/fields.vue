@@ -573,8 +573,44 @@ export default {
         this.$refs.mainElm.innerHTML = processingHTML;
 
         this.formSubmitHandOff(formData, config)
-        .then(res  => { console.log(res) })
-        .catch(err => { console.log(err) });
+        .then((res)  => {
+
+          let resData = res.data.body.body,
+             ticketID = res.data.body.body[0].service_request_id;
+
+          console.log('YOOOOO', res);
+          console.log('YOOOOO', resData);
+          console.log('YOOOOO', ticketID);
+
+          this.$store.dispatch('resetBaseState');
+
+          this.$axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
+          .then((res)  => {
+            this.$store.dispatch('setInitGroupData', res.data)
+          })
+          .catch((err) => {
+            console.error('setInitGroupData Err', err)
+          });
+
+          this.getServiceRequestCRMHTML('171843')
+          .then((res) => {
+            this.$store.dispatch("setServiceTicketCRMHTML", res);
+          })
+          .catch((e) => console.log(e));
+          
+          // this.getServiceRequest(val)
+          // .then((res) => {
+          //   this.$store.dispatch("setServiceTicketData", res);
+
+          //   this.getServiceRequestCRMHTML(val)
+          //   .then((res) => {
+          //     this.$store.dispatch("setServiceTicketCRMHTML", res);
+          //   })
+          //   .catch((e) => console.log(e));
+          // })
+          // .catch((e) => console.log(e));
+        })
+        .catch((err) => { console.log(err) });
       }
     }
   },

@@ -33,54 +33,56 @@
           <a :href="`https://bloomington.in.gov/crm/tickets/view?ticket_id=${serviceTicketData[0].service_request_id}`" class="external" target="_blank" title="Visit ticket via uReport CRM">Visit full ticket</a>
         </div>
 
-        <GmapMap
-          v-if="serviceTicketData[0].lat != null"
-          style="width: 100%; height: 225px;"
-          :center="{lat: parseFloat(serviceTicketData[0].lat), lng: parseFloat(serviceTicketData[0].long)}"
-          :zoom="19"
-          map-type-id="hybrid"
-          :options="{
-            zoomControl:        true,
-            mapTypeControl:     true,
-            scaleControl:       false,
-            streetViewControl:  false,
-            rotateControl:      false,
-            fullscreenControl:  false,
-            disableDefaultUi:   true,
-            draggable:          true,
-            styles: [
-              {
-                featureType:    'poi',
-                stylers: [
-                  {
-                    visibility: 'off'
-                  }
-                ]
-              },
-              {
-                featureType:    'poi.medical',
-                stylers: [
-                  {
-                    visibility: 'off'
-                  }
-                ]
-              },
-              {
-                featureType:    'poi.government',
-                stylers: [
-                  {
-                    visibility: 'off'
-                  }
-                ]
-              }
-            ]
-          }">
+        <template v-if="serviceTicketData[0].lat != null">
+          <GmapMap
+            v-if="serviceTicketData[0].lat"
+            style="width: 100%; height: 225px;"
+            :center="{lat: parseFloat(serviceTicketData[0].lat), lng: parseFloat(serviceTicketData[0].long)}"
+            :zoom="19"
+            map-type-id="hybrid"
+            :options="{
+              zoomControl:        true,
+              mapTypeControl:     true,
+              scaleControl:       false,
+              streetViewControl:  false,
+              rotateControl:      false,
+              fullscreenControl:  false,
+              disableDefaultUi:   true,
+              draggable:          true,
+              styles: [
+                {
+                  featureType:    'poi',
+                  stylers: [
+                    {
+                      visibility: 'off'
+                    }
+                  ]
+                },
+                {
+                  featureType:    'poi.medical',
+                  stylers: [
+                    {
+                      visibility: 'off'
+                    }
+                  ]
+                },
+                {
+                  featureType:    'poi.government',
+                  stylers: [
+                    {
+                      visibility: 'off'
+                    }
+                  ]
+                }
+              ]
+            }">
 
-          <GmapMarker
-            ref="myMarker"
-            :position="{lat: parseFloat(serviceTicketData[0].lat), lng: parseFloat(serviceTicketData[0].long)}"
-          />
-        </GmapMap>
+            <GmapMarker
+              ref="myMarker"
+              :position="{lat: parseFloat(serviceTicketData[0].lat), lng: parseFloat(serviceTicketData[0].long)}"
+            />
+          </GmapMap>
+        </template>
 
         <div class="service-info">
           <header>
@@ -115,7 +117,7 @@
             </span>
           </div>
         </div>
-
+        
         <div class="service-body">
           <div class="description" v-if="serviceTicketData[0].description != null">
             <h5>Service Description</h5>
@@ -369,9 +371,30 @@ import { mapFields }  from 'vuex-map-fields'
 export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if(to.query.ticket)
-        vm.ticketID = to.query.ticket
+      if(to.query.ticket){
+        vm.ticketID = to.query.ticket;
 
+        vm.getServiceRequest(to.query.ticket)
+        .then((res) => {
+          vm.$store.dispatch("setServiceTicketData", res);
+
+          vm.getServiceRequestCRMHTML(to.query.ticket)
+          .then((res) => {
+            vm.$store.dispatch("setServiceTicketCRMHTML", res);
+          })
+          .catch((e)  => console.log(e));
+        })
+        .catch((e)  => console.log(e));
+      }
+
+      if(!vm.initGroupData)
+        vm.$axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
+        .then((res) => {
+          vm.$store.dispatch("setInitGroupData", res)
+        })
+        .catch((err) => {
+          console.error(err)
+        });
       next();
     });
   },
@@ -407,7 +430,8 @@ export default {
       return this.serviceTicketData[0]
     },
     groupCategories() {
-      return [...new Set(this.initGroupData.map(g => g.group))]
+      if(this.initGroupData)
+        return [...new Set(this.initGroupData.map(g => g.group))]
     },
     setCommunicationHistory() {
       if(this.serviceTicketCRMHTML) {
@@ -437,6 +461,6 @@ export default {
         return names
       }
     },
-  }
+  },
 }
 </script>

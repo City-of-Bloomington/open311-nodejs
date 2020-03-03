@@ -78,10 +78,8 @@ Vue.mixin({
         axios.post(`${process.env.POST_PROXY}`, formData, config)
         .then((response) => {
           this.$store.commit('storeResponseInfo', response);
-        })
-        .then((response) => {
           this.$router.push({ name: 'subcategory-fields-confirm' });
-          resolve('formData sent')
+          resolve(response);
         })
         .catch((error) => {
           this.reCaptchaError = true;

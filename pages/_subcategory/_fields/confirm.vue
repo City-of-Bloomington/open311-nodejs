@@ -17,7 +17,12 @@
       </h3>
 
       <nuxt-link
-        :to="{name: 'index'}"
+        :to="{
+          name: 'index',
+          query: {
+            ticket: serviceReponse[0].service_request_id
+          }
+        }"
         class="button ok-button">
         View Ticket
       </nuxt-link>
@@ -118,9 +123,7 @@ export default {
       this.$router.go('index');
     },
     serviceID() {
-      console.log(this.service_response)
-      // var resData = JSON.parse(this.responseData)[0];
-      this.serviceReqID = '0';
+      console.log(serviceReponse[0].service_request_id);
     }
   },
   computed: {

@@ -12,7 +12,7 @@ export const defaultState = () => ({
   nav_height:         '',
   stepper_height:     '',
   loc_search_height:  '',
-  initGroupData:      {},
+  initGroupData:      null,
   fromServiceCode:    '',
   serviceInfos: {
     service_group: {
@@ -253,6 +253,9 @@ export const actions = {
   },
   setProgressStepFive(context, payload) {
     context.commit("SET_PROGRESS_STEP_FIVE", payload)
+  },
+  setInitGroupData(context, payload) {
+    context.commit("storeInitGroupData", payload)
   },
   async nuxtServerInit({ commit }) {
     let { data } = await axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)

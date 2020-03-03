@@ -7,7 +7,7 @@ var bodyParser         = require('body-parser');
 const busboyBodyParser = require('busboy-body-parser');
 
 var secretKey = `${process.env.RECAPTCHA_SERVERKEY}`;
-let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
+let postURL = `${process.env.CRM_API_TEST_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
 
@@ -77,8 +77,8 @@ app.post('/', function (req, res, next) {
         console.log(err)
       }
 
-      console.log('.: Submit :.');
-      console.log(body.data)
+      console.log('.: Submit OK :.');
+      // console.log(body)
       
       res.json({ body })
     });

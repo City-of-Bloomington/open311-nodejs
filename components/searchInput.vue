@@ -4,7 +4,6 @@
     v-on-clickaway="away">
 
     <div class="form-wrapper">
-      {{ value }}
       <form @submit.prevent autocomplete="off">
         <fn1-input
           v-model="input"
@@ -244,14 +243,16 @@
 
 <script>
 import { mixin as clickaway } from 'vue-clickaway'
+import { mapFields }          from 'vuex-map-fields'
 
 export default {
   mixins: [ clickaway ],
   data() {
     return {
-      input:        'testing',
+      input:        '',
       focused:      false,
       showClearBtn: false,
+      updatedOnce:  false,
     }
   },
   props: {
@@ -260,11 +261,10 @@ export default {
     value:  { type: String, required: false},
     field:  { type: String, required: false}
   },
-  created() {
-    console.log('created');
-  },
-  mounted() {
-    console.log('mounted');
+  computed: {
+    ...mapFields([
+      'serviceTicketData',
+    ]),
   },
   methods: {
     isNan(val){ return isNaN(val) },
@@ -272,7 +272,7 @@ export default {
       let numberRegEx = /^\d{6}$/,
             testInput = numberRegEx.test(this.input);
 
-      if(!testInput){
+      if(!testInput || !this.serviceTicketData){
         this.focused = false;
         this.clearSearch();
       }
@@ -311,12 +311,11 @@ export default {
         this.getServiceRequestCRMHTML(val)
         .then((res) => {
           this.$store.dispatch("setServiceTicketCRMHTML", res);
-          // alert('ok');
           this.$router.replace({query: {ticket: val}})
         })
         .catch((e)  => console.log(e));
       })
-      .catch((e)  => console.log(e))
+      .catch((e)  => console.log(e));
     },
   },
   watch: {
@@ -332,36 +331,23 @@ export default {
         this.ticketLookup(val);
       }
 
-      if(val.length >= 1) {
-        this.focused = true
-        this.showClearBtn = true
-      } else {
-        this.focused = false
-        this.showClearBtn = false
+      if(val){
+        if(val.length >= 1) {
+          this.focused = true
+          this.showClearBtn = true
+        } else {
+          this.focused = false
+          this.showClearBtn = false
+        }
       }
     }
   },
   updated() {
-    console.log('updated');
-    console.log(this.input == "");
-    console.log(this.value);
-    console.log(this.field);
-
-    
-    
-    if(this.input == "" && this.value){
-      // let code = this.value;
-      // this.input = code;
-    }
-      
-
-
-
-    // console.log(this.input == "");
-    // console.log(this.value);
-
-    // if(this.input == "" && this.value)
-    //   this.input = this.value
+    if(!this.updatedOnce)
+      setTimeout(() => {
+        this.updatedOnce = true
+        this.input = this.value;
+      }, 100);
   }
 }
 </script>
