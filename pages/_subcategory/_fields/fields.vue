@@ -574,15 +574,18 @@ export default {
 
         this.formSubmitHandOff(formData, config)
         .then((res)  => {
-
-          let resData = res.data.body.body,
-             ticketID = res.data.body.body[0].service_request_id;
-
-          console.log('YOOOOO', res);
-          console.log('YOOOOO', resData);
-          console.log('YOOOOO', ticketID);
-
           this.$store.dispatch('resetBaseState');
+
+          this.$store.commit('storeResponseInfo', res);
+
+          let resData = JSON.parse(res.data.body.body),
+             ticketID = resData[0].service_request_id;
+
+          console.log('Res', res);
+          console.log('ResData', resData);
+          console.log('Ticket ID', ticketID);
+          
+          
 
           this.$axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
           .then((res)  => {
@@ -597,18 +600,6 @@ export default {
             this.$store.dispatch("setServiceTicketCRMHTML", res);
           })
           .catch((e) => console.log(e));
-          
-          // this.getServiceRequest(val)
-          // .then((res) => {
-          //   this.$store.dispatch("setServiceTicketData", res);
-
-          //   this.getServiceRequestCRMHTML(val)
-          //   .then((res) => {
-          //     this.$store.dispatch("setServiceTicketCRMHTML", res);
-          //   })
-          //   .catch((e) => console.log(e));
-          // })
-          // .catch((e) => console.log(e));
         })
         .catch((err) => { console.log(err) });
       }

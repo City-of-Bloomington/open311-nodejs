@@ -8,11 +8,11 @@
 
     <main class="info-process thank-you">
 
-      <h2 v-html="thankYou"></h2>
+      <h2>Thanks for the report!</h2>
       
       <h3>
         <strong>Service Request ID:
-        <span>{{ serviceReponse[0].service_request_id }}</span>
+        <span>{{ serviceID }}</span>
         </strong>
       </h3>
 
@@ -20,7 +20,7 @@
         :to="{
           name: 'index',
           query: {
-            ticket: serviceReponse[0].service_request_id
+            ticket: serviceID
           }
         }"
         class="button ok-button">
@@ -33,6 +33,7 @@
 <style lang="scss" scoped>
   main {
     &.thank-you {
+      text-align: center;
       justify-content: center;
 
       h2, h3 {
@@ -93,11 +94,11 @@ import { mapFields,
          mapMultiRowFields }  from 'vuex-map-fields'
 
 export default {
-  // beforeRouteEnter (to, from, next) {
-  //   if(from.path == '/')
-  //     next('/');
-  //   next();
-  // },
+  beforeRouteEnter (to, from, next) {
+    if(from.path == '/')
+      next('/');
+    next();
+  },
   head () {
     return {
       titleTemplate: `%s - Thanks!`
@@ -114,32 +115,22 @@ export default {
       navSubGroup:    true,
     }
   },
-  mounted() {
-    this.serviceID();
-  },
   methods: {
     goHome() {
       alert('go home')
       this.$router.go('index');
     },
-    serviceID() {
-      console.log(serviceReponse[0].service_request_id);
-    }
   },
   computed: {
     ...mapFields([
       'serviceInfos.service_response',
-      'serviceInfos.personal_info.first_name'
     ]),
-    thankYou() {
-      if(this.firstName != '') {
-        return `<strong>${this.first_name}</strong>, thanks for the report.`
-      }
-      return `Thanks for the report.`
-    },
     serviceReponse() {
       return JSON.parse(this.service_response.data.body.body)
-    }
+    },
+    serviceID() {
+      return this.serviceReponse[0].service_request_id
+    },
   }
 }
 </script>
