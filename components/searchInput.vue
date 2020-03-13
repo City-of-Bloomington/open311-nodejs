@@ -61,7 +61,7 @@
         min-height: 30px;
         border-radius: $radius-default;
         caret-color: $color-blue; //no IE support
-        padding: 0 0 0 40px;
+        padding: 0 10px 0 40px;
         background-color: white;
         // background-color: red;
         background-size: 20px;
@@ -246,12 +246,14 @@ import { mixin as clickaway } from 'vue-clickaway'
 import { mapFields }          from 'vuex-map-fields'
 
 export default {
+  beforeUpdate() {
+    console.log('beforeUpdate()')
+  },
   mixins: [ clickaway ],
   data() {
     return {
-      input:        '',
+      input:        this.value,
       focused:      false,
-      showClearBtn: false,
       updatedOnce:  false,
     }
   },
@@ -320,24 +322,29 @@ export default {
   },
   watch: {
     'input': function(val, oldVal){
-      if(val != oldVal) {
-        this.$store.dispatch("setServiceTicketData", null);
-      }
 
       let numberRegEx = /^\d{6}$/,
             ticketInputTest = numberRegEx.test(val);
 
+      if(val == '') {
+        this.$router.replace({query: null})
+        this.input = '';        
+        this.$store.dispatch("setServiceTicketData", null);
+        this.$store.dispatch("setServiceTicketCRMHTML", null);
+      }
+
+
       if(ticketInputTest){
+        this.input = val;
+        console.log('looking up the ticket')
         this.ticketLookup(val);
       }
 
       if(val){
         if(val.length >= 1) {
           this.focused = true
-          this.showClearBtn = true
         } else {
           this.focused = false
-          this.showClearBtn = false
         }
       }
     }
@@ -345,6 +352,9 @@ export default {
   updated() {
     if(!this.updatedOnce)
       setTimeout(() => {
+        console.log('updatedOnce')
+        console.log('i', this.input)
+        console.log('v', this.value)
         this.updatedOnce = true
         this.input = this.value;
       }, 100);

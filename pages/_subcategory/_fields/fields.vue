@@ -21,7 +21,7 @@
               name="media"></label>
 
             <button
-              @click="$refs.fileInput.click()" 
+              @click.prevent="$refs.fileInput.click()" 
               v-if="captures.length < 1"
               class="image-input">Include Photo</button>
           </div>

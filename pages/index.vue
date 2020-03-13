@@ -117,7 +117,7 @@
             </span>
           </div>
         </div>
-        
+
         <div class="service-body">
           <div class="description" v-if="serviceTicketData[0].description != null">
             <h5>Service Description</h5>
