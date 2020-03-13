@@ -14,7 +14,7 @@
 
       <button
         slot="footer"
-        @click="commitSeenModal"
+        @click.prevent="commitSeenModal"
         tabindex="0"
         autofocus>I Understand</button>
     </template>

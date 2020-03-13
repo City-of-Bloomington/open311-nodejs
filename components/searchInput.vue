@@ -6,6 +6,7 @@
     <div class="form-wrapper">
       <form @submit.prevent autocomplete="off">
         <fn1-input
+          type="search"
           v-model="input"
           label="Search"
           placeholder="Seach for services or a ticket number"
@@ -246,12 +247,20 @@ import { mixin as clickaway } from 'vue-clickaway'
 import { mapFields }          from 'vuex-map-fields'
 
 export default {
-  beforeUpdate() {
-    console.log('beforeUpdate()')
+  beforeUpdate() {},
+  created() {
+    console.log('created', this.$route.query.ticket)
+
+    if(this.$route.query.ticket) {
+      this.input = this.$route.query.ticket
+      this.hasCreatedVal = true;
+    }
+      
   },
   mixins: [ clickaway ],
   data() {
     return {
+      hasCreatedVal: false,
       input:        this.value,
       focused:      false,
       updatedOnce:  false,
@@ -322,23 +331,38 @@ export default {
   },
   watch: {
     'input': function(val, oldVal){
+      console.log('val', val);
+      console.log('oldVal', oldVal);
 
       let numberRegEx = /^\d{6}$/,
             ticketInputTest = numberRegEx.test(val);
 
+      if(val != oldVal) {
+        if(oldVal != null)
+          this.hasCreatedVal = false
+      }
+
       if(val == '') {
+        console.log('clearing search data')
         this.$router.replace({query: null})
         this.input = '';        
         this.$store.dispatch("setServiceTicketData", null);
         this.$store.dispatch("setServiceTicketCRMHTML", null);
       }
 
-
-      if(ticketInputTest){
+      if(ticketInputTest && !this.hasCreatedVal) {
         this.input = val;
         console.log('looking up the ticket')
         this.ticketLookup(val);
       }
+      
+      
+
+      // if(this.updatedOnce && ticketInputTest) {
+      //   this.input = val;
+      //   console.log('looking up the ticket')
+      //   this.ticketLookup(val);
+      // }
 
       if(val){
         if(val.length >= 1) {
@@ -351,13 +375,7 @@ export default {
   },
   updated() {
     if(!this.updatedOnce)
-      setTimeout(() => {
-        console.log('updatedOnce')
-        console.log('i', this.input)
-        console.log('v', this.value)
-        this.updatedOnce = true
-        this.input = this.value;
-      }, 100);
+      setTimeout(() => { this.updatedOnce = true }, 100);
   }
 }
 </script>
