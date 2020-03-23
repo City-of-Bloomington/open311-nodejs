@@ -7,6 +7,9 @@
     </header>
 
     <main class="questions" ref="mainElm">
+      <fn1-alert v-if="reCaptchaError" variant="warning">
+        <p><strong>Google reCaptcha error</strong>, please try submitting again.</p>
+      </fn1-alert>
       <h2>General information:</h2>
 
       <form>
@@ -139,6 +142,11 @@
 
 <style lang="scss" scoped>
   main {
+    .alert {
+      margin: 0 0 15px 0;
+      padding: 10px 15px;
+    }
+
     &.questions {
       height: calc(100vh - 244px);
 
