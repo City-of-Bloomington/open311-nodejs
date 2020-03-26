@@ -82,6 +82,7 @@ Vue.mixin({
           resolve(response);
         })
         .catch((error) => {
+          console.log('ERRRR')
           this.reCaptchaError = true;
           console.log(`%c .: SS :: ${JSON.stringify(error.response.data.responseDesc)} :.`, `background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
           reject('formData fail', error.response.data.responseDesc)

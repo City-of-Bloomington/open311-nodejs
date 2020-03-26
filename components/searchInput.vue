@@ -249,8 +249,6 @@ import { mapFields }          from 'vuex-map-fields'
 export default {
   beforeUpdate() {},
   created() {
-    console.log('created', this.$route.query.ticket)
-
     if(this.$route.query.ticket) {
       this.input = this.$route.query.ticket
       this.hasCreatedVal = true;
@@ -331,8 +329,8 @@ export default {
   },
   watch: {
     'input': function(val, oldVal){
-      console.log('val', val);
-      console.log('oldVal', oldVal);
+      // console.log('val', val);
+      // console.log('oldVal', oldVal);
 
       let numberRegEx = /^\d{6}$/,
             ticketInputTest = numberRegEx.test(val);
@@ -343,7 +341,7 @@ export default {
       }
 
       if(val == '') {
-        console.log('clearing search data')
+        // console.log('clearing search data')
         this.$router.replace({query: null})
         this.input = '';        
         this.$store.dispatch("setServiceTicketData", null);
@@ -352,17 +350,9 @@ export default {
 
       if(ticketInputTest && !this.hasCreatedVal) {
         this.input = val;
-        console.log('looking up the ticket')
+        // console.log('looking up the ticket')
         this.ticketLookup(val);
       }
-      
-      
-
-      // if(this.updatedOnce && ticketInputTest) {
-      //   this.input = val;
-      //   console.log('looking up the ticket')
-      //   this.ticketLookup(val);
-      // }
 
       if(val){
         if(val.length >= 1) {

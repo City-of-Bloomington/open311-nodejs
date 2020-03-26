@@ -18,6 +18,11 @@ app.post('/', function (req, res, next) {
     console.log(req.body);
   }
 
+  if (req.body) {
+    console.log('.: Request reCaptcha :.');
+    console.log(req.body.g_recaptcha_response);
+  }
+
   var recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
 
 
@@ -40,12 +45,12 @@ app.post('/', function (req, res, next) {
     body = JSON.parse(body);
 
     if(!body.success) {
-      console.log('.: reCaptcha Fail :.');
-      console.log(error)
+      console.log('.: reCaptcha Fail :.', error);
+      console.log('failed body', body)
 
       return res.status(500).json(
         { "responseCode" : 1,
-          "responseDesc" : "Failed reCaptcha validation"}
+          "responseDesc": body}
       );
     } else {
       console.log('.: reCaptcha :.');

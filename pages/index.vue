@@ -431,7 +431,7 @@ export default {
     },
     groupCategories() {
       if(this.initGroupData)
-        return [...new Set(this.initGroupData.map(g => g.group))]
+        return [...new Set(this.initGroupData.filter(g => g.group != 'Internal').map(g => g.group))]
     },
     setCommunicationHistory() {
       if(this.serviceTicketCRMHTML) {
