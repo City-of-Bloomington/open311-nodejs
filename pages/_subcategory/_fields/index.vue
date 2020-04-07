@@ -12,21 +12,24 @@
           Service request location:
         </label>
 
-        <gmap-autocomplete
-          :value="location_data.placeAddress"
-          :class="['autocomplete-search', {'locating': findingUserPosition }]"
-          placeholder="Service Request Location"
-          @place_changed="setPlace"
-          :select-first-on-enter="true"
-          :options="{
-            strictBounds: true,
-            bounds: {
-              north:  39.2,
-              south:  39.1,
-              east:  -86.5,
-              west:  -86.6
-            },
-          }" />
+        <client-only>
+          <gmap-autocomplete
+            :value="location_data.placeAddress"
+            :class="['autocomplete-search', {'locating': findingUserPosition }]"
+            placeholder="Service Request Location"
+            @place_changed="setPlace"
+            :select-first-on-enter="true"
+            :options="{
+              strictBounds: true,
+              bounds: {
+                north:  39.2,
+                south:  39.1,
+                east:  -86.5,
+                west:  -86.6
+              },
+            }"
+          />
+        </client-only>
 
         <button
           :class="['find-me', {'locating': findingUserPosition }]"
@@ -320,7 +323,13 @@
 
         .vue-map-container {
           height: 210px;
-          margin: 10px 0;
+          margin: 10px 0 0 0;
+        }
+      }
+
+      @media (max-height: 800px) {
+        .vue-map-container {
+          height: 230px;
         }
       }
     }

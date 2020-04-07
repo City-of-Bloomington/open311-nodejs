@@ -15,7 +15,7 @@
         </li>
         
         <li @click="showModal = true">
-          <span>Can't find what your looking for?</span>
+          <span>Can't find what you're looking for?</span>
         </li>
       </ul>
 
@@ -42,6 +42,14 @@
 
       ul {
         width: 100%;
+
+        li {
+          &:last-child {
+            // background: red;
+            cursor: pointer;
+            text-align: center;
+          }
+        }
       }
 
       @media only screen

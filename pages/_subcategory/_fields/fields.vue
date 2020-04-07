@@ -537,6 +537,7 @@ export default {
 
       if(!grecaptcha.getResponse()) {
         this.reCaptchaError = true;
+        alert('reCaptcha invalid, please try again.');
         console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
       } else {
         let formData        = new FormData(),
@@ -603,7 +604,7 @@ export default {
             console.error('setInitGroupData Err', err)
           });
 
-          this.getServiceRequestCRMHTML('171843')
+          this.getServiceRequestCRMHTML(ticketID)
           .then((res) => {
             this.$store.dispatch("setServiceTicketCRMHTML", res);
           })

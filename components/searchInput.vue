@@ -199,7 +199,7 @@
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
       width: calc(100% - 40px);
-      padding: 10px 0;
+      padding: 12px 0 10px 0;
 
       .form-wrapper {
         form {

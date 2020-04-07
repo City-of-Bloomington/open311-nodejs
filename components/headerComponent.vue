@@ -14,7 +14,7 @@
 
       :application="{
         name:         `${appName}`,
-        url:          `${baseUrl}${frontendBase}`
+        url:          `${frontendBase}`
       }"
 
       :navItems="[
