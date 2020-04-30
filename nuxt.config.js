@@ -77,11 +77,19 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     '@nuxtjs/style-resources',
+    '@nuxtjs/recaptcha',
     ['@nuxtjs/pwa', {
       icon: true,
       sizes: [16, 120, 144, 152, 192, 384, 512],
     }]
   ],
+
+  recaptcha: {
+    hideBadge:  false,
+    siteKey:    process.env.RECAPTCHA_SITEKEY,
+    version:    2,
+    size:       'invisible'
+  },
 
   axios: {
     baseURL:              process.env.BASE_URL,

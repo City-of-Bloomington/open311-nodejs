@@ -130,11 +130,17 @@
       </form>
       
       <footer>
+        <client-only>
+        <recaptcha
+          @error="onError"
+          @success="onSuccess"
+          @expired="onExpired"
+        />
+
         <button
-          class="g-recaptcha button next-button"
-          :data-sitekey="reCaptchaSiteKey"
-          data-size="invisible"
+          class="button next-button"
           @click="submitPost()">Submit</button>
+        </client-only>
       </footer>
     </main>
   </div>
@@ -414,8 +420,9 @@ export default {
     this.$store.dispatch('setProgressStepFive', stepData);
   },
   mounted() {
-    setTimeout(() => { grecaptcha.execute() }, 100);
-
+    // grecaptcha.execute()
+    // this.updateReCaptcha();
+    
     let noServiceCode = this.service_code == '';
 
     if(noServiceCode) {
@@ -430,6 +437,15 @@ export default {
     }
   },
   methods: {
+    onError (error) {
+      console.log('reCaptcha Error happened:', error)
+    },
+    onSuccess (token) {
+      console.log('reCaptcha Succeeded:', token)
+    },
+    onExpired () {
+      console.log('reCaptcha Expired')
+    },
     removeImage(c){
       this.$store.dispatch('setDefaultImage', '');
       this.captures.splice(this.captures.indexOf(c), 1);
@@ -532,87 +548,101 @@ export default {
         return new Blob([ia], {type:mimeString});
       }
     },
-    submitPost() {
-      this.$store.commit('storeDefaultImage', this.captures[0]);
+    async submitPost() {
+      try {
+        const token = await this.$recaptcha.getResponse();
+        console.log('ReCaptcha token:', token);
 
-      if(!grecaptcha.getResponse()) {
-        this.reCaptchaError = true;
-        alert('reCaptcha invalid, please try again.');
-        console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
-      } else {
-        let formData        = new FormData(),
-            blob            = this.dataURItoBlob(this.default_image),
-            captchaReponse  = grecaptcha.getResponse();
+        this.$store.commit('storeDefaultImage', this.captures[0]);
 
-        formData.append("g_recaptcha_response", captchaReponse)
-        formData.append("service_code",         parseInt(this.service_code, 10))
-        formData.append("lat",                  this.lat)
-        formData.append("long",                 this.lng)
-        formData.append("address_string",       this.address)
-        formData.append("email",                this.email)
-        formData.append("first_name",           this.first_name)
-        formData.append("last_name",            this.last_name)
-        formData.append("phone",                this.phone)
-        formData.append("description",          this.default_description)
+        
+        if(!token) {
+          this.reCaptchaError = true;
 
-        if(blob != undefined)
-          formData.append("media",              blob)
+          alert('reCaptcha invalid, please try again.');
 
-        Object.values(this.pre_service_attrs).map((key) => {
-          return formData.append(`attribute[${key.code}]`, `${key.answer_value}`)
-        }).join('&');
+          console.log(`%c .: CS :: reCaptcha invalid :.`,`background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
 
-        let config = {
-          onUploadProgress: (progressEvent) => {
-            this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            console.log(`Percent Completed: ${this.percentCompleted}`);
+        } else {
+          let formData        = new FormData(),
+              blob            = this.dataURItoBlob(this.default_image),
+              captchaReponse  = token;
+
+          formData.append("g_recaptcha_response", captchaReponse)
+          formData.append("service_code",         parseInt(this.service_code, 10))
+          formData.append("lat",                  this.lat)
+          formData.append("long",                 this.lng)
+          formData.append("address_string",       this.address)
+          formData.append("email",                this.email)
+          formData.append("first_name",           this.first_name)
+          formData.append("last_name",            this.last_name)
+          formData.append("phone",                this.phone)
+          formData.append("description",          this.default_description)
+
+          if(blob != undefined)
+            formData.append("media",              blob)
+
+          Object.values(this.pre_service_attrs).map((key) => {
+            return formData.append(`attribute[${key.code}]`, `${key.answer_value}`)
+          }).join('&');
+
+          let config = {
+            onUploadProgress: (progressEvent) => {
+              this.percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              console.log(`Percent Completed: ${this.percentCompleted}`);
+            }
           }
-        }
 
-        for (var pair of formData.entries()) {
-          console.log(pair[0]+ ', ' + pair[1]);
-        }
+          for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+          }
 
-        let processingHTML = `
-          <div>
-            <p>Processing your service request.</p>
-          </div>
-        `;
+          let processingHTML = `
+            <div>
+              <p>Processing your service request.</p>
+            </div>
+          `;
 
-        this.$refs.mainElm.innerHTML = processingHTML;
-
-        this.formSubmitHandOff(formData, config)
-        .then((res)  => {
-          this.$store.dispatch('resetBaseState');
-
-          this.$store.commit('storeResponseInfo', res);
-
-          let resData = JSON.parse(res.data.body.body),
-             ticketID = resData[0].service_request_id;
-
-          console.log('Res', res);
-          console.log('ResData', resData);
-          console.log('Ticket ID', ticketID);
-          
+          this.$refs.mainElm.innerHTML = processingHTML;
           
 
-          this.$axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
+          this.formSubmitHandOff(formData, config)
           .then((res)  => {
-            this.$store.dispatch('setInitGroupData', res.data)
-          })
-          .catch((err) => {
-            console.error('setInitGroupData Err', err)
-          });
+            this.$store.dispatch('resetBaseState');
 
-          this.getServiceRequestCRMHTML(ticketID)
-          .then((res) => {
-            this.$store.dispatch("setServiceTicketCRMHTML", res);
+            this.$store.commit('storeResponseInfo', res);
+
+            let resData = JSON.parse(res.data.body.body),
+                ticketID = resData[0].service_request_id;
+
+            console.log('Res', res);
+            console.log('ResData', resData);
+            console.log('Ticket ID', ticketID);
+            
+            
+
+            this.$axios.get(`${process.env.CRM_API_URL}${process.env.SERVICES_API}`)
+            .then((res)  => {
+              this.$store.dispatch('setInitGroupData', res.data)
+            })
+            .catch((err) => {
+              console.error('setInitGroupData Err', err)
+            });
+
+            this.getServiceRequestCRMHTML(ticketID)
+            .then((res) => {
+              this.$store.dispatch("setServiceTicketCRMHTML", res);
+            })
+            .catch((e) => console.log(e));
           })
-          .catch((e) => console.log(e));
-        })
-        .catch((err) => { console.log(err) });
+          .catch((err) => { console.log(err) });
+        }
+
+      } catch (error) {
+        console.log('Client Submit Error:', error);
+        await this.$recaptcha.reset();
       }
-    }
+    },
   },
   computed: {
     ...mapMultiRowFields(['serviceInfos.pre_service_attrs']),
