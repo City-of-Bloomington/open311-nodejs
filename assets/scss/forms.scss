@@ -3,15 +3,25 @@
   margin: 0 0 20px 0;
 
   .singlevaluelist {
-    padding: 10px 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
 
     legend {
-      margin: 0 0 10px 0;
+      width: 100%;
+      margin: 0 0 5px 0;
     }
 
     div {
+      margin: 0;
+      width: 100%;
       display: block;
-      margin: 0 0 5px 0;
+      
+
+      &.no-break {
+        width: auto;
+        margin: 0 15px 0 0;
+      }
 
       &:last-of-type {
         margin: 0;
@@ -20,15 +30,16 @@
   }
 
   legend {
-    // border-bottom: 1px solid rgba(225,225,225,0.2);
-    padding: 0;
-    margin: 0;
+    color: white;
+    font-size: 16px;
+    margin: 0 0 10px 0;
   }
 
   label {
     display: block;
     color: white;
-    margin: 0 0 5px 0;
+    font-size: 16px;
+    margin: 0 0 10px 0;
   }
 
   select {
@@ -43,6 +54,7 @@
 
   input:not([type=radio]):not([type=checkbox]),
   textarea {
+    font-size: 16px;
     border: none;
     display: block;
     width: 100%;

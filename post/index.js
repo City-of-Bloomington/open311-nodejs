@@ -2,56 +2,92 @@ require('dotenv').config();
 var express            = require("express");
 var app                = express();
 var request            = require('request');
+const axios            = require('axios')
+var bodyParser         = require('body-parser');
 const busboyBodyParser = require('busboy-body-parser');
 
 var secretKey = `${process.env.RECAPTCHA_SERVERKEY}`;
 let postURL = `${process.env.CRM_API_URL}${process.env.POST_API}`;
 
 app.use(busboyBodyParser());
+
 app.post('/', function (req, res, next) {
-  var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
+
+  if(req.body) {
+    console.log('.: Request :.');
+    console.log(req.body);
+  }
+
+  if (req.body) {
+    console.log('.: Request reCaptcha :.');
+    console.log(req.body.g_recaptcha_response);
+  }
+
+  var recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g_recaptcha_response'] + "&remoteip=" + req.connection.remoteAddress;
+
+
 
   if(
     req.body['g_recaptcha_response'] === undefined ||
     req.body['g_recaptcha_response'] === '' ||
     req.body['g_recaptcha_response'] === null
   ) {
-    res.status(500).send({"responseCode" : 1, "responseDesc" : "Please validate reCaptcha"});
+    res.status(500).send(
+      { "responseCode" : 1,
+        "responseDesc" : "Please validate reCaptcha"
+      }
+    );
+
     return next();
   }
 
-  request(verificationUrl, function(error, response, body) {
+  request(recaptchaUrl, (error, response, body) => {
     body = JSON.parse(body);
+
     if(!body.success) {
-      return res.status(500).json({"responseCode" : 1, "responseDesc" : "Failed reCaptcha validation"});
+      console.log('.: reCaptcha Fail :.', error);
+      console.log('failed body', body)
+
+      return res.status(500).json(
+        { "responseCode" : 1,
+          "responseDesc": body}
+      );
+    } else {
+      console.log('.: reCaptcha :.');
+      console.log(body)
+
+      return postForm();
     }
-    return postForm();
   });
 
-  function postForm() {
-    const formData = req.body;
-    formData.api_key = process.env.OPEN_311_KEY;
-    delete formData['g_recaptcha_response'];
+  postForm = () => {
+    req.body.api_key = process.env.OPEN_311_KEY;
+    delete req.body['g_recaptcha_response'];
 
     if (req.files.media) {
-      formData.media = {
+      req.body.media = {
         value: req.files.media.data,
         options: {
-          filename: req.files.media.data + '-' + Date.now(),
-          contentType: req.files.media.mimetype
+          filename:     `${req.files.media.data-Date.now()}`,
+          contentType:  req.files.media.mimetype
         }
       }
     }
 
-    request.post({url: postURL, formData: formData}, function optionalCallback(err, httpResponse, body) {
+    let data = { url: postURL, formData: req.body };
+
+    request.post(data, (err, body) => {
       if (err) {
-        return console.error('upload failed:', err);
+        console.log(`%c .: Submit Fail :.`, `background: red; color: white; padding: 2px 5px; border-radius: 2px;`);
+        console.log(err)
       }
-      console.log('Upload successful!  Server responded with:', body);
+
+      console.log('.: Submit OK :.');
+      // console.log(body)
+      
       res.json({ body })
     });
   }
-  return false;
 })
 
 module.exports = {

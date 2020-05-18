@@ -1,6 +1,6 @@
 <template>
-  <modal v-if="!seenModal">
-    <template v-if="!seenModal">
+  <modal v-if="!seen_modal">
+    <template v-if="!seen_modal">
       <h4 slot="header">Notice</h4>
       <h4 slot="body">Non-Emergency Use Only</h4>
       <p slot="body">This system is not for reporting emergencies or imminent safety hazards.</p>
@@ -14,29 +14,17 @@
 
       <button
         slot="footer"
-        @click="commitSeenModal"
+        @click.prevent="commitSeenModal"
         tabindex="0"
         autofocus>I Understand</button>
     </template>
   </modal>
 </template>
 
-<style>
-hr {
-  background-color: silver;
-  height: 1px;
-  border: none;
-  margin: 15px 0;
-}
-
-h4 {
-  font-weight: 600;
-  margin: 0 0 5px 0;
-}
-</style>
-
 <script>
-import modal from '~/components/modal.vue'
+import modal     from '~/components/modal.vue'
+import { 
+  mapFields }    from 'vuex-map-fields'
 
 export default {
   components: { modal },
@@ -53,9 +41,9 @@ export default {
     }
   },
   computed: {
-    seenModal() {
-      return this.$store.getters.seenModal
-    }
+    ...mapFields([
+      'seen_modal'
+    ]),
   }
 }
 </script>

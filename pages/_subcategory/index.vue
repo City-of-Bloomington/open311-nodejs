@@ -2,30 +2,23 @@
   <div>
     <header class="subcategory">
       <headerNav
-        :back-home="backHome"
         :nav-sub-group="navSubGroup"
-        :step-active="stepActive"
-        :step-complete="stepComplete" />
+        :step-active="stepActive" />
     </header>
 
     <main class="subcategory">
-      <ul class="subcategories">
-        <li
-            v-for="subCat in subGroupList"
+      <ul>
+        <li v-for="subCat in subGroupList"
             :key="subCat.service_name"
             @click="subGroupName(subCat.service_name,subCat.service_code)">
             <nuxt-link :to="{name:'subcategory-fields', params:{'fields':subCat.service_code}}">{{ subCat.service_name }}</nuxt-link>
         </li>
-
-        <!-- <li v-if="groupProperName"
-            v-for="groups in allDatas()"
-            :key="groups.service_name"
-            @click="subGroupName(subCat.service_name,subCat.service_code)">
-            <nuxt-link :to="{name:'subcategory-fields', params:{'fields':groups.service_code}}">{{ groups.service_name }}</nuxt-link>
-        </li> -->
+        
+        <li @click="showModal = true">
+          <span>Can't find what you're looking for?</span>
+        </li>
       </ul>
 
-      <button class="text-btn" @click="showModal = true">- Can't Find It? -</button>
       <modal v-if="showModal">
         <h4 slot="header">uReport: Can't Find It</h4>
         <p slot="body">Can't find what you are looking for?</p>
@@ -41,27 +34,54 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+  main {
+    &.subcategory {
+      margin: 0 auto;
+      height: calc(100vh - 200px);
+
+      ul {
+        width: 100%;
+
+        li {
+          &:last-child {
+            // background: red;
+            cursor: pointer;
+            text-align: center;
+          }
+        }
+      }
+
+      @media only screen
+      and (min-device-width : 320px)
+      and (max-device-width : 480px) {
+        margin-top: 5px;
+        height: 375px;
+      }
+    }
+  }
+</style>
+
 <script>
-import axios     from 'axios'
 import emerModal from '~/components/emerModal.vue'
 import headerNav from '~/components/nav.vue'
 import modal     from '~/components/modal.vue'
+import { 
+  mapFields }    from 'vuex-map-fields'
 
 export default {
   beforeRouteEnter (to, from, next) {
     if(from.name !== 'index')
-      next(vm => {
-        vm.backHome = true;
-      });
+      next(vm => { vm.backHome = true; });
     next();
   },
   head () {
     return {
-      titleTemplate: `%s - ${this.$store.getters.group}`,
+      titleTemplate: `%s - ${this.group}`,
       meta: [
         { hid:     'description',
           name:    'description',
-          content: `Submit a ${this.$store.getters.group} uReport service request.`
+          content: `Submit a ${this.group} uReport service request.`
         }
       ]
     }
@@ -74,49 +94,23 @@ export default {
   data() {
     return {
       backHome:        false,
-      groupName:       '',
-      groupRouteName:  '',
-      groupProperName: '',
       showModal:       false,
-      allData:         [],
       navSubGroup:     false,
-      stepActive: {
-        one:           false,
-        two:           true,
-        three:         false,
-        four:          false,
-        five:          false,
-        six:           false
-      },
-      stepComplete: {
-        one:           true,
-        two:           false,
-        three:         false,
-        four:          false,
-        five:          false,
-        six:           false
-      },
-      routeNames: {
-        cs:           'cleanup-and-sanitation',
-        csProper:     'Cleanup & Sanitation',
-        spt:          'streets-parking-and-traffic',
-        sptProper:    'Streets, Parking & Traffic',
-        pr:           'parks-and-recreation',
-        prProper:     'Parks & Recreation',
-        h:            'hazards',
-        hProper:      'Hazards',
-        wsu:          'water-and-sewage-utility',
-        wsuProper:    'Water & Sewage Utility',
-        m:            'miscellaneous',
-        mProper:      'Miscellaneous'
-      }
+      stepActive:      2,
+      
     }
+  },
+  created(){
+    let stepData = {
+      name: this.$route.name,
+      path: this.$route.fullPath,
+    }
+
+    this.$store.dispatch('setProgressStepTwo', stepData);
   },
   mounted() {
     if(this.group == ''){
-      this.groupRouteName = this.$route.params.subcategory;
-
-      switch (this.groupRouteName) {
+      switch (this.$route.params.subcategory) {
         case this.routeNames.cs:
           this.groupProperName = this.routeNames.csProper
           break;
@@ -138,28 +132,43 @@ export default {
         default:
           this.$router.push({ path: '/' });
       }
-      this.$store.commit('storeGroupName', this.groupProperName)
+      this.$store.dispatch('setGroupName', this.groupProperName)
     }
   },
   methods: {
-    subGroupName(name,code) {
-      this.$store.commit('storeSubGroupName', name);
-      this.$store.commit('storeGroupCode', code);
-      this.$store.commit('storeRouteCode', code);
+    subGroupName(name, code) {
+      let newCode = this.service_code != code || this.service_code == '';
+      
+      if(newCode) {
+        this.$store.dispatch('setSubGroupName', name);
+        this.$store.dispatch('setGroupCode',    code);
+        this.$store.dispatch('setRouteCode',    code);
+
+        this.getServiceAttrs(code)
+        .then((res) => {
+          let data = res.attributes.map((e, i) => {
+            let dataReady = {...e, answer_value: ''}
+            return dataReady
+          });
+
+          this.$store.dispatch('setPreServiceAttrs', data);
+        })
+        .catch(err => { console.log(`get fields err - ${err}`); });
+      }
     }
   },
   computed: {
-    allInitGroupData() {
-      return this.$store.getters.initGroupData
-    },
+    ...mapFields([
+      'initGroupData',
+      'fromServiceCode',
+      'routeNames',
+      'serviceInfos.service_group.group',
+      'serviceInfos.service_group.service_code',
+    ]),
     subGroupList() {
-      const allsubGroups = this.allInitGroupData.filter(
-        g => g.group == this.$store.state.serviceInfos.service_group.group
-      );
+      const allsubGroups = this.initGroupData
+      .filter(g => g.group == this.group);
       return allsubGroups
-    },
-    group() {
-      return this.$store.getters.group
     }
   }
 }

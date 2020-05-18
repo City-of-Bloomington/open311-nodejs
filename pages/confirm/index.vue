@@ -19,7 +19,18 @@
   </div>
 </template>
 
-<style type="text/css">
+<style lang="scss" scoped>
+
+  .ok-button {
+    background: $fern;
+    font-size: 30px;
+    color: white;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    margin: 40px auto 0 auto;
+  }
+
 
   main.thank-you h2 {
     border-bottom: none;
@@ -58,7 +69,7 @@ export default {
   },
   data() {
     return {
-      crmLink:        `${process.env.crmBaseUrl}${process.env.crmTickets}`,
+      crmLink:        `${process.env.CRM_BASE_URL}${process.env.CRM_TICKETS}`,
       serviceReqID:   '',
       navSubGroup:    true,
       stepActive: {
@@ -92,21 +103,18 @@ export default {
     }
   },
   computed: {
+    ...mapFields([
+      'serviceInfos.personal_info.first_name'
+    ]),
     crmMessageLink() {
       return `To view your request status, <a href='${this.crmLink}${this.serviceReqID}' target='_blank'>click here</a>.`
-    },
-    firstName() {
-      return this.$store.getters.firstName
     },
     requestID() {
       return `Your service request number is: <strong>${this.serviceReqID}</strong>`
     },
-    responseData() {
-      return this.$store.getters.response.data.body;
-    },
     thankYou() {
       if(this.firstName != '') {
-        return `<strong>${this.firstName}</strong>, thanks for the report!`
+        return `<strong>${this.first_name}</strong>, thanks for the report!`
       }
       return `Thanks for the report!`
     }
