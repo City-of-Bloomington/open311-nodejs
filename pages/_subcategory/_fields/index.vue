@@ -318,7 +318,6 @@
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         margin-top: 10px;
-        background-color: green !important;
         height: 355px;
 
         .vue-map-container {
