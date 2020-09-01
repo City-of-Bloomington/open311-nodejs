@@ -10,7 +10,7 @@
       <h2>Your Information</h2>
       <p><strong>Note:</strong> <i>Information you provide through uReport is stored and retained by the City as a public record. You may submit a service ticket anonymously.</i></p>
 
-      <form>
+      <form @submit.prevent="whoSubmit">
         <div class="form-group">
           <label for="first-name">First Name:</label>
           <input v-model="first_name"
@@ -43,14 +43,17 @@
                 placeholder="Email"
                 id="email">
         </div>
-      </form>
+      
       
       <footer>
-        <nuxt-link
+        <!-- <nuxt-link
           v-if="true"
           :to="{name: 'subcategory-fields-fields'}"
-          class="button next-button">Next</nuxt-link>
+          class="button next-button">Next</nuxt-link> -->
+          <input type="submit" value="Next" class="button next-button">
       </footer>
+
+      </form>
 
       <emerModal />
     </main>
@@ -140,6 +143,9 @@ export default {
     }
   },
   methods: {
+    whoSubmit() {
+      this.$router.push({name: 'subcategory-fields-fields'});
+    }
   },
   computed: {
     ...mapFields([
