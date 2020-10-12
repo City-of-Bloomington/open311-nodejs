@@ -8,6 +8,7 @@ export default ({ store, isHMR }) => {
       createPersistedState({
         reducer(state, paths) {
           const reducer = Object.assign({}, state);
+          delete reducer.totalSteps;
           delete reducer.seen_modal;
           delete reducer.topbar_height;
           delete reducer.search_height;

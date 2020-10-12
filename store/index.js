@@ -33,7 +33,7 @@ export const defaultState = () => ({
       lat: 39.1701322,
       lng: -86.5369248
     },
-    location_data:  {},
+    location_data: {},
     location_info: {
       address_string:     '',
       lat:                '',
@@ -69,7 +69,7 @@ export const defaultState = () => ({
       'border-radius: 3px',
       'padding: 2px 0'].join(';')
   },
-  totalSteps:   5,
+  totalSteps:   4,
   stepperPaths: {
     1: {
       name: 'home',
@@ -78,7 +78,6 @@ export const defaultState = () => ({
     2: {},
     3: {},
     4: {},
-    5: {},
   },
   routeNames: {
     cs:         'cleanup-and-sanitation',
