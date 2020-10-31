@@ -9,7 +9,7 @@ images:
 deployments:
 # dev deployment handled by patches
 - name: open311-nodejs
-  namespace: production
+  namespace: prod
   helm:
     chart:
       name: ./charts/open311-nodejs
