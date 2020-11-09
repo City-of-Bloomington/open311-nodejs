@@ -238,7 +238,7 @@
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         margin-top: 5px;
-        height: 355px;
+        height: 100%;
       }
     }
 
@@ -581,7 +581,7 @@
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         margin-top: 10px;
-        height: 355px;
+        // height: 355px;
 
         .vue-map-container {
           height: 210px;

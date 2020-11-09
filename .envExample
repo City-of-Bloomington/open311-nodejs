@@ -1,0 +1,50 @@
+# Application Name
+APP_NAME='uReport'
+
+# Development Port
+NUXT_PORT=3000
+
+# City Name
+CITY_NAME='City of Bloomington'
+
+# City Website
+CITY_WEBSITE_URL=https://bloomington.in.gov
+
+# Header Nav - Logo Heading
+LOGO_HEADING='Bloomington.in.gov'
+
+# Header Nav - Logo Sub Heading
+LOGO_SUB_HEADING='John Hamilton, Mayor'
+
+# Frontend Directory Base
+FE_BASE=/ureport/
+
+CRM_BASE_URL=https://bloomington.in.gov/crm/
+CRM_TICKETS=tickets/view?ticket_id=
+BASE_URL=/ureport
+BROWSER_BASE_URL=/ureport
+LOCAL_PORT=2222
+POST_PROXY=/ureport/post
+CRM_API_URL=https://bloomington.in.gov/crm/open311/v2/
+ATTRS_API=services/
+SERVICES_API=services.json
+POST_API=requests.json
+
+OPEN_311_KEY=REMOVED
+
+# Google reCaptcha Keys [ Client / Server ]
+# v2 invisible keys
+RECAPTCHA_SITEKEY=REMOVED
+RECAPTCHA_SERVERKEY=REMOVED
+
+# Google API Key
+GOOGLE_API_KEY=REMOVED
+
+# Bloomington City Boundary
+CITY_BOUNDARY_PATH=https://bloomington.in.gov/geoserver/publicgis/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=publicgis:BloomingtonMunicipalBoundary&maxFeatures=50&outputFormat=application%2Fjson
+
+# Coordinate Projection
+COORDS_PROJECTION='+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs'
+
+# City Hall Lat/Long
+CITY_HALL_LAT_LONG='{"lat":39.16992723,"lng":-86.53680559}'

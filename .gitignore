@@ -1,4 +1,6 @@
 /uploads
+*.BAK
+*.OLD
 
 ### Node template
 # Logs

@@ -17,8 +17,9 @@
     @media only screen
     and (min-width : 320px)
     and (max-width : 768px) {
-      top: 73px;
-      height: calc(100vh - 73px);
+      top: auto;
+      height: auto;
+      // height: calc(100vh - 73px);
     }
   }
 </style>

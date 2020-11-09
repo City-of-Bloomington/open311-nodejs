@@ -92,7 +92,7 @@ main {
     and (min-device-width : 320px)
     and (max-device-width : 480px) {
       margin: 5px auto 0 auto;
-      height: 355px;
+      height: 100%;
     }
   }
 }
@@ -175,6 +175,7 @@ export default {
   },
   computed: {
     ...mapFields([
+      'initGroupData',
       'serviceInfos.service_group.group',
       'serviceInfos.service_group.service_code',
       'serviceInfos.service_group.service_name',

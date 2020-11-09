@@ -327,6 +327,7 @@ button,
   cursor: pointer;
 
   &.next-button {
+    appearance: button;
     background: $fern;
     color: white;
     padding: 5px 20px;
@@ -340,6 +341,7 @@ button,
   only screen and ( min-resolution: 200dpi),
   only screen and ( min-resolution: 1.25dppx){
     &.next-button {
+      appearance: button;
       padding: 10px 20px;
     }
   }

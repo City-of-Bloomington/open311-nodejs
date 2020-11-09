@@ -305,6 +305,8 @@ header {
   }
 
   @media (max-width: 767px) {
+    position: relative;
+    
     a {
       &:first-of-type {
         margin: 0;

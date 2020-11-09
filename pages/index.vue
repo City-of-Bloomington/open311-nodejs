@@ -30,7 +30,7 @@
         class="service-ticket">
 
         <div class="service-link">
-          <a :href="`https://bloomington.in.gov/crm/tickets/view?ticket_id=${serviceTicketData[0].service_request_id}`" class="external" target="_blank" title="Visit ticket via uReport CRM">Visit full ticket</a>
+          <a :href="`https://bloomington.in.gov/crm/tickets/view?ticket_id=${serviceTicketData[0].service_request_id}`" class="external" target="_blank" title="View ticket via uReport CRM">View full ticket</a>
         </div>
 
         <template v-if="serviceTicketData[0].lat != null">
@@ -157,8 +157,8 @@
 
       &.viewing-ticket {
         padding-bottom: 20px;
-        max-height: calc(100vh - 165px);
-        height: max-content;
+        max-height: 100%;
+        height: 100%;
       }
 
       .service-ticket {
@@ -331,7 +331,7 @@
         padding: 2px 0;
         // background-color: purple !important;
         margin: 0 auto;
-        // max-height: calc(100vh - 125px);
+        max-height: 100%;
         height: auto;
 
         .service-ticket {

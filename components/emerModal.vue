@@ -31,7 +31,7 @@ export default {
   head () {
     return {
       bodyAttrs: {
-        class: !this.seenEmerModal ? 'showing-modal' : ''
+        class: !this.seen_modal ? 'showing-modal' : ''
       }
     }
   },

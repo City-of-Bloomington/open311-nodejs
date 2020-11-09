@@ -56,7 +56,7 @@
       and (min-device-width : 320px)
       and (max-device-width : 480px) {
         margin-top: 5px;
-        height: 375px;
+        height: 100%;
       }
     }
   }
