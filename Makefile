@@ -1,18 +1,23 @@
-DOCKER := $(shell command -v docker 2> /dev/null)
+include make.conf
+# Variables from make.conf:
+#
+# DOCKER_REPO
+SHELL := /bin/bash
+APPNAME := open311-nodejs
 
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
 
 default: build
 
-dependencies:
-ifndef DOCKER
-	$(error "Docker is not installed")
-endif
+clean:
+	rm -Rf build/${APPNAME}*
 
-build: dependencies
-	docker build -t cob/open311-nodejs
+build: clean
+	[[ -d build ]] || mkdir build
+	rsync -rl --exclude-from=buildignore . build/${APPNAME}
+	cd build && tar czf ${APPNAME}-${VERSION}.tar.gz ${APPNAME}
 
-push:
-	docker tag open311-nodejs docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
-	docker push docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
+dockerfile:
+	docker build build/${APPNAME} -t ${DOCKER_REPO}/${APPNAME}:${VERSION}-${COMMIT}
+	docker push ${DOCKER_REPO}/${APPNAME}:${VERSION}-${COMMIT}

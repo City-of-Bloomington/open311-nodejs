@@ -97,7 +97,7 @@ certs/*
 
 # build files
 make.conf
-Makefile
+build
 
 # editor files
 .vscode/

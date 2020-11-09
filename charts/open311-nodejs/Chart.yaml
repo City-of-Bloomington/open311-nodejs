@@ -1,12 +1,14 @@
+---
 name: open311-nodejs
 version: 0.0.3
 description: A Helm chart for open311-nodejs, a frontend for submissions to uReport
 home: https://github.com/City-of-Bloomington/open311-nodejs
 apiVersion: v1
-appVersion: "1.1.3"
+appVersion: "1.1.9"
 keywords:
   - nodejs
   - open311
   - uReport
   - bloomington
   - cob
+...
