@@ -1,5 +1,7 @@
 // require('dotenv').config()
 module.exports = {
+  telemetry: false,
+  
   dev: (process.env.NODE_ENV !== 'production'),
 
   router: {
