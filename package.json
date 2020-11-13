@@ -21,7 +21,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/dotenv": "^1.4.1",
-    "@nuxtjs/pwa": "^2.6.0",
+    "@nuxtjs/pwa": "^3.2.2",
     "@nuxtjs/recaptcha": "^0.6.2",
     "@nuxtjs/style-resources": "^1.0.0",
     "body-parser": "^1.19.0",
@@ -30,7 +30,7 @@
     "cob-design-system": "git+https://github.com/City-of-Bloomington/design-system.git",
     "dotenv": "^6.2.0",
     "exif-js": "^2.3.0",
-    "nuxt": "^2.11.0",
+    "nuxt": "^2.14.7",
     "proj4": "^2.6.0",
     "request": "^2.88.0",
     "vue-clickaway": "^2.2.2",
