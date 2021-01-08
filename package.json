@@ -24,6 +24,7 @@
     "@nuxtjs/pwa": "^3.2.2",
     "@nuxtjs/recaptcha": "^0.6.2",
     "@nuxtjs/style-resources": "^1.0.0",
+    "axios": ">=0.21.1",
     "body-parser": "^1.19.0",
     "busboy-body-parser": "^0.3.2",
     "cheerio": "^1.0.0-rc.3",
