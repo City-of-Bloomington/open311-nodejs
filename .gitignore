@@ -95,7 +95,7 @@ sw.*
 .babelrc
 
 # Certs
-certs/*
+certs
 
 # build files
 make.conf
