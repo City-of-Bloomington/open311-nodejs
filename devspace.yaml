@@ -52,4 +52,4 @@ profiles:
 
   - op: replace
     path: deployments[0].helm.values.ingress.hosts[0].host
-    value: kubetest.bloomington.in.gov
+    value: bloomington.dev
