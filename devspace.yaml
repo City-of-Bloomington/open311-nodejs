@@ -20,6 +20,10 @@ deployments:
         npmscript: build+start
         tag: ds-${DEVSPACE_TIMESTAMP}-${DEVSPACE_GIT_COMMIT}
       ingress:
+        tls:
+          - secretName: cert-wildcard
+            hosts:
+              - bloomington.in.gov
         hosts:
         - host: kubeproxy.bloomington.in.gov
           paths: /ureport
@@ -52,4 +56,12 @@ profiles:
 
   - op: replace
     path: deployments[0].helm.values.ingress.hosts[0].host
+    value: bloomington.dev
+
+  - op: replace
+    path: deployments[0].helm.values.ingress.tls[0].secretName
+    value: cert-bloomdev
+
+  - op: replace
+    path: deployments[0].helm.values.ingress.tls[0].hosts[0]
     value: bloomington.dev
