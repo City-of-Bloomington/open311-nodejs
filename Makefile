@@ -11,8 +11,8 @@ ifndef DOCKER
 endif
 
 build: dependencies
-	docker build -t cob/open311-nodejs
+	docker build --platform=linux/amd64 -t cob/open311-nodejs .
 
 push:
-	docker tag open311-nodejs docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
-	docker push docker-repo.bloomington.in.gov/cob/open311-nodejs:${VERSION}-${COMMIT}
+	docker tag cob/open311-nodejs docker-repo.bloomington.in.gov/cob/open311-nodejs:test-${VERSION}-${COMMIT}
+	docker push docker-repo.bloomington.in.gov/cob/open311-nodejs:test-${VERSION}-${COMMIT}

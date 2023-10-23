@@ -98,7 +98,8 @@ module.exports = {
     browserBaseURL:       process.env.BROWSER_BASE_URL,
     proxy:                true,
     credentials:          true,
-    proxyHeaders:         true
+    proxyHeaders:         true,
+    debug:                true
   },
 
   env: {

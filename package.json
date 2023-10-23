@@ -32,9 +32,11 @@
     "dotenv": "^6.2.0",
     "exif-js": "^2.3.0",
     "express": "^4.17.1",
-    "nuxt": "^2.14.7",
+    "nodemon": "^3.0.1",
+    "nuxt": "2.15.8",
     "proj4": "^2.6.0",
     "request": "^2.88.0",
+    "vue": "^2.7.15",
     "vue-clickaway": "^2.2.2",
     "vue-meta": "^2.3.2",
     "vue2-google-maps": "^0.10.7",
@@ -42,11 +44,7 @@
     "vuex-persistedstate": "^2.7.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "node-sass": "^4.14.1",
     "sass-loader": "^7.3.1"
   }
